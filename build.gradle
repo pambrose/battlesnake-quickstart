@@ -15,18 +15,16 @@ allprojects {
 }
 
 def jvmVersion = '1.8'
-def jdkVersion = System.getProperty('java.version')
 def kotlinVersion = '1.3.21'
 def serializationVersion = '0.10.0'
 def loggingVersion = '1.6.25'
 def sparkVersion = '2.8.0'
 def slf4jVersion = '1.7.21'
 def junitVersion = '5.4.0'
-def VERSION = '0.1.0'
 def appName = 'battlesnake-dispatch'
 
 group = 'io.battlesnake'
-version = "${VERSION}-SNAPSHOT"
+version = "0.1.1-SNAPSHOT"
 description = appName
 sourceCompatibility = jvmVersion
 
