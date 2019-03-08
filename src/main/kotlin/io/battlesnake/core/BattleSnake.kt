@@ -12,7 +12,7 @@ abstract class BattleSnake<T> : KLogging() {
 
     abstract fun gameStrategy(): Strategy<T>
 
-    abstract fun moveTo(context: T, request: MoveRequest, position: Position): MoveResponse
+    protected fun moveTo(context: T, request: MoveRequest, position: Position) = RIGHT
 
     protected fun moveToOrigin(context: T, request: MoveRequest) =
         moveTo(context, request, Board.BOARD_ORIGIN)
