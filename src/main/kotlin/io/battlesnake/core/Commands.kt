@@ -86,8 +86,8 @@ data class MoveRequest(
     val nearestFoodPosition
         get() = nearestFood.position
     @Transient
-    val bodySize
-        get() = you.bodySize
+    val bodyLength
+        get() = you.bodyLength
 
     @Transient
     val headPosition
@@ -162,8 +162,8 @@ data class Snake(
     val name: String
 ) {
     @Transient
-    val bodySize
-        get() = body.size
+    val bodyLength
+        get() = body.map { it.position }.distinct().size
 
     @Transient
     val headPosition
@@ -180,8 +180,8 @@ data class You(
     val name: String
 ) {
     @Transient
-    val bodySize
-        get() = body.size
+    val bodyLength
+        get() = body.map { it.position }.distinct().size
 
     @Transient
     val headPosition by lazy { bodyPosition(0) }
