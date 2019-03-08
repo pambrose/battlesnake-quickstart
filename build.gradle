@@ -24,7 +24,7 @@ def junitVersion = '5.4.0'
 def appName = 'battlesnake-dispatch'
 
 group = 'io.battlesnake'
-version = "0.1.1-SNAPSHOT"
+version = "0.1.2-SNAPSHOT"
 description = appName
 sourceCompatibility = jvmVersion
 
