@@ -24,11 +24,12 @@ abstract class BattleSnake<T> : KLogging() {
 
     private val contextMap = mutableMapOf<String, T>()
 
-    fun process(req: Request, res: Response): SnakeResponse {
-        val uri = req.uri()
+    fun process(req: Request, res: Response) =
         try {
             //logger.info{ "$uri called with: ${req.body()}" }
-            lateinit var resp: SnakeResponse
+            strategy.beforeTurn.invoke(req, res)
+            val uri = req.uri()
+            lateinit var resp: GameResponse
             val ms =
                 measureTimeMillis {
                     resp =
@@ -40,7 +41,7 @@ abstract class BattleSnake<T> : KLogging() {
                                     .run {
                                         val request = StartRequest.toObject(req.body())
                                         contextMap[request.gameId] = this
-                                        logger.info { "Creating game ${request.gameId}" }
+                                        logger.info { "Starting game ${request.gameId}" }
                                         strategy.start.invoke(this, request)
                                     }
                             }
@@ -63,12 +64,12 @@ abstract class BattleSnake<T> : KLogging() {
                         }
                 }
             logger.info { "Responded to $uri in ${ms}ms with: $resp" }
-            return resp
+            strategy.afterTurn.invoke(resp, ms)
+            resp
         } catch (e: Exception) {
-            logger.warn(e) { "Something went wrong with $uri" }
+            logger.warn(e) { "Something went wrong with ${req.uri()}" }
             throw e
         }
-    }
 
     fun run(port: Int = 8080) {
         val p = Integer.parseInt(System.getProperty("PORT") ?: "$port")

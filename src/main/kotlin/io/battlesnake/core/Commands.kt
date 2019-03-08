@@ -10,9 +10,9 @@ fun Int.isEven() = this % 2 == 0
 
 fun Int.isOdd() = this % 2 != 0
 
-interface SnakeResponse
+interface GameResponse
 
-object PingResponse : SnakeResponse {
+object PingResponse : GameResponse {
     override fun toString() = PingResponse::class.simpleName!!
 }
 
@@ -46,7 +46,7 @@ data class StartResponse(
     val color: String = "",
     val headType: String = "",
     val tailType: String = ""
-) : SnakeResponse {
+) : GameResponse {
     fun toJson() = Json.stringify(StartResponse.serializer(), this)
 }
 
@@ -99,7 +99,7 @@ data class MoveRequest(
 }
 
 @Serializable
-data class MoveResponse(val move: String) : SnakeResponse {
+data class MoveResponse(val move: String) : GameResponse {
     fun toJson() = Json.stringify(MoveResponse.serializer(), this)
 }
 
@@ -119,7 +119,7 @@ data class EndRequest(
     }
 }
 
-object EndResponse : SnakeResponse {
+object EndResponse : GameResponse {
     override fun toString() = EndResponse::class.simpleName!!
 }
 
