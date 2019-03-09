@@ -42,11 +42,13 @@ abstract class BattleSnake<T : AbstractGameContext> : KLogging() {
                                 val context = contextMap[request.gameId]
                                     ?: throw NoSuchElementException("Missing context for game id: ${request.gameId}")
                                 lateinit var response: GameResponse
-                                val moveMillis = measureTimeMillis {
-                                    response = strategy.move.map { it.invoke(context, request) }.lastOrNull() ?: RIGHT
-                                }
+                                val moveTime =
+                                    measureTimeMillis {
+                                        response =
+                                            strategy.move.map { it.invoke(context, request) }.lastOrNull() ?: RIGHT
+                                    }
                                 context.apply {
-                                    elapsedMoveTimeMillis += moveMillis
+                                    elapsedMoveTimeMillis += moveTime
                                     moveCount += 1
                                 }
                                 response
