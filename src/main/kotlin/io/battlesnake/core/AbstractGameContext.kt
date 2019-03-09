@@ -10,7 +10,14 @@ abstract class AbstractGameContext {
     var moveCount = 0L
 
     lateinit var request: Request
+        internal set
     lateinit var response: Response
+        internal set
+
+    internal fun update(req: Request, res: Response) {
+        request = req
+        response = res
+    }
 
     val elapsedGameTimeMillis get() = System.currentTimeMillis() - gameStartTimeMillis
 

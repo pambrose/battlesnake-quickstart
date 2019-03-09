@@ -29,23 +29,25 @@ abstract class BattleSnake<T : AbstractGameContext> : KLogging() {
                             START -> {
                                 gameContext()
                                     .run {
-                                        this.request = req
-                                        this.response = res
-                                        val request = StartRequest.toObject(req.body())
-                                        contextMap[request.gameId] = this
-                                        strategy.start.map { it.invoke(this, request) }.lastOrNull() ?: StartResponse()
+                                        update(req, res)
+                                        val startRequest = StartRequest.toObject(req.body())
+                                        contextMap[startRequest.gameId] = this
+                                        strategy.start.map { it.invoke(this, startRequest) }.lastOrNull()
+                                            ?: StartResponse()
                                     }
                             }
 
                             MOVE -> {
-                                val request = MoveRequest.toObject(req.body())
-                                val context = contextMap[request.gameId]
-                                    ?: throw NoSuchElementException("Missing context for game id: ${request.gameId}")
+                                val moveRequest = MoveRequest.toObject(req.body())
+                                val context = contextMap[moveRequest.gameId]
+                                    ?: throw NoSuchElementException("Missing context for game id: ${moveRequest.gameId}")
+                                context.update(req, res)
+
                                 lateinit var response: GameResponse
                                 val moveTime =
                                     measureTimeMillis {
                                         response =
-                                            strategy.move.map { it.invoke(context, request) }.lastOrNull() ?: RIGHT
+                                            strategy.move.map { it.invoke(context, moveRequest) }.lastOrNull() ?: RIGHT
                                     }
                                 context.apply {
                                     elapsedMoveTimeMillis += moveTime
@@ -55,10 +57,12 @@ abstract class BattleSnake<T : AbstractGameContext> : KLogging() {
                             }
 
                             END -> {
-                                val request = EndRequest.toObject(req.body())
-                                val context = contextMap.remove(request.gameId)
-                                    ?: throw NoSuchElementException("Missing context for game id: ${request.gameId}")
-                                strategy.end.map { it.invoke(context, request) }.lastOrNull() ?: EndResponse
+                                val endRequest = EndRequest.toObject(req.body())
+                                val context = contextMap.remove(endRequest.gameId)
+                                    ?: throw NoSuchElementException("Missing context for game id: ${endRequest.gameId}")
+                                context.update(req, res)
+
+                                strategy.end.map { it.invoke(context, endRequest) }.lastOrNull() ?: EndResponse
                             }
                             else -> throw IllegalAccessError("Strange call made to the snake: $uri [${req.ip()}]")
                         }
