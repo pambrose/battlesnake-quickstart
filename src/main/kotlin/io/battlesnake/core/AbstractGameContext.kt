@@ -19,6 +19,6 @@ abstract class AbstractGameContext {
             return if (time > 1000)
                 "${time / 1000} secs"
             else
-                "$time ms"
+                "${time}ms"
         }
 }

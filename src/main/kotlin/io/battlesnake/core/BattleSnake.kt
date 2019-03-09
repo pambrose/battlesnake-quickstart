@@ -49,7 +49,7 @@ abstract class BattleSnake<T : AbstractGameContext> : KLogging() {
                                     elapsedMoveTimeMillis += moveMillis
                                     moveCount += 1
                                 }
-                                return response
+                                response
                             }
 
                             END -> {
