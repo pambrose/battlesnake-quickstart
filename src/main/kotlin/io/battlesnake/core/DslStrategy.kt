@@ -40,7 +40,7 @@ open class DslStrategy<T : AbstractGameContext> : KLogging() {
 
     internal fun endMsg(context: T, request: EndRequest): String {
         val mpm =
-            if (context.moveCount > 0) "with ${"%.2f".format(context.elapsedMoveTimeMillis / context.moveCount)}ms/move " else ""
+            if (context.moveCount > 0) "with ${"%.2f".format(context.elapsedMoveTimeMillis / (context.moveCount * 1L))}ms/move " else ""
         return "Ending game \"${request.gameId}\" Game time: ${context.elapsedGameTimeMsg} Moves: ${context.moveCount} $mpm[${context.request.ip()}]"
     }
 
