@@ -24,28 +24,27 @@ open class Strategy<T>() {
 
     internal var afterTurn: (response: GameResponse, millis: Long) -> Unit = { _: GameResponse, _: Long -> }
 
-    fun onBeforeTurn(func: (request: Request, response: Response) -> Unit) {
-        beforeTurn = func
+    fun onBeforeTurn(block: (request: Request, response: Response) -> Unit) {
+        beforeTurn = block
     }
 
-    fun onPing(func: () -> PingResponse) {
-        ping = func
+    fun onPing(block: () -> PingResponse) {
+        ping = block
     }
 
-    fun onStart(func: (context: T, request: StartRequest) -> StartResponse) {
-        start = func
+    fun onStart(block: (context: T, request: StartRequest) -> StartResponse) {
+        start = block
     }
 
-    fun onMove(func: (context: T, request: MoveRequest) -> MoveResponse) {
-        move = func
+    fun onMove(block: (context: T, request: MoveRequest) -> MoveResponse) {
+        move = block
     }
 
-    fun onEnd(func: (context: T, request: EndRequest) -> EndResponse) {
-        end = func
+    fun onEnd(block: (context: T, request: EndRequest) -> EndResponse) {
+        end = block
     }
 
-    fun onAfterTurn(func: (response: GameResponse, millis: Long) -> Unit) {
-        afterTurn = func
+    fun onAfterTurn(block: (response: GameResponse, millis: Long) -> Unit) {
+        afterTurn = block
     }
 }
-

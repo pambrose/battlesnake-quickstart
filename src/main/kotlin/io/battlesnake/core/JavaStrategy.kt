@@ -18,7 +18,7 @@ abstract class JavaStrategy<T> : Strategy<T>() {
         onAfterTurn { response: GameResponse, millis: Long -> onAfterTurn(response, millis) }
     }
 
-    open fun onBeforeTurn(request: Request, response: Response) = {}
+    open fun onBeforeTurn(request: Request, response: Response) {}
 
     open fun onPing() = PingResponse
 
@@ -28,5 +28,5 @@ abstract class JavaStrategy<T> : Strategy<T>() {
 
     open fun onEnd(context: T, request: EndRequest) = EndResponse
 
-    open fun onAfterTurn(response: GameResponse, millis: Long) = {}
+    open fun onAfterTurn(response: GameResponse, millis: Long) {}
 }

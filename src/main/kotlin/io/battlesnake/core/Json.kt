@@ -7,7 +7,6 @@ import kotlinx.serialization.json.Json
 import java.lang.Math.abs
 
 fun Int.isEven() = this % 2 == 0
-
 fun Int.isOdd() = this % 2 != 0
 
 interface GameResponse
