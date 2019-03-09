@@ -38,8 +38,11 @@ open class DslStrategy<T : AbstractGameContext> : KLogging() {
     internal fun startMsg(context: T, request: StartRequest) =
         "Starting game \"${request.gameId}\" [${context.request.ip()}]"
 
-    internal fun endMsg(context: T, request: EndRequest) =
-        "Ending game \"${request.gameId}\" Moves: ${request.turn} Time: ${context.elapsedGameTimeMsg} Avg ms/move: ${context.elapsedMoveTimeMillis / request.turn} [${context.request.ip()}]"
+    internal fun endMsg(context: T, request: EndRequest): String {
+        val mpm =
+            if (context.moveCount == 0L) "" else "Avg ms/move: ${context.elapsedMoveTimeMillis / context.moveCount} "
+        return "Ending game \"${request.gameId}\" Game time: ${context.elapsedGameTimeMsg} Moves: ${context.moveCount} $mpm[${context.request.ip()}]"
+    }
 
     internal fun turnMsg(request: Request, response: Response, gameResponse: GameResponse, millis: Long) =
         "Responded to ${request.uri()} in ${millis}ms with: $gameResponse"

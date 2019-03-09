@@ -45,7 +45,10 @@ abstract class BattleSnake<T : AbstractGameContext> : KLogging() {
                                 val moveMillis = measureTimeMillis {
                                     response = strategy.move.map { it.invoke(context, request) }.lastOrNull() ?: RIGHT
                                 }
-                                context.elapsedMoveTimeMillis += moveMillis
+                                context.apply {
+                                    elapsedMoveTimeMillis += moveMillis
+                                    moveCount += 1
+                                }
                                 return response
                             }
 

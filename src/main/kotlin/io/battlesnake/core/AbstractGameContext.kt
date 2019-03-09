@@ -6,6 +6,7 @@ import spark.Response
 abstract class AbstractGameContext {
     private val gameStartTimeMillis: Long = System.currentTimeMillis()
     var elapsedMoveTimeMillis = 0L
+    var moveCount = 0L
 
     lateinit var request: Request
     lateinit var response: Response
