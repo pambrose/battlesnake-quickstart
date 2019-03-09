@@ -6,7 +6,7 @@ import spark.Response
 import spark.Spark
 import kotlin.system.measureTimeMillis
 
-abstract class BattleSnake<T> : KLogging() {
+abstract class BattleSnake<T : AbstractGameContext> : KLogging() {
 
     abstract fun gameContext(): T
 
@@ -37,6 +37,8 @@ abstract class BattleSnake<T> : KLogging() {
                             START -> {
                                 gameContext()
                                     .run {
+                                        this.request = req
+                                        this.response = res
                                         val request = StartRequest.toObject(req.body())
                                         contextMap[request.gameId] = this
                                         strategy.start.map { it.invoke(this, request) }.lastOrNull() ?: StartResponse()

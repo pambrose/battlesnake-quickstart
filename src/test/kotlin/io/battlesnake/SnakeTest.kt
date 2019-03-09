@@ -9,9 +9,11 @@ import java.io.IOException
 class SnakeTest {
 
     object TestSnake : BattleSnake<GameContext>() {
-        class GameContext
+
+        class GameContext : AbstractGameContext()
 
         override fun gameContext() = GameContext()
+
         override fun gameStrategy(): DslStrategy<GameContext> =
             strategy {
                 onStart { _: GameContext, _: StartRequest -> StartResponse("#ff00ff") }
