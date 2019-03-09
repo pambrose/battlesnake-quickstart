@@ -10,7 +10,7 @@ abstract class BattleSnake<T> : KLogging() {
 
     abstract fun gameContext(): T
 
-    abstract fun gameStrategy(): Strategy<T>
+    abstract fun gameStrategy(): DslStrategy<T>
 
     open fun moveTo(context: T, request: MoveRequest, position: Position) = RIGHT
 
@@ -26,23 +26,20 @@ abstract class BattleSnake<T> : KLogging() {
 
     fun process(req: Request, res: Response) =
         try {
-            //logger.info{ "$uri called with: ${req.body()}" }
-            strategy.beforeTurn.invoke(req, res)
             val uri = req.uri()
-            lateinit var resp: GameResponse
+            lateinit var gameResponse: GameResponse
             val ms =
                 measureTimeMillis {
-                    resp =
+                    gameResponse =
                         when (uri) {
-                            PING -> strategy.ping.invoke()
+                            PING -> strategy.ping.map { it.invoke() }.lastOrNull() ?: PingResponse
 
                             START -> {
                                 gameContext()
                                     .run {
                                         val request = StartRequest.toObject(req.body())
                                         contextMap[request.gameId] = this
-                                        logger.info { "Starting game ${request.gameId}" }
-                                        strategy.start.invoke(this, request)
+                                        strategy.start.map { it.invoke(this, request) }.lastOrNull() ?: StartResponse()
                                     }
                             }
 
@@ -50,22 +47,20 @@ abstract class BattleSnake<T> : KLogging() {
                                 val request = MoveRequest.toObject(req.body())
                                 val context = contextMap[request.gameId]
                                     ?: throw NoSuchElementException("Missing context for game id: ${request.gameId}")
-                                strategy.move.invoke(context, request)
+                                strategy.move.map { it.invoke(context, request) }.lastOrNull() ?: RIGHT
                             }
 
                             END -> {
                                 val request = EndRequest.toObject(req.body())
                                 val context = contextMap.remove(request.gameId)
                                     ?: throw NoSuchElementException("Missing context for game id: ${request.gameId}")
-                                logger.info { "Game ${request.gameId} ended in ${request.turn} moves" }
-                                strategy.end.invoke(context, request)
+                                strategy.end.map { it.invoke(context, request) }.lastOrNull() ?: EndResponse
                             }
                             else -> throw IllegalAccessError("Strange call made to the snake: $uri")
                         }
                 }
-            logger.info { "Responded to $uri in ${ms}ms with: $resp" }
-            strategy.afterTurn.invoke(resp, ms)
-            resp
+            strategy.afterTurn.forEach { it.invoke(req, res, gameResponse, ms) }
+            gameResponse
         } catch (e: Exception) {
             logger.warn(e) { "Something went wrong with ${req.uri()}" }
             throw e

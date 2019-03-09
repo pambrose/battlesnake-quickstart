@@ -3,48 +3,42 @@ package io.battlesnake.core
 import spark.Request
 import spark.Response
 
-fun <T> strategy(init: Strategy<T>.() -> Unit) =
-    Strategy<T>()
-        .apply {
-            init.invoke(this)
+abstract class Strategy<T>(val verbose: Boolean = false) : DslStrategy<T>() {
+
+    init {
+        onPing { onPing() }
+
+        onStart { context: T, request: StartRequest ->
+            if (verbose)
+                logger.info { "Starting game ${request.gameId}" }
+            onStart(context, request)
         }
 
-open class Strategy<T>() {
+        onMove { context: T, request: MoveRequest -> onMove(context, request) }
 
-    internal var beforeTurn: (request: Request, response: Response) -> Unit = { _: Request, _: Response -> }
+        onEnd { context: T, request: EndRequest ->
+            if (verbose)
+                logger.info { "Game ${request.gameId} ended in ${request.turn} moves" }
+            onEnd(context, request)
+        }
 
-    internal var ping: () -> PingResponse = { PingResponse }
-
-    internal var start: (context: T, request: StartRequest) -> StartResponse =
-        { _: T, _: StartRequest -> StartResponse() }
-
-    internal var move: (context: T, request: MoveRequest) -> MoveResponse = { _: T, _: MoveRequest -> RIGHT }
-
-    internal var end: (context: T, request: EndRequest) -> EndResponse = { _: T, _: EndRequest -> EndResponse }
-
-    internal var afterTurn: (response: GameResponse, millis: Long) -> Unit = { _: GameResponse, _: Long -> }
-
-    fun onBeforeTurn(block: (request: Request, response: Response) -> Unit) {
-        beforeTurn = block
+        onAfterTurn { request: Request,
+                      response: Response,
+                      gameResponse: GameResponse,
+                      millis: Long ->
+            if (verbose)
+                logger.info { "Responded to ${request.uri()} in ${millis}ms with: $gameResponse" }
+            onAfterTurn(gameResponse, millis)
+        }
     }
 
-    fun onPing(block: () -> PingResponse) {
-        ping = block
-    }
+    open fun onPing() = PingResponse
 
-    fun onStart(block: (context: T, request: StartRequest) -> StartResponse) {
-        start = block
-    }
+    open fun onStart(context: T, request: StartRequest) = StartResponse()
 
-    fun onMove(block: (context: T, request: MoveRequest) -> MoveResponse) {
-        move = block
-    }
+    abstract fun onMove(context: T, request: MoveRequest): MoveResponse
 
-    fun onEnd(block: (context: T, request: EndRequest) -> EndResponse) {
-        end = block
-    }
+    open fun onEnd(context: T, request: EndRequest) = EndResponse
 
-    fun onAfterTurn(block: (response: GameResponse, millis: Long) -> Unit) {
-        afterTurn = block
-    }
+    open fun onAfterTurn(response: GameResponse, millis: Long) {}
 }

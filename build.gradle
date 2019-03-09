@@ -21,10 +21,12 @@ def loggingVersion = '1.6.25'
 def sparkVersion = '2.8.0'
 def slf4jVersion = '1.7.21'
 def junitVersion = '5.4.0'
+def dispatchVersion = '0.1.7'
+
 def appName = 'battlesnake-dispatch'
 
 group = 'io.battlesnake'
-version = "0.1.6-SNAPSHOT"
+version = "$dispatchVersion-SNAPSHOT"
 description = appName
 sourceCompatibility = jvmVersion
 
