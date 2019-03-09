@@ -63,6 +63,12 @@ data class MoveRequest(
     val boardCenter
         get() = board.center
     @Transient
+    val boardOrigin
+        get() = board.origin
+    @Transient
+    val boardUpperLeft
+        get() = board.upperLeft
+    @Transient
     val boardUpperRight
         get() = board.upperRight
     @Transient
@@ -81,7 +87,7 @@ data class MoveRequest(
         get() = you.headPosition == BOARD_ORIGIN
     @Transient
     val isAtUpperLeft
-        get() = isAtOrigin
+        get() = you.headPosition == boardUpperLeft
     @Transient
     val isAtUpperRight
         get() = you.headPosition == boardUpperRight
@@ -153,6 +159,12 @@ data class Board(
     val snakes: List<Snake>,
     val width: Int
 ) {
+    @Transient
+    val origin = BOARD_ORIGIN
+
+    @Transient
+    val upperLeft = BOARD_ORIGIN
+
     @Transient
     val upperRight: Position  by lazy { Position(width - 1, 0) }
 
