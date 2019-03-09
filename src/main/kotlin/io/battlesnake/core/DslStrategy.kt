@@ -39,7 +39,7 @@ open class DslStrategy<T : AbstractGameContext> : KLogging() {
         "Starting game \"${request.gameId}\" [${context.request.ip()}]"
 
     internal fun endMsg(context: T, request: EndRequest) =
-        "Game \"${request.gameId}\" ended in ${request.turn} moves and ${context.elapsedTimeMsg} [${context.request.ip()}]"
+        "Ending game \"${request.gameId}\" Moves: ${request.turn} Time: ${context.elapsedGameTimeMsg} Avg ms/move: ${context.elapsedMoveTimeMillis / request.turn} [${context.request.ip()}]"
 
     internal fun turnMsg(request: Request, response: Response, gameResponse: GameResponse, millis: Long) =
         "Responded to ${request.uri()} in ${millis}ms with: $gameResponse"

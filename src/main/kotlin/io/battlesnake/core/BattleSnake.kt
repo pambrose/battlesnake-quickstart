@@ -12,14 +12,6 @@ abstract class BattleSnake<T : AbstractGameContext> : KLogging() {
 
     abstract fun gameStrategy(): DslStrategy<T>
 
-    open fun moveTo(context: T, request: MoveRequest, position: Position) = RIGHT
-
-    protected fun moveToOrigin(context: T, request: MoveRequest) =
-        moveTo(context, request, Board.BOARD_ORIGIN)
-
-    protected fun moveToCenter(context: T, request: MoveRequest) =
-        moveTo(context, request, request.board.center)
-
     internal val strategy by lazy { gameStrategy() }
 
     private val contextMap = mutableMapOf<String, T>()
@@ -49,7 +41,12 @@ abstract class BattleSnake<T : AbstractGameContext> : KLogging() {
                                 val request = MoveRequest.toObject(req.body())
                                 val context = contextMap[request.gameId]
                                     ?: throw NoSuchElementException("Missing context for game id: ${request.gameId}")
-                                strategy.move.map { it.invoke(context, request) }.lastOrNull() ?: RIGHT
+                                lateinit var response: GameResponse
+                                val moveMillis = measureTimeMillis {
+                                    response = strategy.move.map { it.invoke(context, request) }.lastOrNull() ?: RIGHT
+                                }
+                                context.elapsedMoveTimeMillis += moveMillis
+                                return response
                             }
 
                             END -> {
@@ -58,7 +55,7 @@ abstract class BattleSnake<T : AbstractGameContext> : KLogging() {
                                     ?: throw NoSuchElementException("Missing context for game id: ${request.gameId}")
                                 strategy.end.map { it.invoke(context, request) }.lastOrNull() ?: EndResponse
                             }
-                            else -> throw IllegalAccessError("Strange call made to the snake: $uri")
+                            else -> throw IllegalAccessError("Strange call made to the snake: $uri [${req.ip()}]")
                         }
                 }
             strategy.afterTurn.forEach { it.invoke(req, res, gameResponse, ms) }

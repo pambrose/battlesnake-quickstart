@@ -18,8 +18,6 @@ class SnakeTest {
                 onStart { _: GameContext, _: StartRequest -> StartResponse("#ff00ff") }
                 onMove { _: GameContext, _: MoveRequest -> RIGHT }
             }
-
-        override fun moveTo(context: GameContext, request: MoveRequest, position: Position) = RIGHT
     }
 
     @Test

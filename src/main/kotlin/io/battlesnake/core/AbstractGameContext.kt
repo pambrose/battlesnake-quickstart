@@ -4,17 +4,19 @@ import spark.Request
 import spark.Response
 
 abstract class AbstractGameContext {
+    private val gameStartTimeMillis: Long = System.currentTimeMillis()
+    var elapsedMoveTimeMillis = 0L
+
     lateinit var request: Request
     lateinit var response: Response
-    private val gameStartTimeMillis: Long = System.currentTimeMillis()
 
-    val elapsedTimeMillis get() = System.currentTimeMillis() - gameStartTimeMillis
+    val elapsedGameTimeMillis get() = System.currentTimeMillis() - gameStartTimeMillis
 
-    val elapsedTimeMsg: String
+    val elapsedGameTimeMsg: String
         get() {
-            val time = elapsedTimeMillis
+            val time = elapsedGameTimeMillis
             return if (time > 1000)
-                "${(time / 1000) as Int} secs"
+                "${time / 1000} secs"
             else
                 "$time ms"
         }
