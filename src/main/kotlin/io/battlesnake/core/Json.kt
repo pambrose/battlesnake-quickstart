@@ -33,7 +33,7 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
                     You(emptyList(), 3, "", "")
                 )
             val json = start.toJson()
-            val obj = StartRequest.toObject(json)
+            StartRequest.toObject(json)
         }
 
         fun toObject(json: String) = Json.parse(StartRequest.serializer(), json)

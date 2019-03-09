@@ -32,7 +32,7 @@ abstract class BattleSnake<T : AbstractGameContext> : KLogging() {
                 measureTimeMillis {
                     gameResponse =
                         when (uri) {
-                            PING -> strategy.ping.map { it.invoke() }.lastOrNull() ?: PingResponse
+                            PING -> strategy.ping.map { it.invoke(req, res) }.lastOrNull() ?: PingResponse
 
                             START -> {
                                 gameContext()

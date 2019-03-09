@@ -7,37 +7,44 @@ import spark.Response
 fun <T : AbstractGameContext> strategy(verbose: Boolean = false, init: DslStrategy<T>.() -> Unit) =
     DslStrategy<T>()
         .apply {
+            onPing { request, response ->
+                logger.info { pingMsg(request, response) }
+                PingResponse
+            }
+
             onStart { context, request ->
-                logger.info { startLoggingMsg(context, request) }
+                logger.info { startMsg(context, request) }
                 StartResponse()
             }
 
             onEnd { context, request ->
-                logger.info { endLoggingMsg(context, request) }
+                logger.info { endMsg(context, request) }
                 EndResponse
             }
 
             if (verbose)
                 onAfterTurn { request, response, gameResponse, millis ->
-                    logger.info { turnLoggingMsg(request, response, gameResponse, millis) }
+                    logger.info { turnMsg(request, response, gameResponse, millis) }
                 }
 
             init.invoke(this)
         }
 
-
 open class DslStrategy<T : AbstractGameContext> : KLogging() {
 
-    internal fun startLoggingMsg(context: T, request: StartRequest) =
-        "Starting game ${request.gameId} from ${context.request.ip()}"
+    internal fun pingMsg(request: Request, response: Response) =
+        "Ping from ${request.ip()}"
 
-    internal fun endLoggingMsg(context: T, request: EndRequest) =
-        "Game ${request.gameId} ended in ${request.turn} moves from ${context.request.ip()}"
+    internal fun startMsg(context: T, request: StartRequest) =
+        "Starting game \"${request.gameId}\" [${context.request.ip()}]"
 
-    internal fun turnLoggingMsg(request: Request, response: Response, gameResponse: GameResponse, millis: Long) =
+    internal fun endMsg(context: T, request: EndRequest) =
+        "Game \"${request.gameId}\" ended in ${request.turn} moves and ${context.elapsedTimeMsg} [${context.request.ip()}]"
+
+    internal fun turnMsg(request: Request, response: Response, gameResponse: GameResponse, millis: Long) =
         "Responded to ${request.uri()} in ${millis}ms with: $gameResponse"
 
-    internal val ping: MutableList<() -> PingResponse> = mutableListOf()
+    internal val ping: MutableList<(request: Request, response: Response) -> PingResponse> = mutableListOf()
 
     internal val start: MutableList<(context: T, request: StartRequest) -> StartResponse> = mutableListOf()
 
@@ -52,7 +59,7 @@ open class DslStrategy<T : AbstractGameContext> : KLogging() {
         millis: Long
     ) -> Unit> = mutableListOf()
 
-    fun onPing(block: () -> PingResponse) {
+    fun onPing(block: (request: Request, response: Response) -> PingResponse) {
         ping.add(block)
     }
 
