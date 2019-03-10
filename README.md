@@ -14,9 +14,9 @@ BattleSnakes in Kotlin and Java.
 
 ## Usage
 
-A snake is a subclass of [AbstractBattleSnake](src/main/java/io/battlesnake/core/AbstractBattleSnake.java) and 
-requires methods to produce a [GameContext](src/main/java/io/battlesnake/core/AbstractGameContxt.java) 
-object and a [Strategy](src/main/java/io/battlesnake/core/Strategy.java) object. 
+A snake is a subclass of [AbstractBattleSnake](src/main/kotlin/io/battlesnake/core/AbstractBattleSnake.java) and 
+requires methods to produce a [GameContext](src/main/kotlin/io/battlesnake/core/AbstractGameContxt.java) 
+object and a [Strategy](src/main/kotlin/io/battlesnake/core/Strategy.java) object. 
 A GameContext object is created at the start of every game and provides context between game turns. 
 A Strategy specifies responses for Ping, Start, Move, and End commands.
 
