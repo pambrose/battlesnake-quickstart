@@ -5,7 +5,7 @@ import io.battlesnake.example.kotlin.ExampleSnake.GameContext
 
 object ExampleSnake : AbstractBattleSnake<GameContext>() {
 
-    // GameContext can contain any data you want
+    // Add any necessary snake-specific data to GameContext class
     class GameContext : AbstractGameContext()
 
     // Called at the beginning of each game on Start
@@ -14,12 +14,12 @@ object ExampleSnake : AbstractBattleSnake<GameContext>() {
     override fun gameStrategy(): Strategy<GameContext> =
         strategy(true) {
 
-            // StartReponse describes snake color and head/tail type
+            // StartResponse describes snake color and head/tail type
             onStart { context: GameContext, request: StartRequest ->
                 StartResponse("#ff00ff", "beluga", "bolt")
             }
 
-            // MoveReponse can be LEFT, RIGHT, UP or DOWN
+            // MoveResponse can be LEFT, RIGHT, UP or DOWN
             onMove { context: GameContext, request: MoveRequest ->
                 RIGHT
             }

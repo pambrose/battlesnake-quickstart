@@ -19,13 +19,13 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.GameContext> 
     @Override
     public Strategy<GameContext> gameStrategy() {
         return new AbstractStrategy<GameContext>(true) {
-            // StartReponse describes snake color and head/tail type
+            // StartResponse describes snake color and head/tail type
             @Override
             public StartResponse onStart(GameContext context, StartRequest request) {
                 return new StartResponse("#ff00ff", "beluga", "bolt");
             }
 
-            // MoveReponse can be LEFT, RIGHT, UP or DOWN
+            // MoveResponse can be LEFT, RIGHT, UP or DOWN
             @Override
             public MoveResponse onMove(GameContext context, MoveRequest request) {
                 return RIGHT;
@@ -33,7 +33,7 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.GameContext> 
         };
     }
 
-    // GameContext can contain any data you want
+    // Add any necessary snake-specific data to GameContext class
     static class GameContext extends AbstractGameContext {
     }
 }

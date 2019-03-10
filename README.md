@@ -7,19 +7,19 @@ A framework for creating Kotlin and Java BattleSnakes
 
 ## Motivation
 
-Out of the box, [BattleSnake](https://battlsnake.io) requires a fair amount of JSON/REST wiring before one 
+Out of the box, [BattleSnake](https://battlesnake.io) requires a fair amount of JSON/REST wiring before one 
 can start authoring a snake. That initial exercise can prove problematic for some developers. 
 This repo takes care of the wiring and communications and provides a simple framework for writing 
 BattleSnakes in Kotlin and Java.  
 
 ## Usage
 
-A snake is a subclass of [AbstractBattleSnake](src/main/kotlin/io/battlesnake/core/AbstractBattleSnake.java) and 
-requires methods to produce a [GameContext](src/main/kotlin/io/battlesnake/core/AbstractGameContxt.java) 
-object and a [Strategy](src/main/kotlin/io/battlesnake/core/Strategy.java) object. 
-A GameContext object is created at the start of every game and provides context between game turns. 
-A Strategy specifies responses for Ping, Start, Move, and End commands.
+A snake defined as a subclass of [AbstractBattleSnake](src/main/kotlin/io/battlesnake/core/AbstractBattleSnake.kt) and 
+implements methods to produce [GameContext](src/main/kotlin/io/battlesnake/core/AbstractGameContxt.kt) 
+and [Strategy](src/main/kotlin/io/battlesnake/core/Strategy.kt) objects. 
 
+* A GameContext object is snake-specific and is created at the start of every game and provides context between game turns. 
+* A Strategy specifies responses for Ping, Start, Move, and End commands.
 
 ## Examples
 
@@ -28,7 +28,7 @@ A Strategy specifies responses for Ping, Start, Move, and End commands.
 ```kotlin
 object ExampleSnake : AbstractBattleSnake<GameContext>(){
 
-    // GameContext can contain any data you want
+    // Add any necessary snake-specific data to GameContext class
     class GameContext : AbstractGameContext()
 
     // Called at the beginning of each game on Start
@@ -37,12 +37,12 @@ object ExampleSnake : AbstractBattleSnake<GameContext>(){
     override fun gameStrategy() : Strategy<GameContext> =
         strategy(true) {
 
-            // StartReponse describes snake color and head/tail type
+            // StartResponse describes snake color and head/tail type
             onStart { context: GameContext, request: StartRequest ->
                 StartResponse("#ff00ff", "beluga", "bolt")
             }
 
-            // MoveReponse can be LEFT, RIGHT, UP or DOWN
+            // MoveResponse can be LEFT, RIGHT, UP or DOWN
             onMove { context: GameContext, request: MoveRequest ->
                 RIGHT
             }
