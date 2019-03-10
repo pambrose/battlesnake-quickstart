@@ -1,4 +1,4 @@
-package io.battlesnake.example.java;
+package io.battlesnake.java;
 
 import io.battlesnake.core.*;
 

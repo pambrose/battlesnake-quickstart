@@ -1,7 +1,7 @@
-package io.battlesnake.example.kotlin
+package io.battlesnake.kotlin
 
 import io.battlesnake.core.*
-import io.battlesnake.example.kotlin.ExampleSnake.GameContext
+import io.battlesnake.kotlin.ExampleSnake.GameContext
 
 object ExampleSnake : AbstractBattleSnake<GameContext>() {
 
