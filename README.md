@@ -1,9 +1,9 @@
 # BattleSnake QuickStart 
 
-A framework for creating Kotlin and Java BattleSnakes
+A framework for quickly creating Kotlin and Java BattleSnakes
 
-[![Build Status](https://travis-ci.org/pambrose/battlesnake-dispatch.svg?branch=master)](https://travis-ci.org/pambrose/simple-battlesnake)
-[![Release](https://jitpack.io/v/pambrose/battlesnake-dispatch.svg)](https://jitpack.io/#pambrose/battlesnake-dispatch)
+[![Build Status](https://travis-ci.org/pambrose/battlesnake-quickstart.svg?branch=master)](https://travis-ci.org/pambrose/battlesnake-quickstart)
+[![Release](https://jitpack.io/v/pambrose/battlesnake-quickstart.svg)](https://jitpack.io/#pambrose/battlesnake-quickstart)
 
 ## Motivation
 
@@ -15,13 +15,15 @@ BattleSnakes in Kotlin and Java.
 ## Usage
 
 A snake defined as a subclass of [AbstractBattleSnake](src/main/kotlin/io/battlesnake/core/AbstractBattleSnake.kt) and 
-implements methods to produce [GameContext](src/main/kotlin/io/battlesnake/core/AbstractGameContxt.kt) 
+implements methods to produce [GameContext](src/main/kotlin/io/battlesnake/core/AbstractGameContext.kt) 
 and [Strategy](src/main/kotlin/io/battlesnake/core/Strategy.kt) objects. 
 
-* A GameContext object is snake-specific and is created at the start of every game and provides context between game turns. 
-* A Strategy specifies responses for Ping, Start, Move, and End commands.
+* The GameContext class is snake-specific and is created at the start of every game and provides context between game turns. 
+* The Strategy specifies responses for Ping, Start, Move, and End commands.
 
 ## Examples
+
+Examples of simple BattleSnakes created with this framework are [here](https://github.com/pambrose/battlesnake-examples).
 
 ### Minimal Kotlin BattleSnake
 

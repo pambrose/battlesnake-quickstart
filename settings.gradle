@@ -11,5 +11,5 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'battlesnake-dispatch'
+rootProject.name = 'battlesnake-quickstart'
 
