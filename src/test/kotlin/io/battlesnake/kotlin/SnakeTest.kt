@@ -1,13 +1,13 @@
-package io.battlesnake
+package io.battlesnake.kotlin
 
-import io.battlesnake.SnakeTest.TestSnake.GameContext
 import io.battlesnake.core.*
+import io.battlesnake.kotlin.SnakeTest.TestSnake.GameContext
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class SnakeTest {
 
-    object TestSnake : BattleSnake<GameContext>() {
+    object TestSnake : AbstractBattleSnake<GameContext>() {
 
         class GameContext : AbstractGameContext()
 

@@ -6,7 +6,7 @@ import spark.Response
 import spark.Spark
 import kotlin.system.measureTimeMillis
 
-abstract class BattleSnake<T : AbstractGameContext> : KLogging() {
+abstract class AbstractBattleSnake<T : AbstractGameContext> : KLogging() {
 
     abstract fun gameContext(): T
 
@@ -16,7 +16,7 @@ abstract class BattleSnake<T : AbstractGameContext> : KLogging() {
 
     private val contextMap = mutableMapOf<String, T>()
 
-    fun process(req: Request, res: Response) =
+    private fun process(req: Request, res: Response) =
         try {
             val uri = req.uri()
             lateinit var gameResponse: GameResponse

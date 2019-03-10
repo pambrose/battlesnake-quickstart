@@ -263,5 +263,3 @@ data class Position(
 ) {
     operator fun minus(other: Position) = abs(this.x - other.x) + abs(this.y - other.y)
 }
-
-
