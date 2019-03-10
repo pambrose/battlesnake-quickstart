@@ -13,7 +13,7 @@ class SnakeTest {
 
         override fun gameContext() = GameContext()
 
-        override fun gameStrategy(): DslStrategy<GameContext> =
+        override fun gameStrategy(): Strategy<GameContext> =
             strategy {
                 onStart { _: GameContext, _: StartRequest -> StartResponse("#ff00ff") }
                 onMove { _: GameContext, _: MoveRequest -> RIGHT }

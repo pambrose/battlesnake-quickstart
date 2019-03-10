@@ -4,8 +4,8 @@ import mu.KLogging
 import spark.Request
 import spark.Response
 
-fun <T : AbstractGameContext> strategy(verbose: Boolean = false, init: DslStrategy<T>.() -> Unit) =
-    DslStrategy<T>()
+fun <T : AbstractGameContext> strategy(verbose: Boolean = false, init: Strategy<T>.() -> Unit) =
+    Strategy<T>()
         .apply {
             onPing { request, response ->
                 logger.info { pingMsg(request, response) }
@@ -30,7 +30,7 @@ fun <T : AbstractGameContext> strategy(verbose: Boolean = false, init: DslStrate
             init.invoke(this)
         }
 
-open class DslStrategy<T : AbstractGameContext> : KLogging() {
+open class Strategy<T : AbstractGameContext> : KLogging() {
 
     internal fun pingMsg(request: Request, response: Response) =
         "Ping from ${request.ip()}"

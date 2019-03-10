@@ -10,7 +10,7 @@ abstract class AbstractBattleSnake<T : AbstractGameContext> : KLogging() {
 
     abstract fun gameContext(): T
 
-    abstract fun gameStrategy(): DslStrategy<T>
+    abstract fun gameStrategy(): Strategy<T>
 
     internal val strategy by lazy { gameStrategy() }
 

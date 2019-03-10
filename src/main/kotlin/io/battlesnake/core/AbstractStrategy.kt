@@ -3,7 +3,7 @@ package io.battlesnake.core
 import spark.Request
 import spark.Response
 
-abstract class AbstractStrategy<T : AbstractGameContext>(val verbose: Boolean = false) : DslStrategy<T>() {
+abstract class AbstractStrategy<T : AbstractGameContext>(val verbose: Boolean = false) : Strategy<T>() {
 
     init {
         onPing { request: Request, response: Response ->
