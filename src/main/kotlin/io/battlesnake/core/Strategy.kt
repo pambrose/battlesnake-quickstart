@@ -1,45 +1,91 @@
 package io.battlesnake.core
 
+import mu.KLogging
 import spark.Request
 import spark.Response
 
-abstract class Strategy<T : AbstractGameContext>(val verbose: Boolean = false) : DslStrategy<T>() {
+fun <T : AbstractGameContext> strategy(verbose: Boolean = false, init: DslStrategy<T>.() -> Unit) =
+    DslStrategy<T>()
+        .apply {
+            onPing { request, response ->
+                logger.info { pingMsg(request, response) }
+                PingResponse
+            }
 
-    init {
-        onPing { request: Request, response: Response ->
-            logger.info { pingMsg(request, response) }
-            onPing(request, response)
-        }
+            onStart { context, request ->
+                logger.info { startMsg(context, request) }
+                StartResponse()
+            }
 
-        onStart { context: T, request: StartRequest ->
-            logger.info { startMsg(context, request) }
-            onStart(context, request)
-        }
+            onEnd { context, request ->
+                logger.info { endMsg(context, request) }
+                EndResponse
+            }
 
-        onMove { context: T, request: MoveRequest -> onMove(context, request) }
-
-        onEnd { context: T, request: EndRequest ->
-            logger.info { endMsg(context, request) }
-            onEnd(context, request)
-        }
-
-        onAfterTurn { request: Request,
-                      response: Response,
-                      gameResponse: GameResponse,
-                      millis: Long ->
             if (verbose)
-                logger.info { turnMsg(request, response, gameResponse, millis) }
-            onAfterTurn(gameResponse, millis)
+                onAfterTurn { request, response, gameResponse, millis ->
+                    logger.info { turnMsg(request, response, gameResponse, millis) }
+                }
+
+            init.invoke(this)
         }
+
+open class DslStrategy<T : AbstractGameContext> : KLogging() {
+
+    internal fun pingMsg(request: Request, response: Response) =
+        "Ping from ${request.ip()}"
+
+    internal fun startMsg(context: T, request: StartRequest) =
+        "Starting game: \"${request.gameId}\" [${context.request.ip()}]"
+
+    internal fun endMsg(context: T, request: EndRequest): String {
+        val avg =
+            if (context.moveCount > 0) "with ${"%.2f".format(context.elapsedMoveTimeMillis / (context.moveCount.toFloat()))} ms/move " else ""
+        return "Ending game: \"${request.gameId}\" game time: ${context.elapsedGameTimeMsg} moves: ${context.moveCount} $avg[${context.request.ip()}]"
     }
 
-    open fun onPing(request: Request, response: Response) = PingResponse
+    internal fun turnMsg(request: Request, response: Response, gameResponse: GameResponse, millis: Long) =
+        "Responded to ${request.uri()} in $millis ms with: $gameResponse"
 
-    open fun onStart(context: T, request: StartRequest) = StartResponse()
+    internal val ping: MutableList<(request: Request, response: Response) -> PingResponse> = mutableListOf()
 
-    abstract fun onMove(context: T, request: MoveRequest): MoveResponse
+    internal val start: MutableList<(context: T, request: StartRequest) -> StartResponse> = mutableListOf()
 
-    open fun onEnd(context: T, request: EndRequest) = EndResponse
+    internal val move: MutableList<(context: T, request: MoveRequest) -> MoveResponse> = mutableListOf()
 
-    open fun onAfterTurn(response: GameResponse, millis: Long) {}
+    internal val end: MutableList<(context: T, request: EndRequest) -> EndResponse> = mutableListOf()
+
+    internal val afterTurn: MutableList<(
+        request: Request,
+        response: Response,
+        gameResponse: GameResponse,
+        millis: Long
+    ) -> Unit> = mutableListOf()
+
+    fun onPing(block: (request: Request, response: Response) -> PingResponse) {
+        ping.add(block)
+    }
+
+    fun onStart(block: (context: T, request: StartRequest) -> StartResponse) {
+        start.add(block)
+    }
+
+    fun onMove(block: (context: T, request: MoveRequest) -> MoveResponse) {
+        move.add(block)
+    }
+
+    fun onEnd(block: (context: T, request: EndRequest) -> EndResponse) {
+        end.add(block)
+    }
+
+    fun onAfterTurn(
+        block: (
+            request: Request,
+            response: Response,
+            gameResponse: GameResponse,
+            millis: Long
+        ) -> Unit
+    ) {
+        afterTurn.add(block)
+    }
 }
