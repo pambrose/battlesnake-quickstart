@@ -107,11 +107,6 @@ data class MoveRequest(
     val isFoodAvailable
         get() = foodList.isNotEmpty()
     @Transient
-    val nearestFood by lazy { you.nearestFood(foodList) }
-    @Transient
-    val nearestFoodPosition
-        get() = nearestFood.position
-    @Transient
     val bodyLength
         get() = you.bodyLength
 
@@ -227,15 +222,7 @@ data class You(
     @Transient
     val headPosition by lazy { bodyPosition(0) }
 
-    fun nearestFood(foodList: List<Food>) =
-        foodList
-            .map { Pair(it, movesTo(it)) }
-            .maxBy { it.second }!!
-            .first
-
     fun bodyPosition(pos: Int) = body[pos].position
-
-    fun movesTo(food: Food) = headPosition - food.position
 }
 
 @Serializable

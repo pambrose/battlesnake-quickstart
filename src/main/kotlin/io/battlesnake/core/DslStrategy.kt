@@ -45,7 +45,7 @@ open class DslStrategy<T : AbstractGameContext> : KLogging() {
     }
 
     internal fun turnMsg(request: Request, response: Response, gameResponse: GameResponse, millis: Long) =
-        "Responded to ${request.uri()} in ${millis}ms with: $gameResponse"
+        "Responded to ${request.uri()} in $millis ms with: $gameResponse"
 
     internal val ping: MutableList<(request: Request, response: Response) -> PingResponse> = mutableListOf()
 
