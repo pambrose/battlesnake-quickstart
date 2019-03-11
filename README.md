@@ -1,9 +1,9 @@
-# Battlesnake QuickStart 
+# Battlesnake Quickstart 
 
 [![Build Status](https://travis-ci.org/pambrose/battlesnake-quickstart.svg?branch=master)](https://travis-ci.org/pambrose/battlesnake-quickstart)
 [![Release](https://jitpack.io/v/pambrose/battlesnake-quickstart.svg)](https://jitpack.io/#pambrose/battlesnake-quickstart)
 
-A framework for quickly creating Kotlin and Java Battlesnakes
+A framework for easily creating Kotlin and Java Battlesnakes
 
 ## Motivation
 
