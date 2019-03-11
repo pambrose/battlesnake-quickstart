@@ -78,14 +78,7 @@ open class Strategy<T : AbstractGameContext> : KLogging() {
         end.add(block)
     }
 
-    fun onAfterTurn(
-        block: (
-            request: Request,
-            response: Response,
-            gameResponse: GameResponse,
-            millis: Long
-        ) -> Unit
-    ) {
+    fun onAfterTurn(block: (request: Request, response: Response, gameResponse: GameResponse, millis: Long) -> Unit) {
         afterTurn.add(block)
     }
 }
