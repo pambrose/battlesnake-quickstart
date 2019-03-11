@@ -1,16 +1,16 @@
-# BattleSnake QuickStart 
-
-A framework for quickly creating Kotlin and Java BattleSnakes
+# Battlesnake QuickStart 
 
 [![Build Status](https://travis-ci.org/pambrose/battlesnake-quickstart.svg?branch=master)](https://travis-ci.org/pambrose/battlesnake-quickstart)
 [![Release](https://jitpack.io/v/pambrose/battlesnake-quickstart.svg)](https://jitpack.io/#pambrose/battlesnake-quickstart)
 
+A framework for quickly creating Kotlin and Java Battlesnakes
+
 ## Motivation
 
-Out of the box, [BattleSnake](https://battlesnake.io) requires a fair amount of JSON/REST wiring before one 
+Out of the box, [Battlesnake](https://battlesnake.io) requires a fair amount of JSON/REST wiring before one 
 can start authoring a snake. That initial exercise can prove problematic for some developers. 
 This repo takes care of the wiring and communications and provides a simple framework for writing 
-BattleSnakes in Kotlin and Java.  
+Battlesnakes in Kotlin and Java.  
 
 ## Usage
 
@@ -18,14 +18,15 @@ A snake defined as a subclass of [AbstractBattleSnake](src/main/kotlin/io/battle
 implements methods to produce [GameContext](src/main/kotlin/io/battlesnake/core/AbstractGameContext.kt) 
 and [Strategy](src/main/kotlin/io/battlesnake/core/Strategy.kt) objects. 
 
-* The GameContext class is snake-specific and is created at the start of every game and provides context between game turns. 
+* The GameContext class is snake-specific. An instance is created at the start of every game and 
+provides context between game turns. 
 * The Strategy specifies responses for Ping, Start, Move, and End commands.
 
 ## Examples
 
-Examples of simple BattleSnakes created with this framework are [here](https://github.com/pambrose/battlesnake-examples).
+Examples of simple Battlesnakes created with this framework are [here](https://github.com/pambrose/battlesnake-examples).
 
-### Minimal Kotlin BattleSnake
+### Minimal Kotlin Battlesnake
 
 ```kotlin
 object ExampleSnake : AbstractBattleSnake<GameContext>(){
@@ -57,7 +58,7 @@ object ExampleSnake : AbstractBattleSnake<GameContext>(){
 }
 ```
 
-### Minimal Java BattleSnake
+### Minimal Java Battlesnake
 
 ```java
 public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.GameContext> {
