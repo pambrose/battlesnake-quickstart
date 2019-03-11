@@ -32,7 +32,9 @@ Examples of simple Battlesnakes created with this framework are [here](https://g
 object ExampleSnake : AbstractBattleSnake<GameContext>(){
 
     // Add any necessary snake-specific data to GameContext class
-    class GameContext : AbstractGameContext()
+    class GameContext : AbstractGameContext() {
+        // Context instance data goes here
+    }
 
     // Called at the beginning of each game on Start
     override fun gameContext(): GameContext = GameContext()
@@ -65,7 +67,8 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.GameContext> 
 
     // GameContext can contain any data you want
     static class GameContext extends AbstractGameContext {
-    }
+        // Context instance data goes here
+ }
 
     // Called at the beginning of each game on Start
     @Override
