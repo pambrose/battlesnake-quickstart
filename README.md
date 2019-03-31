@@ -22,6 +22,10 @@ and [Strategy](src/main/kotlin/io/battlesnake/core/Strategy.kt) objects.
 provides context between game turns. 
 * The Strategy specifies responses for Ping, Start, Move, and End commands.
 
+## Helpful Tools
+
+* [JsonToKotlinClass](https://github.com/wuseal/JsonToKotlinClass)
+
 ## Examples
 
 Examples of simple Battlesnakes created with this framework are [here](https://github.com/pambrose/battlesnake-examples).
