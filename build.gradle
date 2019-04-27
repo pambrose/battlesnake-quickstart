@@ -1,24 +1,22 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.3.21'
-    id 'kotlinx-serialization' version '1.3.20'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.31'
+    id 'kotlinx-serialization' version '1.3.31'
     id "com.github.ben-manes.versions" version "0.21.0"
 }
 
-allprojects {
-    repositories {
-        mavenCentral()
-        jcenter()
-        maven { url "https://kotlin.bintray.com/kotlinx" }
-        maven { url 'https://jitpack.io' }
-    }
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url "https://kotlin.bintray.com/kotlinx" }
+    maven { url 'https://jitpack.io' }
 }
 
 def jvmVersion = '1.8'
-def kotlinVersion = '1.3.21'
+def kotlinVersion = '1.3.31'
 def serializationVersion = '0.10.0'
-def loggingVersion = '1.6.25'
-def sparkVersion = '2.8.0'
+def loggingVersion = '1.6.26'
+def sparkVersion = '2.9.0'
 def slf4jVersion = '1.7.21'
 def junitVersion = '5.4.0'
 def quickstartVersion = '0.2.0'
@@ -50,15 +48,11 @@ artifacts {
 }
 
 compileKotlin {
-    kotlinOptions {
-        jvmTarget = jvmVersion
-    }
+    kotlinOptions.jvmTarget = jvmVersion
 }
 
 compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = jvmVersion
-    }
+    kotlinOptions.jvmTarget = jvmVersion
 }
 
 test {
