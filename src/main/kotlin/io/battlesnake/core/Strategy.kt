@@ -36,26 +36,27 @@ open class Strategy<T : AbstractGameContext> : KLogging() {
         "Ping from ${request.ip()}"
 
     internal fun startMsg(context: T, request: StartRequest) =
-        "Starting game: \"${request.gameId}\" [${context.request.ip()}]"
+        "Starting game: \"${request.gameId}\" [${context.request?.ip() ?: "Unkown IP"}]"
 
     internal fun endMsg(context: T, request: EndRequest): String {
         val avg =
             if (context.moveCount > 0) "with ${"%.2f".format(context.elapsedMoveTimeMillis / (context.moveCount.toFloat()))} ms/move " else ""
-        return "Ending game: \"${request.gameId}\" game time: ${context.elapsedGameTimeMsg} moves: ${context.moveCount} $avg[${context.request.ip()}]"
+        return "Ending game: \"${request.gameId}\" game time: ${context.elapsedGameTimeMsg} moves: ${context.moveCount} $avg[${context.request?.ip()
+            ?: "Unknown IP"}]"
     }
 
     internal fun turnMsg(request: Request, response: Response, gameResponse: GameResponse, millis: Long) =
         "Responded to ${request.uri()} in $millis ms with: $gameResponse"
 
-    internal val ping: MutableList<(request: Request, response: Response) -> PingResponse> = mutableListOf()
+    val ping: MutableList<(request: Request, response: Response) -> PingResponse> = mutableListOf()
 
-    internal val start: MutableList<(context: T, request: StartRequest) -> StartResponse> = mutableListOf()
+    val start: MutableList<(context: T, request: StartRequest) -> StartResponse> = mutableListOf()
 
-    internal val move: MutableList<(context: T, request: MoveRequest) -> MoveResponse> = mutableListOf()
+    val move: MutableList<(context: T, request: MoveRequest) -> MoveResponse> = mutableListOf()
 
-    internal val end: MutableList<(context: T, request: EndRequest) -> EndResponse> = mutableListOf()
+    val end: MutableList<(context: T, request: EndRequest) -> EndResponse> = mutableListOf()
 
-    internal val afterTurn: MutableList<(
+    val afterTurn: MutableList<(
         request: Request,
         response: Response,
         gameResponse: GameResponse,
@@ -63,22 +64,22 @@ open class Strategy<T : AbstractGameContext> : KLogging() {
     ) -> Unit> = mutableListOf()
 
     fun onPing(block: (request: Request, response: Response) -> PingResponse) {
-        ping.add(block)
+        ping += block
     }
 
     fun onStart(block: (context: T, request: StartRequest) -> StartResponse) {
-        start.add(block)
+        start += block
     }
 
     fun onMove(block: (context: T, request: MoveRequest) -> MoveResponse) {
-        move.add(block)
+        move += block
     }
 
     fun onEnd(block: (context: T, request: EndRequest) -> EndResponse) {
-        end.add(block)
+        end += block
     }
 
     fun onAfterTurn(block: (request: Request, response: Response, gameResponse: GameResponse, millis: Long) -> Unit) {
-        afterTurn.add(block)
+        afterTurn += block
     }
 }

@@ -9,12 +9,12 @@ abstract class AbstractGameContext {
     var elapsedMoveTimeMillis = 0L
     var moveCount = 0L
 
-    lateinit var request: Request
+    var request: Request? = null
         internal set
-    lateinit var response: Response
+    var response: Response? = null
         internal set
 
-    internal fun update(req: Request, res: Response) {
+    internal fun assignRequestResponse(req: Request, res: Response) {
         request = req
         response = res
     }

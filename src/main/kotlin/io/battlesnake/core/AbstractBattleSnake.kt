@@ -12,7 +12,7 @@ abstract class AbstractBattleSnake<T : AbstractGameContext> : KLogging() {
 
     abstract fun gameStrategy(): Strategy<T>
 
-    internal val strategy by lazy { gameStrategy() }
+    val strategy by lazy { gameStrategy() }
 
     private val contextMap = mutableMapOf<String, T>()
 
@@ -29,7 +29,7 @@ abstract class AbstractBattleSnake<T : AbstractGameContext> : KLogging() {
                             START -> {
                                 gameContext()
                                     .run {
-                                        update(req, res)
+                                        assignRequestResponse(req, res)
                                         val startRequest = StartRequest.toObject(req.body())
                                         contextMap[startRequest.gameId] = this
                                         strategy.start.map { it.invoke(this, startRequest) }.lastOrNull()
@@ -41,7 +41,7 @@ abstract class AbstractBattleSnake<T : AbstractGameContext> : KLogging() {
                                 val moveRequest = MoveRequest.toObject(req.body())
                                 val context = contextMap[moveRequest.gameId]
                                     ?: throw NoSuchElementException("Missing context for game id: ${moveRequest.gameId}")
-                                context.update(req, res)
+                                context.assignRequestResponse(req, res)
 
                                 lateinit var response: GameResponse
                                 val moveTime =
@@ -60,7 +60,7 @@ abstract class AbstractBattleSnake<T : AbstractGameContext> : KLogging() {
                                 val endRequest = EndRequest.toObject(req.body())
                                 val context = contextMap.remove(endRequest.gameId)
                                     ?: throw NoSuchElementException("Missing context for game id: ${endRequest.gameId}")
-                                context.update(req, res)
+                                context.assignRequestResponse(req, res)
 
                                 strategy.end.map { it.invoke(context, endRequest) }.lastOrNull() ?: EndResponse
                             }

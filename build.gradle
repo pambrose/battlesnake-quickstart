@@ -19,7 +19,7 @@ def loggingVersion = '1.6.26'
 def sparkVersion = '2.9.0'
 def slf4jVersion = '1.7.21'
 def junitVersion = '5.4.0'
-def quickstartVersion = '0.2.1'
+def quickstartVersion = '0.2.2'
 
 group = 'io.battlesnake'
 version = "$quickstartVersion-SNAPSHOT"
