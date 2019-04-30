@@ -21,7 +21,7 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
     val gameId
         get() = game.id
 
-    fun toJson() = Json.stringify(StartRequest.serializer(), this)
+    fun toJson() = Json.stringify(serializer(), this)
 
     companion object {
         fun primeClassLoader() {
@@ -33,10 +33,10 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
                     You(emptyList(), 3, "", "")
                 )
             val json = start.toJson()
-            StartRequest.toObject(json)
+            toObject(json)
         }
 
-        fun toObject(json: String) = Json.parse(StartRequest.serializer(), json)
+        fun toObject(json: String) = Json.parse(serializer(), json)
     }
 }
 
@@ -46,7 +46,7 @@ data class StartResponse(
     val headType: String = "",
     val tailType: String = ""
 ) : GameResponse {
-    fun toJson() = Json.stringify(StartResponse.serializer(), this)
+    fun toJson() = Json.stringify(serializer(), this)
 }
 
 @Serializable
@@ -132,13 +132,13 @@ data class MoveRequest(
         get() = you.headPosition
 
     companion object {
-        fun toObject(json: String) = Json.parse(MoveRequest.serializer(), json)
+        fun toObject(json: String) = Json.parse(serializer(), json)
     }
 }
 
 @Serializable
 data class MoveResponse(val move: String) : GameResponse {
-    fun toJson() = Json.stringify(MoveResponse.serializer(), this)
+    fun toJson() = Json.stringify(serializer(), this)
 }
 
 @Serializable
@@ -153,7 +153,7 @@ data class EndRequest(
         get() = game.id
 
     companion object {
-        fun toObject(json: String) = Json.parse(EndRequest.serializer(), json)
+        fun toObject(json: String) = Json.parse(serializer(), json)
     }
 }
 
