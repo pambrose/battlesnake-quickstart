@@ -17,7 +17,6 @@ object PingResponse : GameResponse {
 
 @Serializable
 data class StartRequest(val board: Board, val game: Game, val turn: Int, val you: You) {
-    @Transient
     val gameId
         get() = game.id
 
@@ -56,78 +55,59 @@ data class MoveRequest(
     val turn: Int,
     val you: You
 ) {
-    @Transient
     val gameId
         get() = game.id
 
-    @Transient
     val boardCenter
         get() = board.center
 
-    @Transient
     val boardOrigin
         get() = board.origin
 
-    @Transient
     val boardUpperLeft
         get() = board.upperLeft
 
-    @Transient
     val boardUpperRight
         get() = board.upperRight
 
-    @Transient
     val boardLowerRight
         get() = board.lowerRight
 
-    @Transient
     val boardLowerLeft
         get() = board.lowerLeft
 
-    @Transient
     val boardSize by lazy { Pair(board.width, board.height) }
 
-    @Transient
     val isAtCenter
         get() = you.headPosition == boardCenter
 
-    @Transient
     val isAtOrigin
         get() = you.headPosition == BOARD_ORIGIN
 
-    @Transient
     val isAtUpperLeft
         get() = you.headPosition == boardUpperLeft
 
-    @Transient
     val isAtUpperRight
         get() = you.headPosition == boardUpperRight
 
-    @Transient
     val isAtLowerRight
         get() = you.headPosition == boardLowerRight
 
-    @Transient
     val isAtLowerLeft
         get() = you.headPosition == boardLowerLeft
 
-    @Transient
     val foodList
         get() = board.food
 
-    @Transient
     val snakeList
         get() = board.snakes
 
-    @Transient
     val isFoodAvailable
         get() = foodList.isNotEmpty()
 
-    @Transient
     val bodyLength
         get() = you.bodyLength
 
-    @Transient
     val headPosition
         get() = you.headPosition
 
@@ -148,7 +128,6 @@ data class EndRequest(
     val turn: Int,
     val you: You
 ) {
-    @Transient
     val gameId
         get() = game.id
 
@@ -177,16 +156,10 @@ data class Board(
     @Transient
     val upperLeft = BOARD_ORIGIN
 
-    @Transient
     val upperRight: Position  by lazy { Position(width - 1, 0) }
-
-    @Transient
     val lowerRight: Position  by lazy { Position(width - 1, height - 1) }
-
-    @Transient
     val lowerLeft: Position  by lazy { Position(0, height - 1) }
 
-    @Transient
     val center by lazy {
         val centerX =
             (if (width.isEven())
@@ -214,13 +187,11 @@ data class Snake(
     val id: String,
     val name: String
 ) {
-    @Transient
     val headPosition
         get() = bodyPosition(0)
 
     fun bodyPosition(pos: Int) = body[pos].position
 
-    @Transient
     val bodyLength
         get() = body.map { it.position }.distinct().size
 }
@@ -232,12 +203,10 @@ data class You(
     val id: String,
     val name: String
 ) {
-    @Transient
     val headPosition by lazy { bodyPosition(0) }
 
     fun bodyPosition(pos: Int) = body[pos].position
 
-    @Transient
     val bodyLength
         get() = body.map { it.position }.distinct().size
 }
@@ -247,7 +216,6 @@ data class Body(
     val x: Int,
     val y: Int
 ) {
-    @Transient
     val position by lazy { Position(x, y) }
 }
 
@@ -256,7 +224,6 @@ data class Food(
     val x: Int,
     val y: Int
 ) {
-    @Transient
     val position by lazy { Position(x, y) }
 }
 
