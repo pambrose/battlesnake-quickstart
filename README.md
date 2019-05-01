@@ -19,9 +19,8 @@ A snake defined as a subclass of [AbstractBattleSnake](src/main/kotlin/io/battle
 implements methods to produce [GameContext](src/main/kotlin/io/battlesnake/core/AbstractGameContext.kt) 
 and [Strategy](src/main/kotlin/io/battlesnake/core/Strategy.kt) objects. 
 
-* The GameContext class is snake-specific. An instance is created at the start of every game and 
-provides context between game turns. 
-* The Strategy specifies responses for Ping, Start, Move, and End commands.
+*   The GameContext class is snake-specific. An instance is created at the start of every game and provides context between game turns. 
+*   The Strategy specifies responses for Ping, Start, Move, and End commands.
 
 ## Helpful Tools
 
