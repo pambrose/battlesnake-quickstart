@@ -1,3 +1,4 @@
+@file:Suppress("UndocumentedPublicClass")
 package io.battlesnake.core
 
 import mu.KLogging

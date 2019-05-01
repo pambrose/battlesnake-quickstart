@@ -24,9 +24,6 @@ abstract class AbstractGameContext {
     val elapsedGameTimeMsg: String
         get() {
             val time = elapsedGameTimeMillis
-            return if (time > 1000)
-                "${time / 1000} secs"
-            else
-                "$time ms"
+            return if (time > 1000) "${time / 1000} secs" else "$time ms"
         }
 }
