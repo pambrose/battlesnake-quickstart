@@ -1,3 +1,4 @@
+@file:Suppress("UndocumentedPublicClass", "UndocumentedPublicFunction")
 package io.battlesnake.core
 
 import spark.Request
