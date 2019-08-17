@@ -1,9 +1,10 @@
 @file:Suppress("UndocumentedPublicClass", "UndocumentedPublicFunction")
+
 package io.battlesnake.kotlin
 
 import io.battlesnake.core.*
 import io.battlesnake.kotlin.SnakeTest.TestSnake.GameContext
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.amshove.kluent.shouldEqual
 import org.junit.jupiter.api.Test
 
 class SnakeTest {
@@ -23,9 +24,9 @@ class SnakeTest {
 
     @Test
     internal fun pingTest() {
-        //val response = TestSnake.strategy.ping.map { it.invoke() }.lastOrNull() ?: PingResponse
+        // val response = TestSnake.strategy.ping.map { it.invoke() }.lastOrNull() ?: PingResponse
         val response = PingResponse
-        assertEquals(PingResponse.javaClass.simpleName, response.toString())
+        response.toString() shouldEqual PingResponse.javaClass.simpleName
     }
 
     @Test
@@ -35,9 +36,12 @@ class SnakeTest {
         val request = StartRequest.toObject(json)
         val response =
             TestSnake.strategy.start.map { it.invoke(TestSnake.gameContext(), request) }.lastOrNull() ?: StartResponse()
-        assertEquals("#ff00ff", response.color)
-        assertEquals("", response.headType)
-        assertEquals("", response.tailType)
+
+        response.apply {
+            color shouldEqual "#ff00ff"
+            headType shouldEqual ""
+            tailType shouldEqual ""
+        }
     }
 
     @Test
@@ -47,7 +51,7 @@ class SnakeTest {
         val request = MoveRequest.toObject(json)
         val response =
             TestSnake.strategy.move.map { it.invoke(TestSnake.gameContext(), request) }.lastOrNull() ?: RIGHT
-        assertEquals("right", response.move)
+        response.move shouldEqual "right"
     }
 
     @Test
@@ -57,6 +61,6 @@ class SnakeTest {
         val request = EndRequest.toObject(json)
         val response =
             TestSnake.strategy.end.map { it.invoke(TestSnake.gameContext(), request) }.lastOrNull() ?: EndResponse
-        assertEquals(EndResponse.javaClass.simpleName, response.toString())
+        response.toString() shouldEqual EndResponse.javaClass.simpleName
     }
 }

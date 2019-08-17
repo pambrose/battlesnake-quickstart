@@ -23,10 +23,11 @@ fun <T : AbstractGameContext> strategy(verbose: Boolean = false, init: Strategy<
                 EndResponse
             }
 
-            if (verbose)
+            if (verbose) {
                 onAfterTurn { request, response, gameResponse, millis ->
                     logger.info { turnMsg(request, response, gameResponse, millis) }
                 }
+            }
 
             init.invoke(this)
         }

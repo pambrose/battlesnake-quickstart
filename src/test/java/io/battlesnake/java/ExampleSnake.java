@@ -1,6 +1,7 @@
 package io.battlesnake.java;
 
 import io.battlesnake.core.*;
+import org.jetbrains.annotations.NotNull;
 
 import static io.battlesnake.core.JavaConstants.RIGHT;
 
@@ -12,22 +13,26 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.GameContext> 
 
     // Called at the beginning of each game on Start
     @Override
-    public GameContext gameContext() {
+    public @NotNull
+    GameContext gameContext() {
         return new GameContext();
     }
 
     @Override
-    public Strategy<GameContext> gameStrategy() {
+    public @NotNull
+    Strategy<GameContext> gameStrategy() {
         return new AbstractStrategy<GameContext>(true) {
             // StartResponse describes snake color and head/tail type
             @Override
-            public StartResponse onStart(GameContext context, StartRequest request) {
+            public @NotNull
+            StartResponse onStart(@NotNull GameContext context, @NotNull StartRequest request) {
                 return new StartResponse("#ff00ff", "beluga", "bolt");
             }
 
             // MoveResponse can be LEFT, RIGHT, UP or DOWN
             @Override
-            public MoveResponse onMove(GameContext context, MoveRequest request) {
+            public @NotNull
+            MoveResponse onMove(@NotNull GameContext context, @NotNull MoveRequest request) {
                 return RIGHT;
             }
         };
