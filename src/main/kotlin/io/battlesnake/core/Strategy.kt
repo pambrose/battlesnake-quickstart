@@ -39,7 +39,7 @@ open class Strategy<T : AbstractGameContext> : KLogging() {
         "Ping from ${request.ip()}"
 
     internal fun startMsg(context: T, request: StartRequest) =
-        "Starting game: \"${request.gameId}\" [${context.request?.ip() ?: "Unkown IP"}]"
+        "Starting game: '${request.gameId}' [${context.request?.ip() ?: "Unkown IP"}]"
 
     internal fun endMsg(context: T, request: EndRequest): String {
         val avg = if (context.moveCount > 0) {
@@ -48,7 +48,7 @@ open class Strategy<T : AbstractGameContext> : KLogging() {
             ""
         }
 
-        return "Ending game: \"${request.gameId}\" game time: ${context.elapsedGameTimeMsg} " +
+        return "Ending game: '${request.gameId}' game time: ${context.elapsedGameTimeMsg} " +
                 "moves: ${context.moveCount} $avg[${context.request?.ip() ?: "Unknown IP"}]"
     }
 
