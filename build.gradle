@@ -22,10 +22,10 @@ def kluentVersion = '1.53'
 
 def quickstartVersion = '0.2.7'
 
-group = 'io.battlesnake'
-version = "$quickstartVersion-SNAPSHOT"
-description = 'battlesnake-quickstart'
-sourceCompatibility = jvmVersion
+def group = 'io.battlesnake'
+def version = "$quickstartVersion-SNAPSHOT"
+def description = 'battlesnake-quickstart'
+def sourceCompatibility = jvmVersion
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
