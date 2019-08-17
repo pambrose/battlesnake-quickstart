@@ -2,7 +2,17 @@
 
 package io.battlesnake.kotlin
 
-import io.battlesnake.core.*
+import io.battlesnake.core.AbstractBattleSnake
+import io.battlesnake.core.AbstractGameContext
+import io.battlesnake.core.EndRequest
+import io.battlesnake.core.EndResponse
+import io.battlesnake.core.MoveRequest
+import io.battlesnake.core.PingResponse
+import io.battlesnake.core.RIGHT
+import io.battlesnake.core.StartRequest
+import io.battlesnake.core.StartResponse
+import io.battlesnake.core.Strategy
+import io.battlesnake.core.strategy
 import io.battlesnake.kotlin.SnakeTest.TestSnake.GameContext
 import org.amshove.kluent.shouldEqual
 import org.junit.jupiter.api.Test
