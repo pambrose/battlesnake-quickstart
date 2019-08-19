@@ -15,7 +15,7 @@ import io.battlesnake.core.Strategy
 import io.battlesnake.core.strategy
 import io.battlesnake.kotlin.SnakeTest.TestSnake.GameContext
 import org.amshove.kluent.shouldEqual
-import org.junit.jupiter.api.Test
+import org.junit.Test
 
 class SnakeTest {
 
@@ -42,7 +42,9 @@ class SnakeTest {
     @Test
     internal fun startTest() {
         val json =
-            """{"game":{"id":"1551594939037768058"},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],"snakes":[{"id":"you","name":"you","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you","health":0,"body":[{"x":2,"y":2}]}}"""
+            """{"game":{"id":"1551594939037768058"},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
+                |"snakes":[{"id":"you","name":"you","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
+                |"health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
         val request = StartRequest.toObject(json)
         val response =
             TestSnake.strategy.start.map { it.invoke(TestSnake.gameContext(), request) }.lastOrNull() ?: StartResponse()
@@ -57,7 +59,9 @@ class SnakeTest {
     @Test
     internal fun moveTest() {
         val json =
-            """{"game":{"id":"1551628170849008209"},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],"snakes":[{"id":"you","name":"you","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you","health":0,"body":[{"x":2,"y":2}]}}"""
+            """{"game":{"id":"1551628170849008209"},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
+                |"snakes":[{"id":"you","name":"you","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
+                |"health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
         val request = MoveRequest.toObject(json)
         val response =
             TestSnake.strategy.move.map { it.invoke(TestSnake.gameContext(), request) }.lastOrNull() ?: RIGHT
@@ -67,7 +71,9 @@ class SnakeTest {
     @Test
     internal fun endTest() {
         val json =
-            """{"game":{"id":"1551628170849008209"},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],"snakes":[{"id":"you","name":"you","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you","health":0,"body":[{"x":2,"y":2}]}}"""
+            """{"game":{"id":"1551628170849008209"},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
+                |"snakes":[{"id":"you","name":"you","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
+                |"health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
         val request = EndRequest.toObject(json)
         val response =
             TestSnake.strategy.end.map { it.invoke(TestSnake.gameContext(), request) }.lastOrNull() ?: EndResponse

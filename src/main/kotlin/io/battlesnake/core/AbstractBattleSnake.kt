@@ -46,12 +46,11 @@ abstract class AbstractBattleSnake<T : AbstractGameContext> : KLogging() {
 
     private fun start(req: Request, res: Response): GameResponse =
         gameContext()
-            .run {
-                assignRequestResponse(req, res)
+            .let { context ->
+                context.assignRequestResponse(req, res)
                 val startRequest = StartRequest.toObject(req.body())
-                contextMap[startRequest.gameId] = this
-                strategy.start.map { it.invoke(this, startRequest) }.lastOrNull()
-                    ?: StartResponse()
+                contextMap[startRequest.gameId] = context
+                strategy.start.map { it.invoke(context, startRequest) }.lastOrNull() ?: StartResponse()
             }
 
     private fun move(req: Request, res: Response): GameResponse {

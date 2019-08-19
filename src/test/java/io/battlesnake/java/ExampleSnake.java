@@ -12,27 +12,27 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.GameContext> 
     }
 
     // Called at the beginning of each game on Start
+    @NotNull
     @Override
-    public @NotNull
-    GameContext gameContext() {
+    public GameContext gameContext() {
         return new GameContext();
     }
 
+    @NotNull
     @Override
-    public @NotNull
-    Strategy<GameContext> gameStrategy() {
+    public Strategy<GameContext> gameStrategy() {
         return new AbstractStrategy<GameContext>(true) {
             // StartResponse describes snake color and head/tail type
+            @NotNull
             @Override
-            public @NotNull
-            StartResponse onStart(@NotNull GameContext context, @NotNull StartRequest request) {
+            public StartResponse onStart(@NotNull GameContext context, @NotNull StartRequest request) {
                 return new StartResponse("#ff00ff", "beluga", "bolt");
             }
 
             // MoveResponse can be LEFT, RIGHT, UP or DOWN
+            @NotNull
             @Override
-            public @NotNull
-            MoveResponse onMove(@NotNull GameContext context, @NotNull MoveRequest request) {
+            public MoveResponse onMove(@NotNull GameContext context, @NotNull MoveRequest request) {
                 return RIGHT;
             }
         };
