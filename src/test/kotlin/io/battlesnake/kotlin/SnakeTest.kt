@@ -15,7 +15,7 @@ import io.battlesnake.core.Strategy
 import io.battlesnake.core.strategy
 import io.battlesnake.kotlin.SnakeTest.TestSnake.GameContext
 import org.amshove.kluent.shouldEqual
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class SnakeTest {
 
