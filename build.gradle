@@ -20,7 +20,7 @@ def slf4jVersion = '1.7.21'
 def junitVersion = '5.5.1'
 def kluentVersion = '1.53'
 
-def quickstartVersion = '0.2.7'
+def quickstartVersion = '0.2.8'
 
 sourceCompatibility = 1.8
 
