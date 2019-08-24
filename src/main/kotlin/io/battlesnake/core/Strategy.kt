@@ -1,4 +1,5 @@
 @file:Suppress("UndocumentedPublicClass", "UndocumentedPublicFunction")
+
 package io.battlesnake.core
 
 import mu.KLogging
@@ -23,10 +24,11 @@ fun <T : AbstractGameContext> strategy(verbose: Boolean = false, init: Strategy<
                 EndResponse
             }
 
-            if (verbose)
+            if (verbose) {
                 onAfterTurn { request, response, gameResponse, millis ->
                     logger.info { turnMsg(request, response, gameResponse, millis) }
                 }
+            }
 
             init.invoke(this)
         }
@@ -37,15 +39,18 @@ open class Strategy<T : AbstractGameContext> : KLogging() {
         "Ping from ${request.ip()}"
 
     internal fun startMsg(context: T, request: StartRequest) =
-        "Starting game: \"${request.gameId}\" [${context.request?.ip() ?: "Unkown IP"}]"
+        "Starting game: '${request.gameId}' [${context.request?.ip() ?: "Unkown IP"}]"
 
     internal fun endMsg(context: T, request: EndRequest): String {
-        val avg = if (context.moveCount > 0)
-            "with ${"%.2f".format(context.elapsedMoveTimeMillis / (context.moveCount.toFloat()))} ms/move "
-        else
-            ""
-        return "Ending game: \"${request.gameId}\" game time: ${context.elapsedGameTimeMsg} moves: ${context.moveCount} $avg[${context.request?.ip()
-            ?: "Unknown IP"}]"
+        val avg =
+            if (context.moveCount > 0) {
+                "with ${"%.2f".format(context.elapsedMoveTimeMillis / (context.moveCount.toFloat()))} ms/move "
+            } else {
+                ""
+            }
+
+        return "Ending game: '${request.gameId}' game time: ${context.elapsedGameTimeMsg} " +
+                "moves: ${context.moveCount} $avg[${context.request?.ip() ?: "Unknown IP"}]"
     }
 
     internal fun turnMsg(request: Request, response: Response, gameResponse: GameResponse, millis: Long) =
