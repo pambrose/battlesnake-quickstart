@@ -1,4 +1,5 @@
 @file:Suppress("UndocumentedPublicClass", "UndocumentedPublicFunction")
+
 package io.battlesnake.core
 
 import io.battlesnake.core.Board.Companion.BOARD_ORIGIN
@@ -13,7 +14,7 @@ fun Int.isOdd() = this % 2 != 0
 interface GameResponse
 
 object PingResponse : GameResponse {
-    override fun toString() = PingResponse::class.simpleName!!
+    override fun toString() = PingResponse::class.simpleName ?: "PingResponse"
 }
 
 @Serializable
@@ -138,7 +139,7 @@ data class EndRequest(
 }
 
 object EndResponse : GameResponse {
-    override fun toString() = EndResponse::class.simpleName!!
+    override fun toString() = EndResponse::class.simpleName ?: "EndResponse"
 }
 
 @Serializable
@@ -157,22 +158,13 @@ data class Board(
     @Transient
     val upperLeft = BOARD_ORIGIN
 
-    val upperRight: Position  by lazy { Position(width - 1, 0) }
-    val lowerRight: Position  by lazy { Position(width - 1, height - 1) }
-    val lowerLeft: Position  by lazy { Position(0, height - 1) }
+    val upperRight: Position by lazy { Position(width - 1, 0) }
+    val lowerRight: Position by lazy { Position(width - 1, height - 1) }
+    val lowerLeft: Position by lazy { Position(0, height - 1) }
 
     val center by lazy {
-        val centerX =
-            (if (width.isEven())
-                width / 2
-            else
-                (width + 1) / 2) - 1
-
-        val centerY =
-            (if (height.isEven())
-                height / 2
-            else
-                (height + 1) / 2) - 1
+        val centerX = (if (width.isEven()) width / 2 else (width + 1) / 2) - 1
+        val centerY = (if (height.isEven()) height / 2 else (height + 1) / 2) - 1
         Position(centerX, centerY)
     }
 
