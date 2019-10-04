@@ -53,10 +53,14 @@ artifacts {
 
 compileKotlin {
     kotlinOptions.jvmTarget = jvmVersion
+    kotlinOptions.freeCompilerArgs += ['-Xuse-experimental=kotlin.time.ExperimentalTime',
+                                       '-Xuse-experimental=kotlinx.serialization.UnstableDefault']
 }
 
 compileTestKotlin {
     kotlinOptions.jvmTarget = jvmVersion
+    kotlinOptions.freeCompilerArgs += ['-Xuse-experimental=kotlin.time.ExperimentalTime',
+                                       '-Xuse-experimental=kotlinx.serialization.UnstableDefault']
 }
 
 test {
