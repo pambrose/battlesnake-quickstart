@@ -1,8 +1,8 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.3.41'
-    id 'kotlinx-serialization' version '1.3.41'
-    id "com.github.ben-manes.versions" version "0.22.0"
+    id 'org.jetbrains.kotlin.jvm' version '1.3.50'
+    id 'kotlinx-serialization' version '1.3.50'
+    id "com.github.ben-manes.versions" version "0.25.0"
 }
 
 repositories {
@@ -12,13 +12,13 @@ repositories {
 }
 
 def jvmVersion = '1.8'
-def kotlinVersion = '1.3.41'
-def serializationVersion = '0.12.0'
+def kotlinVersion = '1.3.50'
+def serializationVersion = '0.13.0'
 def loggingVersion = '1.7.6'
 def sparkVersion = '2.9.1'
 def slf4jVersion = '1.7.25'
-def junitVersion = '5.5.1'
-def kluentVersion = '1.53'
+def junitVersion = '5.5.2'
+def kluentVersion = '1.56'
 
 def quickstartVersion = '0.2.9'
 
