@@ -8,8 +8,8 @@ import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
 import java.lang.Math.abs
 
-fun Int.isEven() = this % 2 == 0
-fun Int.isOdd() = this % 2 != 0
+val Int.isEven get() = this % 2 == 0
+val Int.isOdd get() = this % 2 != 0
 
 interface GameResponse
 
@@ -163,8 +163,8 @@ data class Board(
     val lowerLeft: Position by lazy { Position(0, height - 1) }
 
     val center by lazy {
-        val centerX = (if (width.isEven()) width / 2 else (width + 1) / 2) - 1
-        val centerY = (if (height.isEven()) height / 2 else (height + 1) / 2) - 1
+        val centerX = (if (width.isEven) width / 2 else (width + 1) / 2) - 1
+        val centerY = (if (height.isEven) height / 2 else (height + 1) / 2) - 1
         Position(centerX, centerY)
     }
 
