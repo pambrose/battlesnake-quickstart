@@ -72,7 +72,7 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.GameContext> 
     // GameContext can contain any data you want
     static class GameContext extends AbstractGameContext {
         // Context instance data goes here
- }
+    }
 
     // Called at the beginning of each game on Start
     @Override
