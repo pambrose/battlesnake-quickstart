@@ -50,7 +50,7 @@ open class Strategy<T : AbstractGameContext> : KLogging() {
             }
 
         return "Ending game: '${request.gameId}' game time: ${context.elapsedGameTimeMsg} " +
-                "moves: ${context.moveCount} $avg[${context.request?.ip() ?: "Unknown IP"}]"
+            "moves: ${context.moveCount} $avg[${context.request?.ip() ?: "Unknown IP"}]"
     }
 
     internal fun turnMsg(request: Request, response: Response, gameResponse: GameResponse, millis: Long) =
