@@ -13,7 +13,6 @@ repositories {
 }
 
 def jvmVersion = '1.8'
-def kotlinVersion = '1.3.60'
 def serializationVersion = '0.13.0'
 def loggingVersion = '1.7.8'
 def sparkVersion = '2.9.1'
@@ -31,8 +30,10 @@ description = 'battlesnake-quickstart'
 sourceCompatibility = jvmVersion
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    implementation platform('org.jetbrains.kotlin:kotlin-bom')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlin:kotlin-reflect"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serializationVersion"
     implementation "io.github.microutils:kotlin-logging:$loggingVersion"
     implementation "com.sparkjava:spark-core:$sparkVersion"
