@@ -32,7 +32,7 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
           Game(""),
           1,
           You(emptyList(), 3, "", "")
-        )
+                    )
       val json = start.toJson()
       toObject(json)
     }
@@ -46,7 +46,7 @@ data class StartResponse(
   val color: String = "",
   val headType: String = "",
   val tailType: String = ""
-) : GameResponse {
+                        ) : GameResponse {
   fun toJson() = Json.stringify(serializer(), this)
 }
 
@@ -56,7 +56,7 @@ data class MoveRequest(
   val game: Game,
   val turn: Int,
   val you: You
-) {
+                      ) {
   val gameId
     get() = game.id
 
@@ -129,7 +129,7 @@ data class EndRequest(
   val game: Game,
   val turn: Int,
   val you: You
-) {
+                     ) {
   val gameId
     get() = game.id
 
@@ -146,12 +146,10 @@ object EndResponse : GameResponse {
 data class Game(val id: String)
 
 @Serializable
-data class Board(
-  val food: List<Food>,
-  val height: Int,
-  val snakes: List<Snake>,
-  val width: Int
-) {
+data class Board(val food: List<Food>,
+                 val height: Int,
+                 val snakes: List<Snake>,
+                 val width: Int) {
   @Transient
   val origin = BOARD_ORIGIN
 
@@ -174,12 +172,10 @@ data class Board(
 }
 
 @Serializable
-data class Snake(
-  val body: List<Body>,
-  val health: Int,
-  val id: String,
-  val name: String
-) {
+data class Snake(val body: List<Body>,
+                 val health: Int,
+                 val id: String,
+                 val name: String) {
   val headPosition
     get() = bodyPosition(0)
 
@@ -190,12 +186,10 @@ data class Snake(
 }
 
 @Serializable
-data class You(
-  val body: List<Body>,
-  val health: Int,
-  val id: String,
-  val name: String
-) {
+data class You(val body: List<Body>,
+               val health: Int,
+               val id: String,
+               val name: String) {
   val headPosition by lazy { bodyPosition(0) }
 
   fun bodyPosition(pos: Int) = body[pos].position
@@ -205,25 +199,16 @@ data class You(
 }
 
 @Serializable
-data class Body(
-  val x: Int,
-  val y: Int
-) {
+data class Body(val x: Int, val y: Int) {
   val position by lazy { Position(x, y) }
 }
 
 @Serializable
-data class Food(
-  val x: Int,
-  val y: Int
-) {
+data class Food(val x: Int, val y: Int) {
   val position by lazy { Position(x, y) }
 }
 
 @Serializable
-data class Position(
-  val x: Int,
-  val y: Int
-) {
+data class Position(val x: Int, val y: Int) {
   operator fun minus(other: Position) = abs(this.x - other.x) + abs(this.y - other.y)
 }

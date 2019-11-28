@@ -46,17 +46,17 @@ abstract class AbstractBattleSnake<T : AbstractGameContext> : KLogging() {
 
   private fun start(req: Request, res: Response): GameResponse =
     gameContext()
-      .let { context ->
-        context.assignRequestResponse(req, res)
-        val startRequest = StartRequest.toObject(req.body())
-        contextMap[startRequest.gameId] = context
-        strategy.start.map { it.invoke(context, startRequest) }.lastOrNull() ?: StartResponse()
-      }
+        .let { context ->
+          context.assignRequestResponse(req, res)
+          val startRequest = StartRequest.toObject(req.body())
+          contextMap[startRequest.gameId] = context
+          strategy.start.map { it.invoke(context, startRequest) }.lastOrNull() ?: StartResponse()
+        }
 
   private fun move(req: Request, res: Response): GameResponse {
     val moveRequest = MoveRequest.toObject(req.body())
     val context = contextMap[moveRequest.gameId]
-      ?: throw NoSuchElementException("Missing context for game id: ${moveRequest.gameId}")
+                  ?: throw NoSuchElementException("Missing context for game id: ${moveRequest.gameId}")
     context.assignRequestResponse(req, res)
 
     lateinit var response: GameResponse
@@ -74,7 +74,7 @@ abstract class AbstractBattleSnake<T : AbstractGameContext> : KLogging() {
   private fun end(req: Request, res: Response): GameResponse {
     val endRequest = EndRequest.toObject(req.body())
     val context = contextMap.remove(endRequest.gameId)
-      ?: throw NoSuchElementException("Missing context for game id: ${endRequest.gameId}")
+                  ?: throw NoSuchElementException("Missing context for game id: ${endRequest.gameId}")
     context.assignRequestResponse(req, res)
     return strategy.end.map { it.invoke(context, endRequest) }.lastOrNull() ?: EndResponse
   }
@@ -87,24 +87,20 @@ abstract class AbstractBattleSnake<T : AbstractGameContext> : KLogging() {
 
     Spark.get("/") { _, _ ->
       "Battlesnake documentation can be found at " +
-          "<a href=\"https://docs.battlesnake.io\">https://docs.battlesnake.io</a>."
+      "<a href=\"https://docs.battlesnake.io\">https://docs.battlesnake.io</a>."
     }
-    Spark.post(
-      PING,
-      { request, response -> process(request, response) },
-      { "{}" })
-    Spark.post(
-      START,
-      { request, response -> process(request, response) },
-      { (it as StartResponse).toJson() })
-    Spark.post(
-      MOVE,
-      { request, response -> process(request, response) },
-      { (it as MoveResponse).toJson() })
-    Spark.post(
-      END,
-      { request, response -> process(request, response) },
-      { "{}" })
+    Spark.post(PING,
+               { request, response -> process(request, response) },
+               { "{}" })
+    Spark.post(START,
+               { request, response -> process(request, response) },
+               { (it as StartResponse).toJson() })
+    Spark.post(MOVE,
+               { request, response -> process(request, response) },
+               { (it as MoveResponse).toJson() })
+    Spark.post(END,
+               { request, response -> process(request, response) },
+               { "{}" })
 
     // Prime the classloader to avoid an expensive first call
     StartRequest.primeClassLoader()

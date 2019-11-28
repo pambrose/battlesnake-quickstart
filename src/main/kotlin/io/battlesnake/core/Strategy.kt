@@ -45,12 +45,13 @@ open class Strategy<T : AbstractGameContext> : KLogging() {
         val avg =
             if (context.moveCount > 0) {
                 "with ${"%.2f".format(context.elapsedMoveTimeMillis / (context.moveCount.toFloat()))} ms/move "
-            } else {
+            }
+            else {
                 ""
             }
 
         return "Ending game: '${request.gameId}' game time: ${context.elapsedGameTimeMsg} " +
-            "moves: ${context.moveCount} $avg[${context.request?.ip() ?: "Unknown IP"}]"
+               "moves: ${context.moveCount} $avg[${context.request?.ip() ?: "Unknown IP"}]"
     }
 
     internal fun turnMsg(request: Request, response: Response, gameResponse: GameResponse, millis: Long) =
@@ -64,12 +65,10 @@ open class Strategy<T : AbstractGameContext> : KLogging() {
 
     val end: MutableList<(context: T, request: EndRequest) -> EndResponse> = mutableListOf()
 
-    val afterTurn: MutableList<(
-        request: Request,
-        response: Response,
-        gameResponse: GameResponse,
-        millis: Long
-    ) -> Unit> = mutableListOf()
+    val afterTurn: MutableList<(request: Request,
+                                response: Response,
+                                gameResponse: GameResponse,
+                                millis: Long) -> Unit> = mutableListOf()
 
     fun onPing(block: (request: Request, response: Response) -> PingResponse) {
         ping += block
