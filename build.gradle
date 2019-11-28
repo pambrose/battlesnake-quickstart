@@ -19,7 +19,6 @@ def slf4jVersion = '1.7.28'
 def kluentVersion = '1.57'
 def junitVersion = '5.5.2'
 
-
 sourceCompatibility = 1.8
 
 description = 'battlesnake-quickstart'
