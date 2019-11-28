@@ -6,7 +6,7 @@ import io.battlesnake.core.Board.Companion.BOARD_ORIGIN
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
-import java.lang.Math.abs
+import kotlin.math.abs
 
 val Int.isEven get() = this % 2 == 0
 val Int.isOdd get() = this % 2 != 0
