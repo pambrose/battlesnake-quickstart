@@ -6,26 +6,26 @@ import spark.Request
 import spark.Response
 
 abstract class AbstractGameContext {
-    private val gameStartTimeMillis: Long = System.currentTimeMillis()
+  private val gameStartTimeMillis: Long = System.currentTimeMillis()
 
-    var elapsedMoveTimeMillis = 0L
-    var moveCount = 0L
+  var elapsedMoveTimeMillis = 0L
+  var moveCount = 0L
 
-    var request: Request? = null
-        internal set
-    var response: Response? = null
-        internal set
+  var request: Request? = null
+    internal set
+  var response: Response? = null
+    internal set
 
-    internal fun assignRequestResponse(req: Request, res: Response) {
-        request = req
-        response = res
+  internal fun assignRequestResponse(req: Request, res: Response) {
+    request = req
+    response = res
+  }
+
+  val elapsedGameTimeMillis get() = System.currentTimeMillis() - gameStartTimeMillis
+
+  val elapsedGameTimeMsg: String
+    get() {
+      val time = elapsedGameTimeMillis
+      return if (time > 1_000) "${time / 1_000} secs" else "$time ms"
     }
-
-    val elapsedGameTimeMillis get() = System.currentTimeMillis() - gameStartTimeMillis
-
-    val elapsedGameTimeMsg: String
-        get() {
-            val time = elapsedGameTimeMillis
-            return if (time > 1_000) "${time / 1_000} secs" else "$time ms"
-        }
 }
