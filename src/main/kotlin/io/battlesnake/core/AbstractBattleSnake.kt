@@ -86,21 +86,26 @@ abstract class AbstractBattleSnake<T : AbstractGameContext> : KLogging() {
     Spark.port(p)
 
     Spark.get("/") { _, _ ->
-      "Battlesnake documentation can be found at " +
+      "You have reached a Battlesnake server. " +
+      "Battlesnake documentation can be found at: " +
       "<a href=\"https://docs.battlesnake.io\">https://docs.battlesnake.io</a>."
     }
     Spark.get(PING,
               { request, response -> process(request, response) },
               { "pong" })
+
     Spark.post(PING,
                { request, response -> process(request, response) },
                { "{}}" })
+
     Spark.post(START,
                { request, response -> process(request, response) },
                { (it as StartResponse).toJson() })
+
     Spark.post(MOVE,
                { request, response -> process(request, response) },
                { (it as MoveResponse).toJson() })
+
     Spark.post(END,
                { request, response -> process(request, response) },
                { "{}" })
