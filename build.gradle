@@ -11,8 +11,8 @@ repositories {
   jcenter()
 }
 
-def junitVersion = '5.5.2'
-def kluentVersion = '1.58'
+def junitVersion = '5.6.0'
+def kluentVersion = '1.60'
 def loggingVersion = '1.7.8'
 def serializationVersion = '0.13.0'
 def slf4jVersion = '1.7.28'
