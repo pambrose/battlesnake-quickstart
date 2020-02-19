@@ -14,7 +14,7 @@ import io.battlesnake.core.StartResponse
 import io.battlesnake.core.Strategy
 import io.battlesnake.core.strategy
 import io.battlesnake.kotlin.SnakeTest.TestSnake.GameContext
-import org.amshove.kluent.shouldEqual
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.jupiter.api.Test
 
 class SnakeTest {
@@ -36,7 +36,7 @@ class SnakeTest {
   internal fun pingTest() {
     // val response = TestSnake.strategy.ping.map { it.invoke() }.lastOrNull() ?: PingResponse
     val response = PingResponse
-    response.toString() shouldEqual PingResponse.javaClass.simpleName
+    response.toString() shouldBeEqualTo PingResponse.javaClass.simpleName
   }
 
   @Test
@@ -50,9 +50,9 @@ class SnakeTest {
       TestSnake.strategy.start.map { it.invoke(TestSnake.gameContext(), request) }.lastOrNull() ?: StartResponse()
 
     response.apply {
-      color shouldEqual "#ff00ff"
-      headType shouldEqual ""
-      tailType shouldEqual ""
+      color shouldBeEqualTo "#ff00ff"
+      headType shouldBeEqualTo ""
+      tailType shouldBeEqualTo ""
     }
   }
 
@@ -65,7 +65,7 @@ class SnakeTest {
     val request = MoveRequest.toObject(json)
     val response =
       TestSnake.strategy.move.map { it.invoke(TestSnake.gameContext(), request) }.lastOrNull() ?: RIGHT
-    response.move shouldEqual "right"
+    response.move shouldBeEqualTo "right"
   }
 
   @Test
@@ -77,6 +77,6 @@ class SnakeTest {
     val request = EndRequest.toObject(json)
     val response =
       TestSnake.strategy.end.map { it.invoke(TestSnake.gameContext(), request) }.lastOrNull() ?: EndResponse
-    response.toString() shouldEqual EndResponse.javaClass.simpleName
+    response.toString() shouldBeEqualTo EndResponse.javaClass.simpleName
   }
 }
