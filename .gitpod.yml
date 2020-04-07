@@ -1,0 +1,4 @@
+#tasks:
+#  - init: ./gradlew build
+#  - init: echo 'init script'
+#    command: echo 'start script'
