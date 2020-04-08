@@ -30,7 +30,7 @@ abstract class AbstractBattleSnake<T : AbstractGameContext> : KLogging() {
               START -> start(req, res)
               MOVE -> move(req, res)
               END -> end(req, res)
-              else -> throw IllegalAccessError("Strange call made to the snake: $uri [${req.ip()}]")
+              else -> throw IllegalAccessError("Invalid call made to the snake: $uri [${req.ip()}]")
             }
         }
 
