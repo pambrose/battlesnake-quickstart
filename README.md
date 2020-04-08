@@ -9,23 +9,24 @@ A framework for easily creating Kotlin and Java Battlesnakes
 
 ## Motivation
 
-Out of the box, [Battlesnake](https://battlesnake.io) requires a fair amount of JSON/REST wiring before one 
+Out of the box, [Battlesnake](https://battlesnake.io) requires a fair amount of JSON/REST wiring before one
 can start authoring a snake. That initial exercise can prove problematic for some developers. 
-This repo takes care of the wiring and communications and provides a simple framework for writing 
+This repo takes care of the wiring and communications and provides a simple framework for writing
 Battlesnakes in Kotlin and Java.  
 
 ## Usage
 
-A snake defined as a subclass of [AbstractBattleSnake](src/main/kotlin/io/battlesnake/core/AbstractBattleSnake.kt) and 
+A snake defined as a subclass of [AbstractBattleSnake](src/main/kotlin/io/battlesnake/core/AbstractBattleSnake.kt) and
 implements methods to produce [GameContext](src/main/kotlin/io/battlesnake/core/AbstractGameContext.kt) 
 and [Strategy](src/main/kotlin/io/battlesnake/core/Strategy.kt) objects. 
 
-*   The GameContext class is snake-specific. An instance is created at the start of every game and provides context between game turns. 
-*   The Strategy specifies responses for Ping, Start, Move, and End commands.
+* The GameContext class is snake-specific. An instance is created at the start of every game and provides 
+context between game turns. 
+* The Strategy specifies responses for Ping, Start, Move, and End commands.
 
 ## Helpful Tools
 
-*   [JsonToKotlinClass](https://github.com/wuseal/JsonToKotlinClass)
+* [JsonToKotlinClass](https://github.com/wuseal/JsonToKotlinClass)
 
 ## Examples
 
@@ -84,13 +85,13 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.GameContext> 
     @Override
     public Strategy<GameContext> gameStrategy() {
         return new AbstractStrategy<GameContext>(true) {
-            // StartReponse describes snake color and head/tail type
+            // StartResponse describes snake color and head/tail type
             @Override
             public StartResponse onStart(GameContext context, StartRequest request) {
                 return new StartResponse("#ff00ff", "beluga", "bolt");
             }
 
-            // MoveReponse can be LEFT, RIGHT, UP or DOWN
+            // MoveResponse can be LEFT, RIGHT, UP or DOWN
             @Override
             public MoveResponse onMove(GameContext context, MoveRequest request) {
                 return RIGHT;
