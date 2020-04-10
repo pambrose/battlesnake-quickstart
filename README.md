@@ -20,13 +20,9 @@ A snake defined as a subclass of [AbstractBattleSnake](src/main/kotlin/io/battle
 implements methods to produce [SnakeContext](src/main/kotlin/io/battlesnake/core/AbstractSnakeContext.kt) 
 and [Strategy](src/main/kotlin/io/battlesnake/core/Strategy.kt) objects. 
 
-* The SnakeContext class is snake-specific. An instance is created at the start of every game for each snake 
-your server is supporting and provides context between game turns. 
-* The Strategy specifies responses for Ping, Start, Move, and End commands.
-
-## Helpful Tools
-
-* [JsonToKotlinClass](https://github.com/wuseal/JsonToKotlinClass)
+* The SnakeContext class is snake-specific. An instance is created at the start of every game (for each snake 
+your server is supporting), and it provides context between game turns. 
+* The Strategy specifies responses for the `Ping`, `Start`, `Move`, and `End` commands.
 
 ## Examples
 
@@ -37,16 +33,16 @@ Examples of simple Battlesnakes created with this framework are [here](https://g
 ```kotlin
 object ExampleSnake : AbstractBattleSnake<SnakeContext>(){
 
-    // Add any necessary snake-specific data to SnakeContext class
+    // Add any necessary snake-specific data to the SnakeContext class
     class SnakeContext(gameId: String, snakeId: String) : AbstractSnakeContext(gameId, snakeId) {
-        // Context instance data goes here
+        // Snake-specific context data goes here
     }
 
-    // Called at the beginning of each game on Start
+    // Called at the beginning of each game on Start for each snake
     override fun snakeContext(gameId: String, snakeId: String): SnakeContext = SnakeContext(gameId, snakeId)
 
     override fun gameStrategy() : Strategy<SnakeContext> =
-        strategy(true) {
+        strategy(verbose = true) {
 
             // StartResponse describes snake color and head/tail type
             onStart { context: SnakeContext, request: StartRequest ->
@@ -71,15 +67,16 @@ object ExampleSnake : AbstractBattleSnake<SnakeContext>(){
 ```java
 public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.SnakeContext> {
 
-    // SnakeContext can contain any data you want
+    // Add any necessary snake-specific data to the SnakeContext class
     static class SnakeContext extends AbstractSnakeContext {
        public SnakeContext(@NotNull String gameId, @NotNull String snakeId) {
          super(gameId, snakeId);
        }
-       // Snake context instance data goes here
+
+       // Snake-specific context data goes here
     }
 
-    // Called at the beginning of each game on Start
+    // Called at the beginning of each game on Start for each snake
     @Override
     public SnakeContext snakeContext(String gameId, String snakeId) {
         return new SnakeContext(gameId, snakeId);
@@ -107,3 +104,7 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.SnakeContext>
     }
 }
 ```
+
+## Helpful Tools
+
+* [JsonToKotlinClass](https://github.com/wuseal/JsonToKotlinClass)
