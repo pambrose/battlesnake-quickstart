@@ -3,7 +3,7 @@
 package io.battlesnake.kotlin
 
 import io.battlesnake.core.AbstractBattleSnake
-import io.battlesnake.core.AbstractGameContext
+import io.battlesnake.core.AbstractSnakeContext
 import io.battlesnake.core.EndRequest
 import io.battlesnake.core.EndResponse
 import io.battlesnake.core.MoveRequest
@@ -13,22 +13,22 @@ import io.battlesnake.core.StartRequest
 import io.battlesnake.core.StartResponse
 import io.battlesnake.core.Strategy
 import io.battlesnake.core.strategy
-import io.battlesnake.kotlin.SnakeTest.TestSnake.GameContext
+import io.battlesnake.kotlin.SnakeTest.TestSnake.SnakeContext
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.jupiter.api.Test
 
 class SnakeTest {
 
-  object TestSnake : AbstractBattleSnake<GameContext>() {
+  object TestSnake : AbstractBattleSnake<SnakeContext>() {
 
-    class GameContext : AbstractGameContext()
+    class SnakeContext(gameId: String, youId: String) : AbstractSnakeContext(gameId, youId)
 
-    override fun gameContext() = GameContext()
+    override fun snakeContext(gameId: String, youId: String) = SnakeContext(gameId, youId)
 
-    override fun gameStrategy(): Strategy<GameContext> =
+    override fun gameStrategy(): Strategy<SnakeContext> =
       strategy {
-        onStart { _: GameContext, _: StartRequest -> StartResponse("#ff00ff") }
-        onMove { _: GameContext, _: MoveRequest -> RIGHT }
+        onStart { _: SnakeContext, _: StartRequest -> StartResponse("#ff00ff") }
+        onMove { _: SnakeContext, _: MoveRequest -> RIGHT }
       }
   }
 
@@ -47,7 +47,8 @@ class SnakeTest {
                 |"health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = StartRequest.toObject(json)
     val response =
-      TestSnake.strategy.start.map { it.invoke(TestSnake.gameContext(), request) }.lastOrNull() ?: StartResponse()
+      TestSnake.strategy.start.map { it.invoke(TestSnake.snakeContext("", ""), request) }.lastOrNull()
+      ?: StartResponse()
 
     response.apply {
       color shouldBeEqualTo "#ff00ff"
@@ -64,7 +65,7 @@ class SnakeTest {
                 |"health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = MoveRequest.toObject(json)
     val response =
-      TestSnake.strategy.move.map { it.invoke(TestSnake.gameContext(), request) }.lastOrNull() ?: RIGHT
+      TestSnake.strategy.move.map { it.invoke(TestSnake.snakeContext("", ""), request) }.lastOrNull() ?: RIGHT
     response.move shouldBeEqualTo "right"
   }
 
@@ -76,7 +77,7 @@ class SnakeTest {
                 |"health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = EndRequest.toObject(json)
     val response =
-      TestSnake.strategy.end.map { it.invoke(TestSnake.gameContext(), request) }.lastOrNull() ?: EndResponse
+      TestSnake.strategy.end.map { it.invoke(TestSnake.snakeContext("", ""), request) }.lastOrNull() ?: EndResponse
     response.toString() shouldBeEqualTo EndResponse.javaClass.simpleName
   }
 }

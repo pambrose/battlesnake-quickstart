@@ -17,11 +17,11 @@ Battlesnakes in Kotlin and Java.
 ## Usage
 
 A snake defined as a subclass of [AbstractBattleSnake](src/main/kotlin/io/battlesnake/core/AbstractBattleSnake.kt) and
-implements methods to produce [GameContext](src/main/kotlin/io/battlesnake/core/AbstractGameContext.kt) 
+implements methods to produce [SnakeContext](src/main/kotlin/io/battlesnake/core/AbstractSnakeContext.kt) 
 and [Strategy](src/main/kotlin/io/battlesnake/core/Strategy.kt) objects. 
 
-* The GameContext class is snake-specific. An instance is created at the start of every game and provides 
-context between game turns. 
+* The SnakeContext class is snake-specific. An instance is created at the start of every game for each snake 
+your server is supporting and provides context between game turns. 
 * The Strategy specifies responses for Ping, Start, Move, and End commands.
 
 ## Helpful Tools
@@ -35,26 +35,26 @@ Examples of simple Battlesnakes created with this framework are [here](https://g
 ### Minimal Kotlin Battlesnake
 
 ```kotlin
-object ExampleSnake : AbstractBattleSnake<GameContext>(){
+object ExampleSnake : AbstractBattleSnake<SnakeContext>(){
 
-    // Add any necessary snake-specific data to GameContext class
-    class GameContext : AbstractGameContext() {
+    // Add any necessary snake-specific data to SnakeContext class
+    class SnakeContext(gameId: String, youId: String) : AbstractSnakeContext(gameId, youId) {
         // Context instance data goes here
     }
 
     // Called at the beginning of each game on Start
-    override fun gameContext(): GameContext = GameContext()
+    override fun snakeContext(gameId: String, youId: String): SnakeContext = SnakeContext(gameId, youId)
 
-    override fun gameStrategy() : Strategy<GameContext> =
+    override fun gameStrategy() : Strategy<SnakeContext> =
         strategy(true) {
 
             // StartResponse describes snake color and head/tail type
-            onStart { context: GameContext, request: StartRequest ->
+            onStart { context: SnakeContext, request: StartRequest ->
                 StartResponse("#ff00ff", "beluga", "bolt")
             }
 
             // MoveResponse can be LEFT, RIGHT, UP or DOWN
-            onMove { context: GameContext, request: MoveRequest ->
+            onMove { context: SnakeContext, request: MoveRequest ->
                 RIGHT
             }
         }
@@ -69,31 +69,34 @@ object ExampleSnake : AbstractBattleSnake<GameContext>(){
 ### Minimal Java Battlesnake
 
 ```java
-public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.GameContext> {
+public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.SnakeContext> {
 
-    // GameContext can contain any data you want
-    static class GameContext extends AbstractGameContext {
-        // Context instance data goes here
+    // SnakeContext can contain any data you want
+    static class SnakeContext(String gameId, String youId) extends AbstractSnakeContext {
+       public SnakeContext(@NotNull String gameId, @NotNull String youId) {
+         super(gameId, youId);
+       }
+       // Context instance data goes here
     }
 
     // Called at the beginning of each game on Start
     @Override
-    public GameContext gameContext() {
-        return new GameContext();
+    public SnakeContext snakeContext(String gameId, String youId) {
+        return new SnakeContext(gameId, youId);
     }
 
     @Override
-    public Strategy<GameContext> gameStrategy() {
-        return new AbstractStrategy<GameContext>(true) {
+    public Strategy<SnakeContext> gameStrategy() {
+        return new AbstractStrategy<SnakeContext>(true) {
             // StartResponse describes snake color and head/tail type
             @Override
-            public StartResponse onStart(GameContext context, StartRequest request) {
+            public StartResponse onStart(SnakeContext context, StartRequest request) {
                 return new StartResponse("#ff00ff", "beluga", "bolt");
             }
 
             // MoveResponse can be LEFT, RIGHT, UP or DOWN
             @Override
-            public MoveResponse onMove(GameContext context, MoveRequest request) {
+            public MoveResponse onMove(SnakeContext context, MoveRequest request) {
                 return RIGHT;
             }
         };

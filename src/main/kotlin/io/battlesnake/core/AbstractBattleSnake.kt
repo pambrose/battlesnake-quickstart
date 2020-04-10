@@ -8,9 +8,9 @@ import spark.Response
 import spark.Spark
 import kotlin.system.measureTimeMillis
 
-abstract class AbstractBattleSnake<T : AbstractGameContext> : KLogging() {
+abstract class AbstractBattleSnake<T : AbstractSnakeContext> : KLogging() {
 
-  abstract fun gameContext(): T
+  abstract fun snakeContext(gameId: String, youId: String): T
 
   abstract fun gameStrategy(): Strategy<T>
 
@@ -44,19 +44,20 @@ abstract class AbstractBattleSnake<T : AbstractGameContext> : KLogging() {
   private fun ping(req: Request, res: Response): GameResponse =
     strategy.ping.map { it.invoke(req, res) }.lastOrNull() ?: PingResponse
 
-  private fun start(req: Request, res: Response): GameResponse =
-    gameContext()
+  private fun start(req: Request, res: Response): GameResponse {
+    val startRequest = StartRequest.toObject(req.body())
+    return snakeContext(startRequest.gameId, startRequest.you.id)
         .let { context ->
           context.assignRequestResponse(req, res)
-          val startRequest = StartRequest.toObject(req.body())
-          contextMap[startRequest.gameId] = context
+          contextMap[startRequest.you.id] = context
           strategy.start.map { it.invoke(context, startRequest) }.lastOrNull() ?: StartResponse()
         }
+  }
 
   private fun move(req: Request, res: Response): GameResponse {
     val moveRequest = MoveRequest.toObject(req.body())
-    val context = contextMap[moveRequest.gameId]
-                  ?: throw NoSuchElementException("Missing context for game id: ${moveRequest.gameId}")
+    val context = contextMap[moveRequest.you.id]
+                  ?: throw NoSuchElementException("Missing context for user id: ${moveRequest.you.id}")
     context.assignRequestResponse(req, res)
 
     lateinit var response: GameResponse
@@ -73,8 +74,8 @@ abstract class AbstractBattleSnake<T : AbstractGameContext> : KLogging() {
 
   private fun end(req: Request, res: Response): GameResponse {
     val endRequest = EndRequest.toObject(req.body())
-    val context = contextMap.remove(endRequest.gameId)
-                  ?: throw NoSuchElementException("Missing context for game id: ${endRequest.gameId}")
+    val context = contextMap.remove(endRequest.you.id)
+                  ?: throw NoSuchElementException("Missing context for user id: ${endRequest.you.id}")
     context.assignRequestResponse(req, res)
     return strategy.end.map { it.invoke(context, endRequest) }.lastOrNull() ?: EndResponse
   }
