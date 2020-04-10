@@ -69,7 +69,7 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.SnakeContext>
 
     // Add any necessary snake-specific data to the SnakeContext class
     static class SnakeContext extends AbstractSnakeContext {
-       public SnakeContext(@NotNull String gameId, @NotNull String snakeId) {
+       public SnakeContext(String gameId, String snakeId) {
          super(gameId, snakeId);
        }
 

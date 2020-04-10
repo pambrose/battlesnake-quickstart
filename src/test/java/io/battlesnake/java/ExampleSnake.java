@@ -8,7 +8,6 @@ import io.battlesnake.core.MoveResponse;
 import io.battlesnake.core.StartRequest;
 import io.battlesnake.core.StartResponse;
 import io.battlesnake.core.Strategy;
-import org.jetbrains.annotations.NotNull;
 
 import static io.battlesnake.core.JavaConstants.RIGHT;
 
@@ -19,27 +18,23 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.SnakeContext>
   }
 
   // Called at the beginning of each game on Start
-  @NotNull
   @Override
   public SnakeContext snakeContext(String gameId, String snakeId) {
     return new SnakeContext(gameId, snakeId);
   }
 
-  @NotNull
   @Override
   public Strategy<SnakeContext> gameStrategy() {
     return new AbstractStrategy<SnakeContext>(true) {
       // StartResponse describes snake color and head/tail type
-      @NotNull
       @Override
-      public StartResponse onStart(@NotNull SnakeContext context, @NotNull StartRequest request) {
+      public StartResponse onStart(SnakeContext context, StartRequest request) {
         return new StartResponse("#ff00ff", "beluga", "bolt");
       }
 
       // MoveResponse can be LEFT, RIGHT, UP or DOWN
-      @NotNull
       @Override
-      public MoveResponse onMove(@NotNull SnakeContext context, @NotNull MoveRequest request) {
+      public MoveResponse onMove(SnakeContext context, MoveRequest request) {
         return RIGHT;
       }
     };
@@ -47,7 +42,7 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.SnakeContext>
 
   // Add any necessary snake-specific data to SnakeContext class
   static class SnakeContext extends AbstractSnakeContext {
-    public SnakeContext(@NotNull String gameId, @NotNull String snakeId) {
+    public SnakeContext(String gameId, String snakeId) {
       super(gameId, snakeId);
     }
   }
