@@ -10,7 +10,7 @@ import kotlin.system.measureTimeMillis
 
 abstract class AbstractBattleSnake<T : AbstractSnakeContext> : KLogging() {
 
-  abstract fun snakeContext(gameId: String, youId: String): T
+  abstract fun snakeContext(gameId: String, snakeId: String): T
 
   abstract fun gameStrategy(): Strategy<T>
 

@@ -39,7 +39,7 @@ open class Strategy<T : AbstractSnakeContext> : KLogging() {
     "Ping from ${request.ip()}"
 
   internal fun startMsg(context: T, request: StartRequest) =
-    "Starting game: '${request.gameId}' [${context.request?.ip() ?: "Unknown IP"}]"
+    "Starting game: '${request.gameId}' for snake ID: '${request.you.id}'  [${context.request?.ip() ?: "Unknown IP"}]"
 
   internal fun endMsg(context: T, request: EndRequest): String {
     val avg =

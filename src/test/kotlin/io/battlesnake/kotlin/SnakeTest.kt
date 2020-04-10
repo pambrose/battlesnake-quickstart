@@ -21,9 +21,9 @@ class SnakeTest {
 
   object TestSnake : AbstractBattleSnake<SnakeContext>() {
 
-    class SnakeContext(gameId: String, youId: String) : AbstractSnakeContext(gameId, youId)
+    class SnakeContext(gameId: String, snakeId: String) : AbstractSnakeContext(gameId, snakeId)
 
-    override fun snakeContext(gameId: String, youId: String) = SnakeContext(gameId, youId)
+    override fun snakeContext(gameId: String, snakeId: String) = SnakeContext(gameId, snakeId)
 
     override fun gameStrategy(): Strategy<SnakeContext> =
       strategy {

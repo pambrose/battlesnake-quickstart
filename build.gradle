@@ -22,7 +22,7 @@ sourceCompatibility = 1.8
 
 description = 'battlesnake-quickstart'
 group = 'io.battlesnake'
-version = '0.2.12'
+version = '0.2.14'
 
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"

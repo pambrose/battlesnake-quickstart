@@ -38,12 +38,12 @@ Examples of simple Battlesnakes created with this framework are [here](https://g
 object ExampleSnake : AbstractBattleSnake<SnakeContext>(){
 
     // Add any necessary snake-specific data to SnakeContext class
-    class SnakeContext(gameId: String, youId: String) : AbstractSnakeContext(gameId, youId) {
+    class SnakeContext(gameId: String, snakeId: String) : AbstractSnakeContext(gameId, snakeId) {
         // Context instance data goes here
     }
 
     // Called at the beginning of each game on Start
-    override fun snakeContext(gameId: String, youId: String): SnakeContext = SnakeContext(gameId, youId)
+    override fun snakeContext(gameId: String, snakeId: String): SnakeContext = SnakeContext(gameId, snakeId)
 
     override fun gameStrategy() : Strategy<SnakeContext> =
         strategy(true) {
@@ -72,17 +72,17 @@ object ExampleSnake : AbstractBattleSnake<SnakeContext>(){
 public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.SnakeContext> {
 
     // SnakeContext can contain any data you want
-    static class SnakeContext(String gameId, String youId) extends AbstractSnakeContext {
-       public SnakeContext(@NotNull String gameId, @NotNull String youId) {
-         super(gameId, youId);
+    static class SnakeContext extends AbstractSnakeContext {
+       public SnakeContext(@NotNull String gameId, @NotNull String snakeId) {
+         super(gameId, snakeId);
        }
-       // Context instance data goes here
+       // Snake context instance data goes here
     }
 
     // Called at the beginning of each game on Start
     @Override
-    public SnakeContext snakeContext(String gameId, String youId) {
-        return new SnakeContext(gameId, youId);
+    public SnakeContext snakeContext(String gameId, String snakeId) {
+        return new SnakeContext(gameId, snakeId);
     }
 
     @Override

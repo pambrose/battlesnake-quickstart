@@ -15,10 +15,10 @@ import io.battlesnake.kotlin.ExampleSnake.SnakeContext
 object ExampleSnake : AbstractBattleSnake<SnakeContext>() {
 
   // Add any necessary snake-specific data to SnakeContext class
-  class SnakeContext(gameId: String, youId: String) : AbstractSnakeContext(gameId, youId)
+  class SnakeContext(gameId: String, snakeId: String) : AbstractSnakeContext(gameId, snakeId)
 
   // Called at the beginning of each game on Start
-  override fun snakeContext(gameId: String, youId: String): SnakeContext = SnakeContext(gameId, youId)
+  override fun snakeContext(gameId: String, snakeId: String): SnakeContext = SnakeContext(gameId, snakeId)
 
   override fun gameStrategy(): Strategy<SnakeContext> =
     strategy(true) {
