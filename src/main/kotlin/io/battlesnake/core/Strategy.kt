@@ -6,7 +6,7 @@ import mu.KLogging
 import spark.Request
 import spark.Response
 
-fun <T : AbstractGameContext> strategy(verbose: Boolean = false, init: Strategy<T>.() -> Unit) =
+fun <T : AbstractSnakeContext> strategy(verbose: Boolean = false, init: Strategy<T>.() -> Unit) =
   Strategy<T>()
       .apply {
         onPing { request, response ->
@@ -33,13 +33,13 @@ fun <T : AbstractGameContext> strategy(verbose: Boolean = false, init: Strategy<
         init.invoke(this)
       }
 
-open class Strategy<T : AbstractGameContext> : KLogging() {
+open class Strategy<T : AbstractSnakeContext> : KLogging() {
 
   internal fun pingMsg(request: Request, response: Response) =
     "Ping from ${request.ip()}"
 
   internal fun startMsg(context: T, request: StartRequest) =
-    "Starting game: '${request.gameId}' [${context.request?.ip() ?: "Unknown IP"}]"
+    "Starting game/snake '${request.gameId}/${request.you.id}'  [${context.request?.ip() ?: "Unknown IP"}]"
 
   internal fun endMsg(context: T, request: EndRequest): String {
     val avg =
@@ -50,7 +50,7 @@ open class Strategy<T : AbstractGameContext> : KLogging() {
         ""
       }
 
-    return "Ending game: '${request.gameId}' game time: ${context.elapsedGameTimeMsg} " +
+    return "Ending game/snake '${request.gameId}/${request.you.id}' game time: ${context.elapsedGameTimeMsg} " +
            "moves: ${context.moveCount} $avg[${context.request?.ip() ?: "Unknown IP"}]"
   }
 
