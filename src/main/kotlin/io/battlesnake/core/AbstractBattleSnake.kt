@@ -87,10 +87,16 @@ abstract class AbstractBattleSnake<T : AbstractSnakeContext> : KLogging() {
     Spark.port(p)
 
     Spark.get("/") { _, _ ->
-      "You have reached a Battlesnake server. " +
-      "Battlesnake documentation can be found at: " +
-      "<a href=\"https://docs.battlesnake.io\">https://docs.battlesnake.io</a>."
+      """
+      You have reached a Battlesnake server. 
+      <br><br>
+      Use the URL of this page as your snake URL. 
+      <br><br>
+      The Battlesnake documentation can be found at: 
+      <a href=\"https://docs.battlesnake.io\">https://docs.battlesnake.io</a>.
+      """
     }
+
     Spark.get(PING,
               { request, response -> process(request, response) },
               { "pong" })
