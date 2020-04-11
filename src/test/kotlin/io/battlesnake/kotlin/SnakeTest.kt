@@ -21,7 +21,7 @@ class SnakeTest {
 
   object TestSnake : AbstractBattleSnake<SnakeContext>() {
 
-    class SnakeContext() : AbstractSnakeContext()
+    class SnakeContext : AbstractSnakeContext()
 
     override fun snakeContext() = SnakeContext()
 

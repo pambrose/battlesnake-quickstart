@@ -20,7 +20,7 @@ A snake defined as a subclass of [AbstractBattleSnake](src/main/kotlin/io/battle
 implements methods to produce [SnakeContext](src/main/kotlin/io/battlesnake/core/AbstractSnakeContext.kt) 
 and [Strategy](src/main/kotlin/io/battlesnake/core/Strategy.kt) objects. 
 
-* The SnakeContext class is snake-specific. An instance is created at the start of every game (for each snake 
+* The SnakeContext class is snake-specific. The framework creates an instance at the start of every game (for each snake 
 your server is supporting), and it provides context between game turns. 
 * The Strategy specifies responses for the `Ping`, `Start`, `Move`, and `End` commands.
 
@@ -34,7 +34,7 @@ Examples of simple Battlesnakes created with this framework are [here](https://g
 object ExampleSnake : AbstractBattleSnake<SnakeContext>(){
 
     // Add any necessary snake-specific data to the SnakeContext class
-    class SnakeContext() : AbstractSnakeContext() {
+    class SnakeContext : AbstractSnakeContext() {
         // Snake-specific context data goes here
     }
 

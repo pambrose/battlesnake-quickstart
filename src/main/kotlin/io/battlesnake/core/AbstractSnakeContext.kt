@@ -5,7 +5,7 @@ package io.battlesnake.core
 import spark.Request
 import spark.Response
 
-abstract class AbstractSnakeContext() {
+abstract class AbstractSnakeContext {
   private val gameStartTimeMillis: Long = System.currentTimeMillis()
 
   var elapsedMoveTimeMillis = 0L
@@ -15,7 +15,6 @@ abstract class AbstractSnakeContext() {
     internal set
   lateinit var snakeId: String
     internal set
-
   lateinit var request: Request
     internal set
   lateinit var response: Response
