@@ -34,12 +34,12 @@ Examples of simple Battlesnakes created with this framework are [here](https://g
 object ExampleSnake : AbstractBattleSnake<SnakeContext>(){
 
     // Add any necessary snake-specific data to the SnakeContext class
-    class SnakeContext(gameId: String, snakeId: String) : AbstractSnakeContext(gameId, snakeId) {
+    class SnakeContext() : AbstractSnakeContext() {
         // Snake-specific context data goes here
     }
 
     // Called at the beginning of each game on Start for each snake
-    override fun snakeContext(gameId: String, snakeId: String): SnakeContext = SnakeContext(gameId, snakeId)
+    override fun snakeContext(): SnakeContext = SnakeContext()
 
     override fun gameStrategy() : Strategy<SnakeContext> =
         strategy(verbose = true) {
@@ -69,17 +69,13 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.SnakeContext>
 
     // Add any necessary snake-specific data to the SnakeContext class
     static class SnakeContext extends AbstractSnakeContext {
-       public SnakeContext(String gameId, String snakeId) {
-         super(gameId, snakeId);
-       }
-
-       // Snake-specific context data goes here
+        // Snake-specific context data goes here
     }
 
     // Called at the beginning of each game on Start for each snake
     @Override
-    public SnakeContext snakeContext(String gameId, String snakeId) {
-        return new SnakeContext(gameId, snakeId);
+    public SnakeContext snakeContext() {
+        return new SnakeContext();
     }
 
     @Override

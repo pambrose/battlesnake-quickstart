@@ -19,8 +19,8 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.SnakeContext>
 
   // Called at the beginning of each game on Start
   @Override
-  public SnakeContext snakeContext(String gameId, String snakeId) {
-    return new SnakeContext(gameId, snakeId);
+  public SnakeContext snakeContext() {
+    return new SnakeContext();
   }
 
   @Override
@@ -42,8 +42,5 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.SnakeContext>
 
   // Add any necessary snake-specific data to SnakeContext class
   static class SnakeContext extends AbstractSnakeContext {
-    public SnakeContext(String gameId, String snakeId) {
-      super(gameId, snakeId);
-    }
   }
 }

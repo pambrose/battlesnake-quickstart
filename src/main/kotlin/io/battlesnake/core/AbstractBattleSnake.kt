@@ -10,7 +10,7 @@ import kotlin.system.measureTimeMillis
 
 abstract class AbstractBattleSnake<T : AbstractSnakeContext> : KLogging() {
 
-  abstract fun snakeContext(gameId: String, snakeId: String): T
+  abstract fun snakeContext(): T
 
   abstract fun gameStrategy(): Strategy<T>
 
@@ -44,15 +44,15 @@ abstract class AbstractBattleSnake<T : AbstractSnakeContext> : KLogging() {
   private fun ping(req: Request, res: Response): GameResponse =
     strategy.ping.map { it.invoke(req, res) }.lastOrNull() ?: PingResponse
 
-  private fun start(req: Request, res: Response): GameResponse {
-    val startRequest = StartRequest.toObject(req.body())
-    return snakeContext(startRequest.gameId, startRequest.you.id)
+  private fun start(request: Request, response: Response): GameResponse =
+    snakeContext()
         .let { context ->
-          context.assignRequestResponse(req, res)
-          contextMap[startRequest.you.id] = context
+          val startRequest = StartRequest.toObject(request.body())
+          context.assignIds(startRequest.gameId, startRequest.you.id)
+          context.assignRequestResponse(request, response)
+          contextMap[context.snakeId] = context
           strategy.start.map { it.invoke(context, startRequest) }.lastOrNull() ?: StartResponse()
         }
-  }
 
   private fun move(req: Request, res: Response): GameResponse {
     val moveRequest = MoveRequest.toObject(req.body())
