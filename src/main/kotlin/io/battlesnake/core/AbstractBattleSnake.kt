@@ -90,7 +90,10 @@ abstract class AbstractBattleSnake<T : AbstractSnakeContext> : KLogging() {
       """
       You have reached a Battlesnake server. 
       <br><br>
-      Use the URL of this page as your snake URL. 
+      Use the URL of this page as your snake URL: <p id="url"></p>
+      <script>
+        document.getElementById("url").innerHTML = window.location.href;
+      </script>
       <br><br>
       The Battlesnake documentation can be found <a href=\"https://docs.battlesnake.io\">here</a>.
       """
