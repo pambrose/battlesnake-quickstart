@@ -92,8 +92,7 @@ abstract class AbstractBattleSnake<T : AbstractSnakeContext> : KLogging() {
       <br><br>
       Use the URL of this page as your snake URL. 
       <br><br>
-      The Battlesnake documentation can be found at: 
-      <a href=\"https://docs.battlesnake.io\">https://docs.battlesnake.io</a>.
+      The Battlesnake documentation can be found <a href=\"https://docs.battlesnake.io\">here</a>.
       """
     }
 
