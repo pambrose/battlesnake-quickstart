@@ -3,9 +3,10 @@
 [![Release](https://jitpack.io/v/pambrose/battlesnake-quickstart.svg)](https://jitpack.io/#pambrose/battlesnake-quickstart)
 [![Build Status](https://travis-ci.org/pambrose/battlesnake-quickstart.svg?branch=master)](https://travis-ci.org/pambrose/battlesnake-quickstart)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1abc3414ac6945ceae995618d66b45ba)](https://app.codacy.com/app/pambrose/battlesnake-quickstart?utm_source=github.com&utm_medium=referral&utm_content=pambrose/battlesnake-quickstart&utm_campaign=Badge_Grade_Dashboard)
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/pambrose/battlesnake-quickstart)
 
 A framework for easily creating Kotlin and Java Battlesnakes
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/pambrose/battlesnake-quickstart)
 
 ## Motivation
 
@@ -20,7 +21,7 @@ A snake defined as a subclass of [AbstractBattleSnake](src/main/kotlin/io/battle
 implements methods to produce [SnakeContext](src/main/kotlin/io/battlesnake/core/AbstractSnakeContext.kt) 
 and [Strategy](src/main/kotlin/io/battlesnake/core/Strategy.kt) objects. 
 
-* The SnakeContext class is snake-specific. An instance is created at the start of every game (for each snake 
+* The SnakeContext class is snake-specific. The framework creates an instance at the start of every game (for each snake 
 your server is supporting), and it provides context between game turns. 
 * The Strategy specifies responses for the `Ping`, `Start`, `Move`, and `End` commands.
 
@@ -34,12 +35,12 @@ Examples of simple Battlesnakes created with this framework are [here](https://g
 object ExampleSnake : AbstractBattleSnake<SnakeContext>(){
 
     // Add any necessary snake-specific data to the SnakeContext class
-    class SnakeContext(gameId: String, snakeId: String) : AbstractSnakeContext(gameId, snakeId) {
+    class SnakeContext : AbstractSnakeContext() {
         // Snake-specific context data goes here
     }
 
     // Called at the beginning of each game on Start for each snake
-    override fun snakeContext(gameId: String, snakeId: String): SnakeContext = SnakeContext(gameId, snakeId)
+    override fun snakeContext(): SnakeContext = SnakeContext()
 
     override fun gameStrategy() : Strategy<SnakeContext> =
         strategy(verbose = true) {
@@ -69,17 +70,13 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.SnakeContext>
 
     // Add any necessary snake-specific data to the SnakeContext class
     static class SnakeContext extends AbstractSnakeContext {
-       public SnakeContext(@NotNull String gameId, @NotNull String snakeId) {
-         super(gameId, snakeId);
-       }
-
-       // Snake-specific context data goes here
+        // Snake-specific context data goes here
     }
 
     // Called at the beginning of each game on Start for each snake
     @Override
-    public SnakeContext snakeContext(String gameId, String snakeId) {
-        return new SnakeContext(gameId, snakeId);
+    public SnakeContext snakeContext() {
+        return new SnakeContext();
     }
 
     @Override

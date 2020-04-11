@@ -5,20 +5,29 @@ package io.battlesnake.core
 import spark.Request
 import spark.Response
 
-abstract class AbstractSnakeContext(val gameId: String, val snakeId: String) {
+abstract class AbstractSnakeContext {
   private val gameStartTimeMillis: Long = System.currentTimeMillis()
 
   var elapsedMoveTimeMillis = 0L
   var moveCount = 0L
 
-  var request: Request? = null
+  lateinit var gameId: String
     internal set
-  var response: Response? = null
+  lateinit var snakeId: String
+    internal set
+  lateinit var request: Request
+    internal set
+  lateinit var response: Response
     internal set
 
-  internal fun assignRequestResponse(req: Request, res: Response) {
-    request = req
-    response = res
+  internal fun assignIds(gameId: String, snakeId: String) {
+    this.gameId = gameId
+    this.snakeId = snakeId
+  }
+
+  internal fun assignRequestResponse(request: Request, response: Response) {
+    this.request = request
+    this.response = response
   }
 
   val elapsedGameTimeMillis get() = System.currentTimeMillis() - gameStartTimeMillis

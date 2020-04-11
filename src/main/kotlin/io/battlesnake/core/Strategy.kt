@@ -39,7 +39,7 @@ open class Strategy<T : AbstractSnakeContext> : KLogging() {
     "Ping from ${request.ip()}"
 
   internal fun startMsg(context: T, request: StartRequest) =
-    "Starting game/snake '${request.gameId}/${request.you.id}'  [${context.request?.ip() ?: "Unknown IP"}]"
+    "Starting game/snake '${request.gameId}/${request.you.id}'  [${context.request.ip() ?: "Unknown IP"}]"
 
   internal fun endMsg(context: T, request: EndRequest): String {
     val avg =
@@ -51,7 +51,7 @@ open class Strategy<T : AbstractSnakeContext> : KLogging() {
       }
 
     return "Ending game/snake '${request.gameId}/${request.you.id}' game time: ${context.elapsedGameTimeMsg} " +
-           "moves: ${context.moveCount} $avg[${context.request?.ip() ?: "Unknown IP"}]"
+           "moves: ${context.moveCount} $avg[${context.request.ip() ?: "Unknown IP"}]"
   }
 
   internal fun turnMsg(request: Request, response: Response, gameResponse: GameResponse, millis: Long) =

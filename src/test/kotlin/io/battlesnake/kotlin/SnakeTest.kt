@@ -21,9 +21,9 @@ class SnakeTest {
 
   object TestSnake : AbstractBattleSnake<SnakeContext>() {
 
-    class SnakeContext(gameId: String, snakeId: String) : AbstractSnakeContext(gameId, snakeId)
+    class SnakeContext : AbstractSnakeContext()
 
-    override fun snakeContext(gameId: String, snakeId: String) = SnakeContext(gameId, snakeId)
+    override fun snakeContext() = SnakeContext()
 
     override fun gameStrategy(): Strategy<SnakeContext> =
       strategy {
@@ -47,7 +47,7 @@ class SnakeTest {
                 |"health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = StartRequest.toObject(json)
     val response =
-      TestSnake.strategy.start.map { it.invoke(TestSnake.snakeContext("", ""), request) }.lastOrNull()
+      TestSnake.strategy.start.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull()
       ?: StartResponse()
 
     response.apply {
@@ -65,7 +65,7 @@ class SnakeTest {
                 |"health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = MoveRequest.toObject(json)
     val response =
-      TestSnake.strategy.move.map { it.invoke(TestSnake.snakeContext("", ""), request) }.lastOrNull() ?: RIGHT
+      TestSnake.strategy.move.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull() ?: RIGHT
     response.move shouldBeEqualTo "right"
   }
 
@@ -77,7 +77,7 @@ class SnakeTest {
                 |"health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = EndRequest.toObject(json)
     val response =
-      TestSnake.strategy.end.map { it.invoke(TestSnake.snakeContext("", ""), request) }.lastOrNull() ?: EndResponse
+      TestSnake.strategy.end.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull() ?: EndResponse
     response.toString() shouldBeEqualTo EndResponse.javaClass.simpleName
   }
 }
