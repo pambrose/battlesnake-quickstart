@@ -90,7 +90,7 @@ abstract class AbstractBattleSnake<T : AbstractSnakeContext> : KLogging() {
       """
       <br>
       <h2>You have reached a <a href=\"https://docs.battlesnake.io\">Battlesnake</a> server.</h2>
-
+      <br>
       <h2>Use this URL as your snake URL:</h2>
       <p id="url"></p>
       <script>
