@@ -89,7 +89,7 @@ abstract class AbstractBattleSnake<T : AbstractSnakeContext> : KLogging() {
     Spark.get("/") { _, _ ->
       """
       <h2>You have reached a <a href=\"https://docs.battlesnake.io\">Battlesnake</a> server.</h2>
-      <br>
+
       <h2>Use the URL of this page as your snake URL:</h2>
       <p id="url"></p>
       <script>
