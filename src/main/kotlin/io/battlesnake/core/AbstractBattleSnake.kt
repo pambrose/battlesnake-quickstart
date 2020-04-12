@@ -88,11 +88,13 @@ abstract class AbstractBattleSnake<T : AbstractSnakeContext> : KLogging() {
 
     Spark.get("/") { _, _ ->
       """
-      You have reached a Battlesnake server. 
-      <br><br>
-      Use the URL of this page as your snake URL. 
-      <br><br>
-      The Battlesnake documentation can be found <a href=\"https://docs.battlesnake.io\">here</a>.
+      <h2>You have reached a <a href=\"https://docs.battlesnake.io\">Battlesnake</a> server.</h2>
+
+      <h2>Use the URL of this page as your snake URL:</h2>
+      <p id="url"></p>
+      <script>
+        document.getElementById("url").innerHTML = window.location.href;
+      </script>
       """
     }
 
