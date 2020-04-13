@@ -52,23 +52,23 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
                                        gameResponse: GameResponse,
                                        millis: Long) -> Unit> = mutableListOf()
 
-  internal fun onPing(block: (request: Request, response: Response) -> PingResponse) {
+  fun onPing(block: (request: Request, response: Response) -> PingResponse) {
     pingActions += block
   }
 
-  internal fun onStart(block: (context: T, request: StartRequest) -> StartResponse) {
+  fun onStart(block: (context: T, request: StartRequest) -> StartResponse) {
     startActions += block
   }
 
-  internal fun onMove(block: (context: T, request: MoveRequest) -> MoveResponse) {
+  fun onMove(block: (context: T, request: MoveRequest) -> MoveResponse) {
     moveActions += block
   }
 
-  internal fun onEnd(block: (context: T, request: EndRequest) -> EndResponse) {
+  fun onEnd(block: (context: T, request: EndRequest) -> EndResponse) {
     endActions += block
   }
 
-  internal fun onAfterTurn(block: (request: Request, response: Response, gameResponse: GameResponse, millis: Long) -> Unit) {
+  fun onAfterTurn(block: (request: Request, response: Response, gameResponse: GameResponse, millis: Long) -> Unit) {
     afterTurn += block
   }
 
