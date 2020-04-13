@@ -92,9 +92,9 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
           ""
 
       return "Ending Game/Snake '${request.gameId}/${context.snakeId}'" +
-             "\ngame time: ${context.elapsedGameTime} " +
-             "\nmoves: ${context.moveCount} " +
-             "\ncompute time: ${context.computeTime}" +
+             "\ntotal moves: ${context.moveCount} " +
+             "\ntotal game time: ${context.elapsedGameTime} " +
+             "\ntotal compute time: ${context.computeTime}" +
              "$avg[${context.request.ip() ?: "Unknown IP"}]"
     }
 
