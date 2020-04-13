@@ -6,6 +6,7 @@ import mu.KLogging
 import spark.Request
 import spark.Response
 import spark.Spark
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.measureTimedValue
 
 abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
@@ -16,7 +17,7 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
 
   val strategy by lazy { gameStrategy() }
 
-  private val contextMap = mutableMapOf<String, T>()
+  private val contextMap = ConcurrentHashMap<String, T>()
 
   private fun process(req: Request, res: Response): GameResponse =
     try {
