@@ -23,9 +23,9 @@ Battlesnakes in Kotlin and Java.
 state between game moves. The framework creates SnakeContext instances at the start of every game, one for each snake 
 your server is supporting.
                      
-3) Define a [Strategy](src/main/kotlin/io/battlesnake/core/Strategy.kt) object to indicate responses 
-for the `Ping`, `Start`, `Move`, and `End` requests during games. The framework creates a single Strategy 
-instance when the server is started.
+3) Define a [GameStrategy](src/main/kotlin/io/battlesnake/core/GameStrategy.kt) object to produce responses 
+for the `Ping`, `Start`, `Move`, and `End` requests. The framework creates a single GameStrategy 
+instance when the server launches.
 
 ## Examples
 
@@ -48,12 +48,12 @@ object ExampleSnake : AbstractBattleSnake<MySnakeContext>(){
         strategy(verbose = true) {
 
             // StartResponse describes snake color and head/tail type
-            onStart { context: SnakeContext, request: StartRequest ->
+            onStart { context: MySnakeContext, request: StartRequest ->
                 StartResponse("#ff00ff", "beluga", "bolt")
             }
 
             // MoveResponse can be LEFT, RIGHT, UP or DOWN
-            onMove { context: SnakeContext, request: MoveRequest ->
+            onMove { context: MySnakeContext, request: MoveRequest ->
                 RIGHT
             }
         }
@@ -95,12 +95,12 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.SnakeContext>
     
     // Called at the beginning of each game on Start for each snake
     @Override
-    public SnakeContext snakeContext() {
+    public MySnakeContext snakeContext() {
         return new MySnakeContext();
     }
 
     @Override
-    public GameStrategy gameStrategy() {
+    public MyGameStrategy gameStrategy() {
         return new MyGameStrategy(true);
     }
 
