@@ -14,12 +14,6 @@ import io.battlesnake.kotlin.ExampleSnake.MySnakeContext
 
 object ExampleSnake : AbstractBattleSnake<MySnakeContext>() {
 
-  // Add any necessary snake-specific data to SnakeContext class
-  class MySnakeContext : SnakeContext()
-
-  // Called at the beginning of each game on Start
-  override fun snakeContext(): MySnakeContext = MySnakeContext()
-
   override fun gameStrategy(): GameStrategy<MySnakeContext> =
     strategy(true) {
 
@@ -33,6 +27,14 @@ object ExampleSnake : AbstractBattleSnake<MySnakeContext>() {
         RIGHT
       }
     }
+
+  // Called at the beginning of each game on Start
+  override fun snakeContext(): MySnakeContext = MySnakeContext()
+
+  // Add any necessary snake-specific data to SnakeContext class
+  class MySnakeContext : SnakeContext() {
+    // Snake-specific context data goes here
+  }
 
   @JvmStatic
   fun main(args: Array<String>) {

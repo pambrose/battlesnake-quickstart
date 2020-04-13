@@ -13,6 +13,18 @@ import static io.battlesnake.java.ExampleSnake.MySnakeContext;
 
 public class ExampleSnake extends AbstractBattleSnake<MySnakeContext> {
 
+  // Called at the beginning of each game on Start
+  @Override
+  public MySnakeContext snakeContext() {
+    return new MySnakeContext();
+  }
+
+  // Called once during server launch
+  @Override
+  public MyGameStrategy gameStrategy() {
+    return new MyGameStrategy(true);
+  }
+
   // Add any additional data and methods to SnakeContext class
   static class MySnakeContext extends SnakeContext {
   }
@@ -33,17 +45,6 @@ public class ExampleSnake extends AbstractBattleSnake<MySnakeContext> {
     public MoveResponse onMove(MySnakeContext context, MoveRequest request) {
       return RIGHT;
     }
-  }
-
-  // Called at the beginning of each game on Start
-  @Override
-  public MySnakeContext snakeContext() {
-    return new MySnakeContext();
-  }
-
-  @Override
-  public MyGameStrategy gameStrategy() {
-    return new MyGameStrategy(true);
   }
 
   public static void main(String[] args) {

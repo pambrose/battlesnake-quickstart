@@ -35,15 +35,8 @@ Examples of simple Battlesnakes created with this framework are [here](https://g
 
 ```kotlin
 object ExampleSnake : AbstractBattleSnake<MySnakeContext>(){
-
-    // Add any necessary snake-specific data to the SnakeContext class
-    class MySnakeContext : SnakeContext() {
-        // Snake-specific context data goes here
-    }
-
-    // Called at the beginning of each game on Start for each snake
-    override fun snakeContext(): MySnakeContext = MySnakeContext()
-
+  
+    // Called once during server launch
     override fun gameStrategy() : GameStrategy<MySnakeContext> =
         strategy(verbose = true) {
 
@@ -58,6 +51,14 @@ object ExampleSnake : AbstractBattleSnake<MySnakeContext>(){
             }
         }
 
+    // Called at the beginning of each game on Start for each snake
+    override fun snakeContext(): MySnakeContext = MySnakeContext()
+
+    // Add any necessary snake-specific data to the SnakeContext class
+    class MySnakeContext : SnakeContext() {
+        // Snake-specific context data goes here
+    }
+
     @JvmStatic
     fun main(args: Array<String>) {
         run()
@@ -69,6 +70,18 @@ object ExampleSnake : AbstractBattleSnake<MySnakeContext>(){
 
 ```java
 public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.SnakeContext> {
+
+    // Called at the beginning of each game on Start for each snake
+    @Override
+    public MySnakeContext snakeContext() {
+        return new MySnakeContext();
+    }
+
+    // Called once during server launch
+    @Override
+    public MyGameStrategy gameStrategy() {
+        return new MyGameStrategy(true);
+    }
 
     // Add any necessary snake-specific data to the SnakeContext class
     static class MySnakeContext extends SnakeContext {
@@ -93,17 +106,6 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.SnakeContext>
         }
     }              
     
-    // Called at the beginning of each game on Start for each snake
-    @Override
-    public MySnakeContext snakeContext() {
-        return new MySnakeContext();
-    }
-
-    @Override
-    public MyGameStrategy gameStrategy() {
-        return new MyGameStrategy(true);
-    }
-
     public static void main(String[] args) {
         new ExampleSnake().run(8080);
     }
