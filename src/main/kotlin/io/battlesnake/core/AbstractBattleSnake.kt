@@ -15,7 +15,7 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
 
   abstract fun gameStrategy(): GameStrategy<T>
 
-  val strategy by lazy { gameStrategy() }
+  internal val strategy by lazy { gameStrategy() }
 
   private val contextMap = ConcurrentHashMap<String, T>()
 
@@ -48,8 +48,8 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
   private fun start(request: Request, response: Response): Pair<T?, GameResponse> =
     snakeContext()
         .let { context ->
-          context.resetStartTime()
           val startRequest = StartRequest.toObject(request.body())
+          context.resetStartTime()
           context.assignIds(startRequest.gameId, startRequest.you.id)
           context.assignRequestResponse(request, response)
           contextMap[context.snakeId] = context

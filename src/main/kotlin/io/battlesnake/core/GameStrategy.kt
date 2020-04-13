@@ -86,15 +86,16 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
       val avg =
         if (context.moveCount > 0) {
           val rate = (context.computeTime.inMilliseconds / context.moveCount.toDouble()).milliseconds
-          "with $rate/move "
+          "\navg time/move: $rate/move "
         }
         else
           ""
 
       return "Ending Game/Snake '${request.gameId}/${context.snakeId}'" +
              "\ngame time: ${context.elapsedGameTime} " +
+             "\nmoves: ${context.moveCount} " +
              "\ncompute time: ${context.computeTime}" +
-             "\nmoves: ${context.moveCount} $avg[${context.request.ip() ?: "Unknown IP"}]"
+             "$avg[${context.request.ip() ?: "Unknown IP"}]"
     }
 
     internal fun <T : SnakeContext> afterTurnMsg(context: T?,
