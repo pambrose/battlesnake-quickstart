@@ -48,6 +48,7 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
   private fun start(request: Request, response: Response): Pair<T?, GameResponse> =
     snakeContext()
         .let { context ->
+          context.resetStartTime()
           val startRequest = StartRequest.toObject(request.body())
           context.assignIds(startRequest.gameId, startRequest.you.id)
           context.assignRequestResponse(request, response)

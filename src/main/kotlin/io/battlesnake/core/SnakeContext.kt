@@ -8,7 +8,8 @@ import kotlin.time.TimeSource
 import kotlin.time.seconds
 
 open class SnakeContext {
-  private val gameStartTime = TimeSource.Monotonic
+  private val clock = TimeSource.Monotonic
+  private var gameStartTime = clock.markNow()
 
   var totalMoveTime = 0.seconds
     internal set
@@ -25,6 +26,10 @@ open class SnakeContext {
   lateinit var response: Response
     internal set
 
+  internal fun resetStartTime() {
+    gameStartTime = clock.markNow()
+  }
+
   internal fun assignIds(gameId: String, snakeId: String) {
     this.gameId = gameId
     this.snakeId = snakeId
@@ -35,5 +40,5 @@ open class SnakeContext {
     this.response = response
   }
 
-  val elapsedGameTime get() = gameStartTime.markNow().elapsedNow()
+  val elapsedGameTime get() = gameStartTime.elapsedNow()
 }
