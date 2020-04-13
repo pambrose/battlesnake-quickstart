@@ -67,7 +67,7 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
       }
     context.apply {
       totalMoveTime += duration
-      moveCount += 1
+      moveCount++
     }
     return context to response
   }

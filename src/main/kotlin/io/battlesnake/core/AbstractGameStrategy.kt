@@ -21,15 +21,15 @@ abstract class AbstractGameStrategy<T : SnakeContext>(private val verbose: Boole
 
     onMove { context: T, request: MoveRequest -> onMove(context, request) }
 
-    onEnd { context: T, request: EndRequest ->
-      logger.info { endMsg(context, request) }
-      onEnd(context, request)
-    }
-
     onAfterTurn { context: T?, request: Request, response: Response, gameResponse: GameResponse, duration: Duration ->
       if (verbose)
         logger.info { afterTurnMsg(context, request, response, gameResponse, duration) }
       onAfterTurn(gameResponse, duration)
+    }
+
+    onEnd { context: T, request: EndRequest ->
+      logger.info { endMsg(context, request) }
+      onEnd(context, request)
     }
   }
 
