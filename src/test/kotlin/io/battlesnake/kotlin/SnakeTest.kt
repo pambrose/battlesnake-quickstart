@@ -3,32 +3,31 @@
 package io.battlesnake.kotlin
 
 import io.battlesnake.core.AbstractBattleSnake
-import io.battlesnake.core.AbstractSnakeContext
 import io.battlesnake.core.EndRequest
 import io.battlesnake.core.EndResponse
+import io.battlesnake.core.GameStrategy
 import io.battlesnake.core.MoveRequest
 import io.battlesnake.core.PingResponse
 import io.battlesnake.core.RIGHT
+import io.battlesnake.core.SnakeContext
 import io.battlesnake.core.StartRequest
 import io.battlesnake.core.StartResponse
-import io.battlesnake.core.Strategy
 import io.battlesnake.core.strategy
-import io.battlesnake.kotlin.SnakeTest.TestSnake.SnakeContext
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.jupiter.api.Test
 
 class SnakeTest {
 
-  object TestSnake : AbstractBattleSnake<SnakeContext>() {
+  object TestSnake : AbstractBattleSnake<TestSnake.MySnakeContext>() {
 
-    class SnakeContext : AbstractSnakeContext()
+    class MySnakeContext : SnakeContext()
 
-    override fun snakeContext() = SnakeContext()
+    override fun snakeContext() = MySnakeContext()
 
-    override fun gameStrategy(): Strategy<SnakeContext> =
+    override fun gameStrategy(): GameStrategy<MySnakeContext> =
       strategy {
-        onStart { _: SnakeContext, _: StartRequest -> StartResponse("#ff00ff") }
-        onMove { _: SnakeContext, _: MoveRequest -> RIGHT }
+        onStart { _: MySnakeContext, _: StartRequest -> StartResponse("#ff00ff") }
+        onMove { _: MySnakeContext, _: MoveRequest -> RIGHT }
       }
   }
 
@@ -47,7 +46,7 @@ class SnakeTest {
                 |"health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = StartRequest.toObject(json)
     val response =
-      TestSnake.strategy.start.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull()
+      TestSnake.strategy.startActions.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull()
       ?: StartResponse()
 
     response.apply {
@@ -65,7 +64,7 @@ class SnakeTest {
                 |"health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = MoveRequest.toObject(json)
     val response =
-      TestSnake.strategy.move.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull() ?: RIGHT
+      TestSnake.strategy.moveActions.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull() ?: RIGHT
     response.move shouldBeEqualTo "right"
   }
 
@@ -77,7 +76,7 @@ class SnakeTest {
                 |"health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = EndRequest.toObject(json)
     val response =
-      TestSnake.strategy.end.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull() ?: EndResponse
+      TestSnake.strategy.endActions.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull() ?: EndResponse
     response.toString() shouldBeEqualTo EndResponse.javaClass.simpleName
   }
 }

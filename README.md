@@ -17,13 +17,15 @@ Battlesnakes in Kotlin and Java.
 
 ## Usage
 
-A snake defined as a subclass of [AbstractBattleSnake](src/main/kotlin/io/battlesnake/core/AbstractBattleSnake.kt) and
-implements methods to produce [SnakeContext](src/main/kotlin/io/battlesnake/core/AbstractSnakeContext.kt) 
-and [Strategy](src/main/kotlin/io/battlesnake/core/Strategy.kt) objects. 
+1) Define a snake as a subclass of [AbstractBattleSnake](src/main/kotlin/io/battlesnake/core/AbstractBattleSnake.kt).
 
-* The SnakeContext class is snake-specific. The framework creates an instance at the start of every game (for each snake 
-your server is supporting), and it provides context between game turns. 
-* The Strategy specifies responses for the `Ping`, `Start`, `Move`, and `End` commands.
+2) Define a [SnakeContext](src/main/kotlin/io/battlesnake/core/AbstractSnakeContext.kt) object to maintain
+state between game moves. The framework creates SnakeContext instances at the start of every game, one for each snake 
+your server is supporting.
+                     
+3) Define a [Strategy](src/main/kotlin/io/battlesnake/core/Strategy.kt) object to indicate responses 
+for the `Ping`, `Start`, `Move`, and `End` requests during games. The framework creates a single Strategy 
+instance when the server is started.
 
 ## Examples
 
@@ -32,17 +34,17 @@ Examples of simple Battlesnakes created with this framework are [here](https://g
 ### Minimal Kotlin Battlesnake
 
 ```kotlin
-object ExampleSnake : AbstractBattleSnake<SnakeContext>(){
+object ExampleSnake : AbstractBattleSnake<MySnakeContext>(){
 
     // Add any necessary snake-specific data to the SnakeContext class
-    class SnakeContext : AbstractSnakeContext() {
+    class MySnakeContext : SnakeContext() {
         // Snake-specific context data goes here
     }
 
     // Called at the beginning of each game on Start for each snake
-    override fun snakeContext(): SnakeContext = SnakeContext()
+    override fun snakeContext(): MySnakeContext = MySnakeContext()
 
-    override fun gameStrategy() : Strategy<SnakeContext> =
+    override fun gameStrategy() : GameStrategy<MySnakeContext> =
         strategy(verbose = true) {
 
             // StartResponse describes snake color and head/tail type
@@ -69,31 +71,37 @@ object ExampleSnake : AbstractBattleSnake<SnakeContext>(){
 public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.SnakeContext> {
 
     // Add any necessary snake-specific data to the SnakeContext class
-    static class SnakeContext extends AbstractSnakeContext {
+    static class MySnakeContext extends SnakeContext {
         // Snake-specific context data goes here
     }
 
+    static class MyGameStrategy extends AbstractDefaultGameStrategy<MySnakeContext> {
+        public MyGameStrategy(boolean verbose) {
+            super(verbose);
+        }
+        
+        // StartResponse describes snake color and head/tail type
+        @Override
+        public StartResponse onStart(MySnakeContext context, StartRequest request) {
+            return new StartResponse("#ff00ff", "beluga", "bolt");
+        }
+        
+        // MoveResponse can be LEFT, RIGHT, UP or DOWN
+        @Override
+        public MoveResponse onMove(MySnakeContext context, MoveRequest request) {
+            return RIGHT;
+        }
+    }              
+    
     // Called at the beginning of each game on Start for each snake
     @Override
     public SnakeContext snakeContext() {
-        return new SnakeContext();
+        return new MySnakeContext();
     }
 
     @Override
-    public Strategy<SnakeContext> gameStrategy() {
-        return new AbstractStrategy<SnakeContext>(true) {
-            // StartResponse describes snake color and head/tail type
-            @Override
-            public StartResponse onStart(SnakeContext context, StartRequest request) {
-                return new StartResponse("#ff00ff", "beluga", "bolt");
-            }
-
-            // MoveResponse can be LEFT, RIGHT, UP or DOWN
-            @Override
-            public MoveResponse onMove(SnakeContext context, MoveRequest request) {
-                return RIGHT;
-            }
-        };
+    public GameStrategy gameStrategy() {
+        return new MyGameStrategy(true);
     }
 
     public static void main(String[] args) {

@@ -3,33 +3,33 @@
 package io.battlesnake.kotlin
 
 import io.battlesnake.core.AbstractBattleSnake
-import io.battlesnake.core.AbstractSnakeContext
+import io.battlesnake.core.GameStrategy
 import io.battlesnake.core.MoveRequest
 import io.battlesnake.core.RIGHT
+import io.battlesnake.core.SnakeContext
 import io.battlesnake.core.StartRequest
 import io.battlesnake.core.StartResponse
-import io.battlesnake.core.Strategy
 import io.battlesnake.core.strategy
-import io.battlesnake.kotlin.ExampleSnake.SnakeContext
+import io.battlesnake.kotlin.ExampleSnake.MySnakeContext
 
-object ExampleSnake : AbstractBattleSnake<SnakeContext>() {
+object ExampleSnake : AbstractBattleSnake<MySnakeContext>() {
 
   // Add any necessary snake-specific data to SnakeContext class
-  class SnakeContext : AbstractSnakeContext()
+  class MySnakeContext : SnakeContext()
 
   // Called at the beginning of each game on Start
-  override fun snakeContext(): SnakeContext = SnakeContext()
+  override fun snakeContext(): MySnakeContext = MySnakeContext()
 
-  override fun gameStrategy(): Strategy<SnakeContext> =
+  override fun gameStrategy(): GameStrategy<MySnakeContext> =
     strategy(true) {
 
       // StartResponse describes snake color and head/tail type
-      onStart { context: SnakeContext, request: StartRequest ->
+      onStart { context: MySnakeContext, request: StartRequest ->
         StartResponse("#ff00ff", "beluga", "bolt")
       }
 
       // MoveResponse can be LEFT, RIGHT, UP or DOWN
-      onMove { context: SnakeContext, request: MoveRequest ->
+      onMove { context: MySnakeContext, request: MoveRequest ->
         RIGHT
       }
     }

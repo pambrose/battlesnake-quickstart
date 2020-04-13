@@ -5,7 +5,8 @@ package io.battlesnake.core
 import spark.Request
 import spark.Response
 
-abstract class AbstractStrategy<T : AbstractSnakeContext>(private val verbose: Boolean = false) : Strategy<T>() {
+abstract class AbstractDefaultGameStrategy<T : SnakeContext>(private val verbose: Boolean = false) :
+    GameStrategy<T>() {
 
   init {
     onPing { request: Request, response: Response ->
@@ -30,7 +31,7 @@ abstract class AbstractStrategy<T : AbstractSnakeContext>(private val verbose: B
                   gameResponse: GameResponse,
                   millis: Long ->
       if (verbose) {
-        logger.info { turnMsg(request, response, gameResponse, millis) }
+        logger.info { afterTurnMsg(request, response, gameResponse, millis) }
       }
       onAfterTurn(gameResponse, millis)
     }

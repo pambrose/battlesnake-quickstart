@@ -4,9 +4,11 @@ package io.battlesnake.core
 
 import spark.Request
 import spark.Response
+import kotlin.time.TimeSource
+import kotlin.time.seconds
 
-abstract class AbstractSnakeContext {
-  private val gameStartTimeMillis: Long = System.currentTimeMillis()
+open class SnakeContext {
+  private val gameStartTimeMillis = TimeSource.Monotonic
 
   var elapsedMoveTimeMillis = 0L
   var moveCount = 0L
@@ -30,11 +32,11 @@ abstract class AbstractSnakeContext {
     this.response = response
   }
 
-  val elapsedGameTimeMillis get() = System.currentTimeMillis() - gameStartTimeMillis
+  val elapsedGameTime get() = gameStartTimeMillis.markNow().elapsedNow()
 
   val elapsedGameTimeMsg: String
     get() {
-      val time = elapsedGameTimeMillis
-      return if (time > 1_000) "${time / 1_000} secs" else "$time ms"
+      val time = elapsedGameTime
+      return if (time > 1_000.seconds) "${time.inSeconds} secs" else "${time.inMilliseconds} ms"
     }
 }
