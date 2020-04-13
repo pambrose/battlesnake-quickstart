@@ -19,7 +19,7 @@ Battlesnakes in Kotlin and Java.
 
 1) Define a snake as a subclass of [AbstractBattleSnake](src/main/kotlin/io/battlesnake/core/AbstractBattleSnake.kt).
 
-2) Define a [SnakeContext](src/main/kotlin/io/battlesnake/core/AbstractSnakeContext.kt) object to maintain
+2) Define a [SnakeContext](src/main/kotlin/io/battlesnake/core/SnakeContext.kt) object to maintain
 state between game moves. The framework creates SnakeContext instances at the start of every game, one for each snake 
 your server is supporting.
                      
@@ -75,7 +75,7 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.SnakeContext>
         // Snake-specific context data goes here
     }
 
-    static class MyGameStrategy extends AbstractDefaultGameStrategy<MySnakeContext> {
+    static class MyGameStrategy extends AbstractGameStrategy<MySnakeContext> {
         public MyGameStrategy(boolean verbose) {
             super(verbose);
         }

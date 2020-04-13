@@ -1,7 +1,7 @@
 package io.battlesnake.java;
 
 import io.battlesnake.core.AbstractBattleSnake;
-import io.battlesnake.core.AbstractDefaultGameStrategy;
+import io.battlesnake.core.AbstractGameStrategy;
 import io.battlesnake.core.MoveRequest;
 import io.battlesnake.core.MoveResponse;
 import io.battlesnake.core.SnakeContext;
@@ -17,7 +17,7 @@ public class ExampleSnake extends AbstractBattleSnake<MySnakeContext> {
   static class MySnakeContext extends SnakeContext {
   }
 
-  static class MyGameStrategy extends AbstractDefaultGameStrategy<MySnakeContext> {
+  static class MyGameStrategy extends AbstractGameStrategy<MySnakeContext> {
     public MyGameStrategy(boolean verbose) {
       super(verbose);
     }

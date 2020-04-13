@@ -5,7 +5,7 @@ package io.battlesnake.core
 import spark.Request
 import spark.Response
 
-abstract class AbstractDefaultGameStrategy<T : SnakeContext>(private val verbose: Boolean = false) :
+abstract class AbstractGameStrategy<T : SnakeContext>(private val verbose: Boolean = false) :
     GameStrategy<T>() {
 
   init {
