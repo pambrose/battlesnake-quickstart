@@ -101,7 +101,7 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
                                                  response: Response,
                                                  gameResponse: GameResponse,
                                                  duration: Duration) =
-      "Responded to ${request.uri()} in ${duration.inMilliseconds.toInt()} ms with: $gameResponse" +
+      "Responded to ${request.uri()} in $duration with: $gameResponse" +
       context?.let { " Snake: ${context.snakeId}" } ?: ""
   }
 }
