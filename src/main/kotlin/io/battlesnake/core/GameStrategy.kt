@@ -10,6 +10,7 @@ import mu.KLogging
 import spark.Request
 import spark.Response
 import kotlin.time.Duration
+import kotlin.time.milliseconds
 
 fun <T : SnakeContext> strategy(verbose: Boolean = false, init: GameStrategy<T>.() -> Unit) =
   GameStrategy<T>()
@@ -83,13 +84,17 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
 
     internal fun <T : SnakeContext> endMsg(context: T, request: EndRequest): String {
       val avg =
-        if (context.moveCount > 0)
-          "with ${"%.2f".format(context.totalMoveTime.inMilliseconds / (context.moveCount.toDouble()))} ms/move "
+        if (context.moveCount > 0) {
+          val rate = (context.computeTime.inMilliseconds / context.moveCount.toDouble()).milliseconds
+          "with $rate/move "
+        }
         else
           ""
 
-      return "Ending Game/Snake '${request.gameId}/${context.snakeId}' total game time: ${context.elapsedGameTime} " +
-             "total moves: ${context.moveCount} $avg[${context.request.ip() ?: "Unknown IP"}]"
+      return "Ending Game/Snake '${request.gameId}/${context.snakeId}'" +
+             "\ngame time: ${context.elapsedGameTime} " +
+             "\ncompute time: ${context.computeTime}" +
+             "\nmoves: ${context.moveCount} $avg[${context.request.ip() ?: "Unknown IP"}]"
     }
 
     internal fun <T : SnakeContext> afterTurnMsg(context: T?,

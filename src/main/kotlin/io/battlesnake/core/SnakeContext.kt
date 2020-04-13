@@ -11,7 +11,7 @@ open class SnakeContext {
   private val clock = TimeSource.Monotonic
   private var gameStartTime = clock.markNow()
 
-  var totalMoveTime = 0.seconds
+  var computeTime = 0.seconds
     internal set
 
   var moveCount = 0L

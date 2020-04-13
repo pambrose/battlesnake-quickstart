@@ -67,7 +67,7 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
         strategy.moveActions.map { it.invoke(context, moveRequest) }.lastOrNull() ?: RIGHT
       }
     context.apply {
-      totalMoveTime += duration
+      computeTime += duration
       moveCount++
     }
     return context to response
