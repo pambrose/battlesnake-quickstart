@@ -9,6 +9,8 @@ import io.battlesnake.core.GameStrategy.Companion.startMsg
 import mu.KLogging
 import spark.Request
 import spark.Response
+import kotlin.time.Duration
+import kotlin.time.seconds
 
 fun <T : SnakeContext> strategy(verbose: Boolean = false, init: GameStrategy<T>.() -> Unit) =
   GameStrategy<T>()
@@ -29,8 +31,8 @@ fun <T : SnakeContext> strategy(verbose: Boolean = false, init: GameStrategy<T>.
         }
 
         if (verbose) {
-          onAfterTurn { request, response, gameResponse, millis ->
-            logger.info { afterTurnMsg(request, response, gameResponse, millis) }
+          onAfterTurn { context: T?, request, response, gameResponse, millis ->
+            logger.info { afterTurnMsg(context, request, response, gameResponse, millis) }
           }
         }
 
@@ -47,10 +49,11 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
 
   internal val endActions: MutableList<(context: T, request: EndRequest) -> EndResponse> = mutableListOf()
 
-  internal val afterTurn: MutableList<(request: Request,
-                                       response: Response,
-                                       gameResponse: GameResponse,
-                                       millis: Long) -> Unit> = mutableListOf()
+  internal val afterTurnActions: MutableList<(context: T?,
+                                              request: Request,
+                                              response: Response,
+                                              gameResponse: GameResponse,
+                                              duration: Duration) -> Unit> = mutableListOf()
 
   fun onPing(block: (request: Request, response: Response) -> PingResponse) {
     pingActions += block
@@ -68,8 +71,8 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
     endActions += block
   }
 
-  fun onAfterTurn(block: (request: Request, response: Response, gameResponse: GameResponse, millis: Long) -> Unit) {
-    afterTurn += block
+  fun onAfterTurn(block: (context: T?, request: Request, response: Response, gameResponse: GameResponse, duration: Duration) -> Unit) {
+    afterTurnActions += block
   }
 
   companion object {
@@ -77,20 +80,28 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
       "Ping from ${request.ip()}"
 
     internal fun <T : SnakeContext> startMsg(context: T, request: StartRequest) =
-      "Starting game/snake '${request.gameId}/${request.you.id}' [${context.request.ip() ?: "Unknown IP"}]"
+      "Starting Game/Snake '${request.gameId}/${context.snakeId}' [${context.request.ip() ?: "Unknown IP"}]"
 
     internal fun <T : SnakeContext> endMsg(context: T, request: EndRequest): String {
       val avg =
         if (context.moveCount > 0)
-          "with ${"%.2f".format(context.elapsedMoveTimeMillis / (context.moveCount.toFloat()))} ms/move "
+          "with ${"%.2f".format(context.totalMoveTime.inMilliseconds / (context.moveCount.toDouble()))} ms/move "
         else
           ""
 
-      return "Ending game/snake '${request.gameId}/${request.you.id}' game time: ${context.elapsedGameTimeMsg} " +
+      val duration = context.elapsedGameTime
+      val msg = if (duration > 1_000.seconds) "${duration.inSeconds} secs" else "${duration.inMilliseconds.toInt()} ms"
+
+      return "Ending Game/Snake '${request.gameId}/${context.snakeId}' total game time: $msg " +
              "moves: ${context.moveCount} $avg[${context.request.ip() ?: "Unknown IP"}]"
     }
 
-    internal fun afterTurnMsg(request: Request, response: Response, gameResponse: GameResponse, millis: Long) =
-      "Responded to ${request.uri()} in $millis ms with: $gameResponse"
+    internal fun <T : SnakeContext> afterTurnMsg(context: T?,
+                                                 request: Request,
+                                                 response: Response,
+                                                 gameResponse: GameResponse,
+                                                 duration: Duration) =
+      "Responded to ${request.uri()} in ${duration.inMilliseconds.toInt()} ms with: $gameResponse" +
+      context?.let { " Snake: ${context.snakeId}" } ?: ""
   }
 }

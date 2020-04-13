@@ -8,10 +8,13 @@ import kotlin.time.TimeSource
 import kotlin.time.seconds
 
 open class SnakeContext {
-  private val gameStartTimeMillis = TimeSource.Monotonic
+  private val gameStartTime = TimeSource.Monotonic
 
-  var elapsedMoveTimeMillis = 0L
+  var totalMoveTime = 0.seconds
+    internal set
+
   var moveCount = 0L
+    internal set
 
   lateinit var gameId: String
     internal set
@@ -32,11 +35,5 @@ open class SnakeContext {
     this.response = response
   }
 
-  val elapsedGameTime get() = gameStartTimeMillis.markNow().elapsedNow()
-
-  val elapsedGameTimeMsg: String
-    get() {
-      val time = elapsedGameTime
-      return if (time > 1_000.seconds) "${time.inSeconds} secs" else "${time.inMilliseconds} ms"
-    }
+  val elapsedGameTime get() = gameStartTime.markNow().elapsedNow()
 }

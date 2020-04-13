@@ -6,7 +6,7 @@ import mu.KLogging
 import spark.Request
 import spark.Response
 import spark.Spark
-import kotlin.system.measureTimeMillis
+import kotlin.time.measureTimedValue
 
 abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
 
@@ -21,63 +21,63 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
   private fun process(req: Request, res: Response): GameResponse =
     try {
       val uri = req.uri()
-      lateinit var gameResponse: GameResponse
-      val ms =
-        measureTimeMillis {
-          gameResponse =
-            when (uri) {
-              PING -> ping(req, res)
-              START -> start(req, res)
-              MOVE -> move(req, res)
-              END -> end(req, res)
-              else -> throw IllegalAccessError("Invalid call made to the snake: $uri [${req.ip()}]")
-            }
+      val (pair, duration) =
+        measureTimedValue {
+          when (uri) {
+            PING -> ping(req, res)
+            START -> start(req, res)
+            MOVE -> move(req, res)
+            END -> end(req, res)
+            else -> throw IllegalAccessError("Invalid call made to the snake: $uri [${req.ip()}]")
+          }
         }
+      val context = pair.first
+      val gameResponse = pair.second
 
-      strategy.afterTurn.forEach { it.invoke(req, res, gameResponse, ms) }
+      strategy.afterTurnActions.forEach { it.invoke(context, req, res, gameResponse, duration) }
       gameResponse
     } catch (e: Exception) {
       logger.warn(e) { "Something went wrong with ${req.uri()}" }
       throw e
     }
 
-  private fun ping(req: Request, res: Response): GameResponse =
-    strategy.pingActions.map { it.invoke(req, res) }.lastOrNull() ?: PingResponse
+  private fun ping(req: Request, res: Response): Pair<T?, GameResponse> =
+    null to (strategy.pingActions.map { it.invoke(req, res) }.lastOrNull() ?: PingResponse)
 
-  private fun start(request: Request, response: Response): GameResponse =
+  private fun start(request: Request, response: Response): Pair<T?, GameResponse> =
     snakeContext()
         .let { context ->
           val startRequest = StartRequest.toObject(request.body())
           context.assignIds(startRequest.gameId, startRequest.you.id)
           context.assignRequestResponse(request, response)
           contextMap[context.snakeId] = context
-          strategy.startActions.map { it.invoke(context, startRequest) }.lastOrNull() ?: StartResponse()
+          context to (strategy.startActions.map { it.invoke(context, startRequest) }.lastOrNull() ?: StartResponse())
         }
 
-  private fun move(req: Request, res: Response): GameResponse {
+  private fun move(req: Request, res: Response): Pair<T?, GameResponse> {
     val moveRequest = MoveRequest.toObject(req.body())
     val context = contextMap[moveRequest.you.id]
                   ?: throw NoSuchElementException("Missing context for user id: ${moveRequest.you.id}")
+    assert(context.snakeId == moveRequest.you.id)
     context.assignRequestResponse(req, res)
-
-    lateinit var response: GameResponse
-    val moveTime =
-      measureTimeMillis {
-        response = strategy.moveActions.map { it.invoke(context, moveRequest) }.lastOrNull() ?: RIGHT
+    val (response, duration) =
+      measureTimedValue {
+        strategy.moveActions.map { it.invoke(context, moveRequest) }.lastOrNull() ?: RIGHT
       }
     context.apply {
-      elapsedMoveTimeMillis += moveTime
+      totalMoveTime += duration
       moveCount += 1
     }
-    return response
+    return context to response
   }
 
-  private fun end(req: Request, res: Response): GameResponse {
+  private fun end(req: Request, res: Response): Pair<T?, GameResponse> {
     val endRequest = EndRequest.toObject(req.body())
     val context = contextMap.remove(endRequest.you.id)
                   ?: throw NoSuchElementException("Missing context for user id: ${endRequest.you.id}")
+    assert(context.snakeId == endRequest.you.id)
     context.assignRequestResponse(req, res)
-    return strategy.endActions.map { it.invoke(context, endRequest) }.lastOrNull() ?: EndResponse
+    return context to (strategy.endActions.map { it.invoke(context, endRequest) }.lastOrNull() ?: EndResponse)
   }
 
   fun run(port: Int = 8080) {
