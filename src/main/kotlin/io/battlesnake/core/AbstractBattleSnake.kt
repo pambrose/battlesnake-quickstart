@@ -6,78 +6,80 @@ import mu.KLogging
 import spark.Request
 import spark.Response
 import spark.Spark
-import kotlin.system.measureTimeMillis
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.time.measureTimedValue
 
-abstract class AbstractBattleSnake<T : AbstractSnakeContext> : KLogging() {
+abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
 
   abstract fun snakeContext(): T
 
-  abstract fun gameStrategy(): Strategy<T>
+  abstract fun gameStrategy(): GameStrategy<T>
 
-  val strategy by lazy { gameStrategy() }
+  internal val strategy by lazy { gameStrategy() }
 
-  private val contextMap = mutableMapOf<String, T>()
+  private val contextMap = ConcurrentHashMap<String, T>()
 
   private fun process(req: Request, res: Response): GameResponse =
     try {
       val uri = req.uri()
-      lateinit var gameResponse: GameResponse
-      val ms =
-        measureTimeMillis {
-          gameResponse =
-            when (uri) {
-              PING -> ping(req, res)
-              START -> start(req, res)
-              MOVE -> move(req, res)
-              END -> end(req, res)
-              else -> throw IllegalAccessError("Invalid call made to the snake: $uri [${req.ip()}]")
-            }
+      val (pair, duration) =
+        measureTimedValue {
+          when (uri) {
+            PING -> ping(req, res)
+            START -> start(req, res)
+            MOVE -> move(req, res)
+            END -> end(req, res)
+            else -> throw IllegalAccessError("Invalid call made to the snake: $uri [${req.ip()}]")
+          }
         }
+      val context = pair.first
+      val gameResponse = pair.second
 
-      strategy.afterTurn.forEach { it.invoke(req, res, gameResponse, ms) }
+      strategy.afterTurnActions.forEach { it.invoke(context, req, res, gameResponse, duration) }
       gameResponse
     } catch (e: Exception) {
       logger.warn(e) { "Something went wrong with ${req.uri()}" }
       throw e
     }
 
-  private fun ping(req: Request, res: Response): GameResponse =
-    strategy.ping.map { it.invoke(req, res) }.lastOrNull() ?: PingResponse
+  private fun ping(req: Request, res: Response): Pair<T?, GameResponse> =
+    null to (strategy.pingActions.map { it.invoke(req, res) }.lastOrNull() ?: PingResponse)
 
-  private fun start(request: Request, response: Response): GameResponse =
+  private fun start(request: Request, response: Response): Pair<T?, GameResponse> =
     snakeContext()
         .let { context ->
           val startRequest = StartRequest.toObject(request.body())
+          context.resetStartTime()
           context.assignIds(startRequest.gameId, startRequest.you.id)
           context.assignRequestResponse(request, response)
           contextMap[context.snakeId] = context
-          strategy.start.map { it.invoke(context, startRequest) }.lastOrNull() ?: StartResponse()
+          context to (strategy.startActions.map { it.invoke(context, startRequest) }.lastOrNull() ?: StartResponse())
         }
 
-  private fun move(req: Request, res: Response): GameResponse {
+  private fun move(req: Request, res: Response): Pair<T?, GameResponse> {
     val moveRequest = MoveRequest.toObject(req.body())
     val context = contextMap[moveRequest.you.id]
                   ?: throw NoSuchElementException("Missing context for user id: ${moveRequest.you.id}")
+    assert(context.snakeId == moveRequest.you.id)
     context.assignRequestResponse(req, res)
-
-    lateinit var response: GameResponse
-    val moveTime =
-      measureTimeMillis {
-        response = strategy.move.map { it.invoke(context, moveRequest) }.lastOrNull() ?: RIGHT
+    val (response, duration) =
+      measureTimedValue {
+        strategy.moveActions.map { it.invoke(context, moveRequest) }.lastOrNull() ?: RIGHT
       }
     context.apply {
-      elapsedMoveTimeMillis += moveTime
-      moveCount += 1
+      computeTime += duration
+      moveCount++
     }
-    return response
+    return context to response
   }
 
-  private fun end(req: Request, res: Response): GameResponse {
+  private fun end(req: Request, res: Response): Pair<T?, GameResponse> {
     val endRequest = EndRequest.toObject(req.body())
     val context = contextMap.remove(endRequest.you.id)
                   ?: throw NoSuchElementException("Missing context for user id: ${endRequest.you.id}")
+    assert(context.snakeId == endRequest.you.id)
     context.assignRequestResponse(req, res)
-    return strategy.end.map { it.invoke(context, endRequest) }.lastOrNull() ?: EndResponse
+    return context to (strategy.endActions.map { it.invoke(context, endRequest) }.lastOrNull() ?: EndResponse)
   }
 
   fun run(port: Int = 8080) {
@@ -88,9 +90,10 @@ abstract class AbstractBattleSnake<T : AbstractSnakeContext> : KLogging() {
 
     Spark.get("/") { _, _ ->
       """
+      <br>
       <h2>You have reached a <a href=\"https://docs.battlesnake.io\">Battlesnake</a> server.</h2>
-
-      <h2>Use the URL of this page as your snake URL:</h2>
+      <br>
+      <h2>Use this URL as your snake URL:</h2>
       <p id="url"></p>
       <script>
         document.getElementById("url").innerHTML = window.location.href;
@@ -120,5 +123,7 @@ abstract class AbstractBattleSnake<T : AbstractSnakeContext> : KLogging() {
 
     // Prime the classloader to avoid an expensive first call
     StartRequest.primeClassLoader()
+    // Reference strategy to load it
+    strategy
   }
 }
