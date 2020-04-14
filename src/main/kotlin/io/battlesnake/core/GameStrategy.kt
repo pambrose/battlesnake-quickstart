@@ -86,7 +86,7 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
       val avg =
         if (context.moveCount > 0) {
           val rate = (context.computeTime.inMilliseconds / context.moveCount.toDouble()).milliseconds
-          "\navg time/move: $rate/move "
+          "\navg time/move: $rate "
         }
         else
           ""
@@ -102,8 +102,11 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
                                                  request: Request,
                                                  response: Response,
                                                  gameResponse: GameResponse,
-                                                 duration: Duration) =
-      "Responded to ${request.uri()} in $duration with: $gameResponse" +
-      context?.let { " Snake: ${context.snakeId}" } ?: ""
+                                                 duration: Duration): String {
+      return "Responded to ${request.uri()} in $duration with: " +
+             if (gameResponse is MoveResponse) "${gameResponse.move.toUpperCase()}"
+             else "$gameResponse" +
+                  context?.let { " [${context.snakeId}]" } ?: ""
+    }
   }
 }
