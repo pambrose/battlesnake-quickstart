@@ -123,5 +123,7 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
 
     // Prime the classloader to avoid an expensive first call
     StartRequest.primeClassLoader()
+    // Reference strategy to load it
+    strategy
   }
 }
