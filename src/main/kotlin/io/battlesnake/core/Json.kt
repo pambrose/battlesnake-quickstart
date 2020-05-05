@@ -25,8 +25,8 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import kotlin.math.abs
 
-private val Int.isEven get() = this % 2 == 0
-private val Int.isOdd get() = this % 2 != 0
+val Int.isEven get() = this % 2 == 0
+val Int.isOdd get() = this % 2 != 0
 
 private val json = Json(JsonConfiguration.Stable.copy(ignoreUnknownKeys = true, isLenient = true))
 
