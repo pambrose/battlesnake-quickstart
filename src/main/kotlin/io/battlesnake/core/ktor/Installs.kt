@@ -10,10 +10,13 @@ import io.ktor.features.StatusPages
 import io.ktor.features.deflate
 import io.ktor.features.gzip
 import io.ktor.features.minimumSize
-import io.ktor.gson.gson
+import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.path
 import io.ktor.response.respond
+import io.ktor.serialization.DefaultJsonConfiguration
+import io.ktor.serialization.json
+import kotlinx.serialization.json.Json
 import org.slf4j.event.Level
 
 fun Application.installs() {
@@ -33,10 +36,8 @@ fun Application.installs() {
   }
 
   install(ContentNegotiation) {
-    gson {
-      setPrettyPrinting()
-      setLenient()
-    }
+    json(contentType = ContentType.Application.Json,
+         json = Json(DefaultJsonConfiguration.copy(prettyPrint = true)))
   }
 
   install(StatusPages) {
