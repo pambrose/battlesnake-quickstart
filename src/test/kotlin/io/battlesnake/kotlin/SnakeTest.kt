@@ -42,8 +42,8 @@ class SnakeTest {
   internal fun startTest() {
     val json =
       """{"game":{"id":"1551594939037768058"},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
-                |"snakes":[{"id":"you","name":"you","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
-                |"health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
+                |"snakes":[{"id":"you","name":"you","shout":"","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
+                |"shout":"","health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = StartRequest.toObject(json)
     val response =
       TestSnake.strategy.startActions.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull()
@@ -60,8 +60,8 @@ class SnakeTest {
   internal fun moveTest() {
     val json =
       """{"game":{"id":"1551628170849008209"},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
-                |"snakes":[{"id":"you","name":"you","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
-                |"health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
+                |"snakes":[{"id":"you","name":"you","shout":"","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
+                |"shout":"","health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = MoveRequest.toObject(json)
     val response =
       TestSnake.strategy.moveActions.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull() ?: RIGHT
@@ -72,8 +72,8 @@ class SnakeTest {
   internal fun endTest() {
     val json =
       """{"game":{"id":"1551628170849008209"},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
-                |"snakes":[{"id":"you","name":"you","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
-                |"health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
+                |"snakes":[{"id":"you","name":"you","shout":"","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
+                |"shout":"","health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = EndRequest.toObject(json)
     val response =
       TestSnake.strategy.endActions.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull() ?: EndResponse
