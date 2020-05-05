@@ -89,7 +89,7 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
                   ?: throw NoSuchElementException("Missing context for user id: ${endRequest.you.id}")
     assert(context.snakeId == endRequest.you.id)
     context.assignRequestResponse(call)
-    return context to (strategy.endActions.map { it.invoke(context, endRequest) }.lastOrNull() ?: EndResponse)
+    return context to (strategy.endActions.map { it.invoke(context, endRequest) }.lastOrNull() ?: EndResponse())
   }
 
   fun run(port: Int = 8080) {

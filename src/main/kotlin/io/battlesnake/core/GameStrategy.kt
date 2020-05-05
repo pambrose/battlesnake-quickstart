@@ -28,7 +28,7 @@ fun <T : SnakeContext> strategy(verbose: Boolean = false, init: GameStrategy<T>.
 
         onEnd { context, request ->
           logger.info { endMsg(context, request) }
-          EndResponse
+          EndResponse()
         }
 
         if (verbose) {

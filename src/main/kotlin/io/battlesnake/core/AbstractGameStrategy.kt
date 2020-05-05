@@ -38,7 +38,7 @@ abstract class AbstractGameStrategy<T : SnakeContext>(private val verbose: Boole
 
   abstract fun onMove(context: T, request: MoveRequest): MoveResponse
 
-  open fun onEnd(context: T, request: EndRequest) = EndResponse
+  open fun onEnd(context: T, request: EndRequest) = EndResponse()
 
   open fun onAfterTurn(response: GameResponse, duration: Duration) {}
 }

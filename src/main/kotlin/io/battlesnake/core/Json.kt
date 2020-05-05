@@ -139,7 +139,8 @@ data class EndRequest(val board: Board,
   }
 }
 
-object EndResponse : GameResponse {
+@Serializable
+class EndResponse : GameResponse {
   override fun toString() = EndResponse::class.simpleName ?: "EndResponse"
 }
 
