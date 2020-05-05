@@ -37,7 +37,7 @@ fun Application.installs() {
 
   install(ContentNegotiation) {
     json(contentType = ContentType.Application.Json,
-         json = Json(DefaultJsonConfiguration.copy(prettyPrint = true)))
+         json = Json(DefaultJsonConfiguration.copy(ignoreUnknownKeys = true, prettyPrint = true)))
   }
 
   install(StatusPages) {
