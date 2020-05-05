@@ -9,6 +9,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import kotlin.math.abs
 
+
 val Int.isEven get() = this % 2 == 0
 val Int.isOdd get() = this % 2 != 0
 
@@ -125,12 +126,10 @@ data class MoveResponse(val move: String) : GameResponse {
 }
 
 @Serializable
-data class EndRequest(
-  val board: Board,
-  val game: Game,
-  val turn: Int,
-  val you: You
-                     ) {
+data class EndRequest(val board: Board,
+                      val game: Game,
+                      val turn: Int,
+                      val you: You) {
   val gameId
     get() = game.id
 

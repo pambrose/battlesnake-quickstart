@@ -2,8 +2,7 @@
 
 package io.battlesnake.core
 
-import spark.Request
-import spark.Response
+import io.ktor.application.ApplicationCall
 import kotlin.time.TimeSource
 import kotlin.time.seconds
 
@@ -21,9 +20,7 @@ open class SnakeContext {
     internal set
   lateinit var snakeId: String
     internal set
-  lateinit var request: Request
-    internal set
-  lateinit var response: Response
+  lateinit var call: ApplicationCall
     internal set
 
   internal fun resetStartTime() {
@@ -35,9 +32,8 @@ open class SnakeContext {
     this.snakeId = snakeId
   }
 
-  internal fun assignRequestResponse(request: Request, response: Response) {
-    this.request = request
-    this.response = response
+  internal fun assignRequestResponse(call: ApplicationCall) {
+    this.call = call
   }
 
   val elapsedGameTime get() = gameStartTime.elapsedNow()

@@ -6,17 +6,18 @@ import io.battlesnake.core.GameStrategy.Companion.afterTurnMsg
 import io.battlesnake.core.GameStrategy.Companion.endMsg
 import io.battlesnake.core.GameStrategy.Companion.pingMsg
 import io.battlesnake.core.GameStrategy.Companion.startMsg
+import io.ktor.application.ApplicationCall
+import io.ktor.features.origin
+import io.ktor.request.uri
 import mu.KLogging
-import spark.Request
-import spark.Response
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
 fun <T : SnakeContext> strategy(verbose: Boolean = false, init: GameStrategy<T>.() -> Unit) =
   GameStrategy<T>()
       .apply {
-        onPing { request, response ->
-          logger.info { pingMsg(request, response) }
+        onPing { call ->
+          logger.info { pingMsg(call) }
           PingResponse
         }
 
@@ -31,8 +32,8 @@ fun <T : SnakeContext> strategy(verbose: Boolean = false, init: GameStrategy<T>.
         }
 
         if (verbose) {
-          onAfterTurn { context: T?, request, response, gameResponse, millis ->
-            logger.info { afterTurnMsg(context, request, response, gameResponse, millis) }
+          onAfterTurn { context: T?, call, gameResponse, millis ->
+            logger.info { afterTurnMsg(context, call, gameResponse, millis) }
           }
         }
 
@@ -41,7 +42,7 @@ fun <T : SnakeContext> strategy(verbose: Boolean = false, init: GameStrategy<T>.
 
 open class GameStrategy<T : SnakeContext> : KLogging() {
 
-  internal val pingActions: MutableList<(request: Request, response: Response) -> PingResponse> = mutableListOf()
+  internal val pingActions: MutableList<(call: ApplicationCall) -> PingResponse> = mutableListOf()
 
   internal val startActions: MutableList<(context: T, request: StartRequest) -> StartResponse> = mutableListOf()
 
@@ -50,37 +51,28 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
   internal val endActions: MutableList<(context: T, request: EndRequest) -> EndResponse> = mutableListOf()
 
   internal val afterTurnActions: MutableList<(context: T?,
-                                              request: Request,
-                                              response: Response,
+                                              call: ApplicationCall,
                                               gameResponse: GameResponse,
                                               duration: Duration) -> Unit> = mutableListOf()
 
-  fun onPing(block: (request: Request, response: Response) -> PingResponse) {
-    pingActions += block
-  }
+  fun onPing(block: (call: ApplicationCall) -> PingResponse) = let { pingActions += block }
 
-  fun onStart(block: (context: T, request: StartRequest) -> StartResponse) {
-    startActions += block
-  }
+  fun onStart(block: (context: T, request: StartRequest) -> StartResponse) = let { startActions += block }
 
-  fun onMove(block: (context: T, request: MoveRequest) -> MoveResponse) {
-    moveActions += block
-  }
+  fun onMove(block: (context: T, request: MoveRequest) -> MoveResponse) = let { moveActions += block }
 
-  fun onEnd(block: (context: T, request: EndRequest) -> EndResponse) {
-    endActions += block
-  }
+  fun onEnd(block: (context: T, request: EndRequest) -> EndResponse) = let { endActions += block }
 
-  fun onAfterTurn(block: (context: T?, request: Request, response: Response, gameResponse: GameResponse, duration: Duration) -> Unit) {
-    afterTurnActions += block
-  }
+  fun onAfterTurn(block: (context: T?,
+                          call: ApplicationCall,
+                          gameResponse: GameResponse,
+                          duration: Duration) -> Unit) = let { afterTurnActions += block }
 
   companion object {
-    internal fun pingMsg(request: Request, response: Response) =
-      "Ping from ${request.ip()}"
+    internal fun pingMsg(call: ApplicationCall) = "Ping from ${call.request.origin.host}"
 
     internal fun <T : SnakeContext> startMsg(context: T, request: StartRequest) =
-      "Starting Game/Snake '${request.gameId}/${context.snakeId}' [${context.request.ip() ?: "Unknown IP"}]"
+      "Starting Game/Snake '${request.gameId}/${context.snakeId}' [${context.call.request.origin.host ?: "Unknown IP"}]"
 
     internal fun <T : SnakeContext> endMsg(context: T, request: EndRequest): String {
       val avg =
@@ -91,21 +83,19 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
         else
           ""
 
-      return "Ending Game/Snake '${request.gameId}/${context.snakeId}'" +
+      return "\nEnding Game/Snake '${request.gameId}/${context.snakeId}'" +
              "\ntotal moves: ${context.moveCount} " +
              "\ntotal game time: ${context.elapsedGameTime} " +
              "\ntotal compute time: ${context.computeTime}" +
-             "$avg[${context.request.ip() ?: "Unknown IP"}]"
+             "$avg[${context.call.request.origin.host ?: "Unknown IP"}]"
     }
 
     internal fun <T : SnakeContext> afterTurnMsg(context: T?,
-                                                 request: Request,
-                                                 response: Response,
+                                                 call: ApplicationCall,
                                                  gameResponse: GameResponse,
-                                                 duration: Duration): String {
-      return "Responded to ${request.uri()} in $duration with: " +
-             (if (gameResponse is MoveResponse) gameResponse.move.toUpperCase() else "$gameResponse") +
-             (context?.let { " [${context.snakeId}]" } ?: "")
-    }
+                                                 duration: Duration): String =
+      "Responded to ${call.request.uri} in $duration with: " +
+      (if (gameResponse is MoveResponse) gameResponse.move.toUpperCase() else "$gameResponse") +
+      (context?.let { " [${context.snakeId}]" } ?: "")
   }
 }

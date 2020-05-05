@@ -2,16 +2,15 @@
 
 package io.battlesnake.core
 
-import spark.Request
-import spark.Response
+import io.ktor.application.ApplicationCall
 import kotlin.time.Duration
 
 abstract class AbstractGameStrategy<T : SnakeContext>(private val verbose: Boolean = false) : GameStrategy<T>() {
 
   init {
-    onPing { request: Request, response: Response ->
-      logger.info { pingMsg(request, response) }
-      onPing(request, response)
+    onPing { call: ApplicationCall ->
+      logger.info { pingMsg(call) }
+      onPing(call)
     }
 
     onStart { context: T, request: StartRequest ->
@@ -26,14 +25,14 @@ abstract class AbstractGameStrategy<T : SnakeContext>(private val verbose: Boole
       onEnd(context, request)
     }
 
-    onAfterTurn { context: T?, request: Request, response: Response, gameResponse: GameResponse, duration: Duration ->
+    onAfterTurn { context: T?, call: ApplicationCall, gameResponse: GameResponse, duration: Duration ->
       if (verbose)
-        logger.info { afterTurnMsg(context, request, response, gameResponse, duration) }
+        logger.info { afterTurnMsg(context, call, gameResponse, duration) }
       onAfterTurn(gameResponse, duration)
     }
   }
 
-  open fun onPing(request: Request, response: Response) = PingResponse
+  open fun onPing(call: ApplicationCall) = PingResponse
 
   open fun onStart(context: T, request: StartRequest) = StartResponse()
 
