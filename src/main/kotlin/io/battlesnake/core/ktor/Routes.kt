@@ -24,9 +24,6 @@ import kotlinx.html.id
 import kotlinx.html.script
 import kotlinx.html.span
 import kotlinx.html.unsafe
-import mu.KotlinLogging
-
-val logger = KotlinLogging.logger {}
 
 fun Application.routes(snake: AbstractBattleSnake<*>) {
 

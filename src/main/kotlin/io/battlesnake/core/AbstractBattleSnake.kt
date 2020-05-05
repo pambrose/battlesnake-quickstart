@@ -25,7 +25,7 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
 
   private val contextMap = ConcurrentHashMap<String, T>()
 
-  suspend internal fun process(call: ApplicationCall): GameResponse =
+  internal suspend fun process(call: ApplicationCall): GameResponse =
     try {
       val uri = call.request.uri
       val (pair, duration) =
@@ -52,7 +52,7 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
   private fun ping(call: ApplicationCall): Pair<T?, GameResponse> =
     null to (strategy.pingActions.map { it.invoke(call) }.lastOrNull() ?: PingResponse)
 
-  suspend private fun start(call: ApplicationCall): Pair<T?, GameResponse> =
+  private suspend fun start(call: ApplicationCall): Pair<T?, GameResponse> =
     snakeContext()
         .let { context ->
           val startRequest = call.receive<StartRequest>()
@@ -63,7 +63,7 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
           context to (strategy.startActions.map { it.invoke(context, startRequest) }.lastOrNull() ?: StartResponse())
         }
 
-  suspend private fun move(call: ApplicationCall): Pair<T?, GameResponse> {
+  private suspend fun move(call: ApplicationCall): Pair<T?, GameResponse> {
     val moveRequest = call.receive<MoveRequest>()
     val context = contextMap[moveRequest.you.id]
                   ?: throw NoSuchElementException("Missing context for user id: ${moveRequest.you.id}")
@@ -80,10 +80,11 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
       computeTime += duration
       moveCount++
     }
+
     return context to response
   }
 
-  suspend private fun end(call: ApplicationCall): Pair<T?, GameResponse> {
+  private suspend fun end(call: ApplicationCall): Pair<T?, GameResponse> {
     val endRequest = call.receive<EndRequest>()
     val context = contextMap.remove(endRequest.you.id)
                   ?: throw NoSuchElementException("Missing context for user id: ${endRequest.you.id}")
@@ -93,18 +94,20 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
   }
 
   fun run(port: Int = 8080) {
-    val p = Integer.parseInt(System.getProperty("PORT") ?: "$port")
-    logger.info { "Listening on port: $p" }
-    embeddedServer(CIO, port = p) { module() }.start(wait = true)
-  }
-
-  fun Application.module(testing: Boolean = false) {
-    installs()
-    routes(this@AbstractBattleSnake)
-
     // Prime the classloader to avoid an expensive first call
     StartRequest.primeClassLoader()
     // Reference strategy to load it
     strategy
+
+    val p = Integer.parseInt(System.getProperty("PORT") ?: "$port")
+    logger.info { "Listening on port: $p" }
+    embeddedServer(CIO, port = p) { module(this@AbstractBattleSnake) }.start(wait = true)
   }
+
 }
+
+internal fun Application.module(snake: AbstractBattleSnake<*>) {
+  installs()
+  routes(snake)
+}
+

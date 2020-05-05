@@ -72,23 +72,22 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
     internal fun pingMsg(call: ApplicationCall) = "Ping from ${call.request.origin.host}"
 
     internal fun <T : SnakeContext> startMsg(context: T, request: StartRequest) =
-      "Starting Game/Snake '${request.gameId}/${context.snakeId}' [${context.call.request.origin.host ?: "Unknown IP"}]"
+      "Starting Game/Snake '${request.gameId}/${context.snakeId}' [${context.call.request.origin.host}]"
 
-    internal fun <T : SnakeContext> endMsg(context: T, request: EndRequest): String {
-      val avg =
-        if (context.moveCount > 0) {
-          val rate = (context.computeTime.inMilliseconds / context.moveCount.toDouble()).milliseconds
-          "\navg time/move: $rate "
-        }
-        else
-          ""
+    internal fun <T : SnakeContext> endMsg(context: T, request: EndRequest): String =
+      context.let {
+        val avg =
+          if (it.moveCount > 0)
+            "\nAvg time/move: ${(it.computeTime.inMilliseconds / it.moveCount.toDouble()).milliseconds} "
+          else
+            ""
 
-      return "\nEnding Game/Snake '${request.gameId}/${context.snakeId}'" +
-             "\ntotal moves: ${context.moveCount} " +
-             "\ntotal game time: ${context.elapsedGameTime} " +
-             "\ntotal compute time: ${context.computeTime}" +
-             "$avg[${context.call.request.origin.host ?: "Unknown IP"}]"
-    }
+        "\nEnding Game/Snake '${request.gameId}/${it.snakeId}'" +
+        "\nTotal moves: ${it.moveCount} " +
+        "\nTotal game time: ${it.elapsedGameTime} " +
+        "\nTotal compute time: ${it.computeTime}" +
+        "$avg[${it.call.request.origin.host}]"
+      }
 
     internal fun <T : SnakeContext> afterTurnMsg(context: T?,
                                                  call: ApplicationCall,

@@ -9,9 +9,10 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import kotlin.math.abs
 
+private val Int.isEven get() = this % 2 == 0
+private val Int.isOdd get() = this % 2 != 0
 
-val Int.isEven get() = this % 2 == 0
-val Int.isOdd get() = this % 2 != 0
+private val json = Json(JsonConfiguration.Stable.copy(ignoreUnknownKeys = true, isLenient = true))
 
 interface GameResponse
 
@@ -39,7 +40,6 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
       toObject(json)
     }
 
-    val json = Json(JsonConfiguration.Stable.copy(ignoreUnknownKeys = true, isLenient = true))
     fun toObject(s: String) = json.parse(serializer(), s)
   }
 }
@@ -49,6 +49,10 @@ data class StartResponse(val color: String = "",
                          val headType: String = "",
                          val tailType: String = "") : GameResponse {
   fun toJson() = Json.stringify(serializer(), this)
+
+  companion object {
+    fun toObject(s: String) = json.parse(serializer(), s)
+  }
 }
 
 @Serializable
@@ -56,8 +60,8 @@ data class MoveRequest(
   val board: Board,
   val game: Game,
   val turn: Int,
-  val you: You
-                      ) {
+  val you: You) {
+
   val gameId
     get() = game.id
 
@@ -114,8 +118,9 @@ data class MoveRequest(
   val headPosition
     get() = you.headPosition
 
+  fun toJson() = Json.stringify(MoveRequest.serializer(), this)
+
   companion object {
-    val json = Json(JsonConfiguration.Stable.copy(ignoreUnknownKeys = true, isLenient = true))
     fun toObject(s: String) = json.parse(serializer(), s)
   }
 }
@@ -123,6 +128,10 @@ data class MoveRequest(
 @Serializable
 data class MoveResponse(val move: String) : GameResponse {
   fun toJson() = Json.stringify(serializer(), this)
+
+  companion object {
+    fun toObject(s: String) = json.parse(serializer(), s)
+  }
 }
 
 @Serializable
@@ -133,8 +142,9 @@ data class EndRequest(val board: Board,
   val gameId
     get() = game.id
 
+  fun toJson() = Json.stringify(EndRequest.serializer(), this)
+
   companion object {
-    val json = Json(JsonConfiguration.Stable.copy(ignoreUnknownKeys = true, isLenient = true))
     fun toObject(s: String) = json.parse(serializer(), s)
   }
 }
@@ -142,6 +152,10 @@ data class EndRequest(val board: Board,
 @Serializable
 class EndResponse : GameResponse {
   override fun toString() = EndResponse::class.simpleName ?: "EndResponse"
+
+  companion object {
+    fun toObject(s: String) = json.parse(serializer(), s)
+  }
 }
 
 @Serializable

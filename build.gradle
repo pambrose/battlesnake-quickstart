@@ -51,12 +51,14 @@ artifacts {
 compileKotlin {
   kotlinOptions.jvmTarget = '1.8'
   kotlinOptions.freeCompilerArgs += ['-Xuse-experimental=kotlin.time.ExperimentalTime',
+                                     '-Xuse-experimental=io.ktor.util.KtorExperimentalAPI',
                                      '-Xuse-experimental=kotlinx.serialization.UnstableDefault']
 }
 
 compileTestKotlin {
   kotlinOptions.jvmTarget = '1.8'
   kotlinOptions.freeCompilerArgs += ['-Xuse-experimental=kotlin.time.ExperimentalTime',
+                                     '-Xuse-experimental=io.ktor.util.KtorExperimentalAPI',
                                      '-Xuse-experimental=kotlinx.serialization.UnstableDefault']
 }
 
