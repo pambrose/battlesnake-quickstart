@@ -30,10 +30,10 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
     fun primeClassLoader() {
       val start =
         StartRequest(
-          Board(emptyList(), 3, emptyList(), 4),
+          Board(3, 4, emptyList(), emptyList()),
           Game(""),
           1,
-          You(emptyList(), 3, "", "")
+          You("", "", emptyList(), 3, "")
                     )
       val json = start.toJson()
       toObject(json)
@@ -147,10 +147,10 @@ object EndResponse : GameResponse {
 data class Game(val id: String)
 
 @Serializable
-data class Board(val food: List<Food>,
-                 val height: Int,
-                 val snakes: List<Snake>,
-                 val width: Int) {
+data class Board(val height: Int,
+                 val width: Int,
+                 val food: List<Food>,
+                 val snakes: List<Snake>) {
   @Transient
   val origin = BOARD_ORIGIN
 
@@ -173,10 +173,11 @@ data class Board(val food: List<Food>,
 }
 
 @Serializable
-data class Snake(val body: List<Body>,
-                 val health: Int,
+data class Snake(val name: String,
                  val id: String,
-                 val name: String) {
+                 val body: List<Body>,
+                 val health: Int,
+                 val shout: String) {
   val headPosition
     get() = bodyPosition(0)
 
@@ -187,10 +188,11 @@ data class Snake(val body: List<Body>,
 }
 
 @Serializable
-data class You(val body: List<Body>,
-               val health: Int,
+data class You(val name: String,
                val id: String,
-               val name: String) {
+               val body: List<Body>,
+               val health: Int,
+               val shout: String) {
   val headPosition by lazy { bodyPosition(0) }
 
   fun bodyPosition(pos: Int) = body[pos].position
