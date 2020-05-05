@@ -76,7 +76,7 @@ class SnakeTest {
                 |"shout":"","health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = EndRequest.toObject(json)
     val response =
-      TestSnake.strategy.endActions.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull() ?: EndResponse
-    response.toString() shouldBeEqualTo EndResponse.javaClass.simpleName
+      TestSnake.strategy.endActions.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull() ?: EndResponse()
+    response.toString() shouldBeEqualTo EndResponse::class.java.simpleName
   }
 }
