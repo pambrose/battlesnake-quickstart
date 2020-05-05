@@ -1,3 +1,19 @@
+/*
+ * Copyright © 2020 Paul Ambrose (pambrose@mac.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:Suppress("UndocumentedPublicClass", "UndocumentedPublicFunction")
 
 package io.battlesnake.core
@@ -11,6 +27,8 @@ import kotlin.math.abs
 
 val Int.isEven get() = this % 2 == 0
 val Int.isOdd get() = this % 2 != 0
+
+private val json = Json(JsonConfiguration.Stable.copy(ignoreUnknownKeys = true, isLenient = true))
 
 interface GameResponse
 
@@ -29,16 +47,15 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
     fun primeClassLoader() {
       val start =
         StartRequest(
-          Board(emptyList(), 3, emptyList(), 4),
+          Board(3, 4, emptyList(), emptyList()),
           Game(""),
           1,
-          You(emptyList(), 3, "", "")
+          You("", "", emptyList(), 3, "")
                     )
       val json = start.toJson()
       toObject(json)
     }
 
-    val json = Json(JsonConfiguration.Stable.copy(ignoreUnknownKeys = true, isLenient = true))
     fun toObject(s: String) = json.parse(serializer(), s)
   }
 }
@@ -48,6 +65,10 @@ data class StartResponse(val color: String = "",
                          val headType: String = "",
                          val tailType: String = "") : GameResponse {
   fun toJson() = Json.stringify(serializer(), this)
+
+  companion object {
+    fun toObject(s: String) = json.parse(serializer(), s)
+  }
 }
 
 @Serializable
@@ -55,8 +76,8 @@ data class MoveRequest(
   val board: Board,
   val game: Game,
   val turn: Int,
-  val you: You
-                      ) {
+  val you: You) {
+
   val gameId
     get() = game.id
 
@@ -113,8 +134,9 @@ data class MoveRequest(
   val headPosition
     get() = you.headPosition
 
+  fun toJson() = Json.stringify(MoveRequest.serializer(), this)
+
   companion object {
-    val json = Json(JsonConfiguration.Stable.copy(ignoreUnknownKeys = true, isLenient = true))
     fun toObject(s: String) = json.parse(serializer(), s)
   }
 }
@@ -122,36 +144,44 @@ data class MoveRequest(
 @Serializable
 data class MoveResponse(val move: String) : GameResponse {
   fun toJson() = Json.stringify(serializer(), this)
-}
-
-@Serializable
-data class EndRequest(
-  val board: Board,
-  val game: Game,
-  val turn: Int,
-  val you: You
-                     ) {
-  val gameId
-    get() = game.id
 
   companion object {
-    val json = Json(JsonConfiguration.Stable.copy(ignoreUnknownKeys = true, isLenient = true))
     fun toObject(s: String) = json.parse(serializer(), s)
   }
 }
 
-object EndResponse : GameResponse {
+@Serializable
+data class EndRequest(val board: Board,
+                      val game: Game,
+                      val turn: Int,
+                      val you: You) {
+  val gameId
+    get() = game.id
+
+  fun toJson() = Json.stringify(EndRequest.serializer(), this)
+
+  companion object {
+    fun toObject(s: String) = json.parse(serializer(), s)
+  }
+}
+
+@Serializable
+class EndResponse : GameResponse {
   override fun toString() = EndResponse::class.simpleName ?: "EndResponse"
+
+  companion object {
+    fun toObject(s: String) = json.parse(serializer(), s)
+  }
 }
 
 @Serializable
 data class Game(val id: String)
 
 @Serializable
-data class Board(val food: List<Food>,
-                 val height: Int,
-                 val snakes: List<Snake>,
-                 val width: Int) {
+data class Board(val height: Int,
+                 val width: Int,
+                 val food: List<Food>,
+                 val snakes: List<Snake>) {
   @Transient
   val origin = BOARD_ORIGIN
 
@@ -174,10 +204,11 @@ data class Board(val food: List<Food>,
 }
 
 @Serializable
-data class Snake(val body: List<Body>,
-                 val health: Int,
+data class Snake(val name: String,
                  val id: String,
-                 val name: String) {
+                 val body: List<Body>,
+                 val health: Int,
+                 val shout: String) {
   val headPosition
     get() = bodyPosition(0)
 
@@ -188,10 +219,11 @@ data class Snake(val body: List<Body>,
 }
 
 @Serializable
-data class You(val body: List<Body>,
-               val health: Int,
+data class You(val name: String,
                val id: String,
-               val name: String) {
+               val body: List<Body>,
+               val health: Int,
+               val shout: String) {
   val headPosition by lazy { bodyPosition(0) }
 
   fun bodyPosition(pos: Int) = body[pos].position
