@@ -76,7 +76,8 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
           context.assignIds(startRequest.gameId, startRequest.you.id)
           context.assignRequestResponse(call)
           contextMap[context.snakeId] = context
-          context to (strategy.startActions.map { it.invoke(context, startRequest) }.lastOrNull() ?: StartResponse)
+          strategy.startActions.map { it.invoke(context, startRequest) }
+          context to StartResponse
         }
 
   private suspend fun move(call: ApplicationCall): Pair<T?, GameResponse> {

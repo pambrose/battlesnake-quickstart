@@ -39,7 +39,6 @@ fun <T : SnakeContext> strategy(verbose: Boolean = false, init: GameStrategy<T>.
 
         onStart { context, request ->
           logger.info { startMsg(context, request) }
-          StartResponse
         }
 
         onEnd { context, request ->
@@ -60,7 +59,7 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
 
   internal val describeActions: MutableList<(call: ApplicationCall) -> DescribeResponse> = mutableListOf()
 
-  internal val startActions: MutableList<(context: T, request: StartRequest) -> StartResponse> = mutableListOf()
+  internal val startActions: MutableList<(context: T, request: StartRequest) -> Unit> = mutableListOf()
 
   internal val moveActions: MutableList<(context: T, request: MoveRequest) -> MoveResponse> = mutableListOf()
 
@@ -73,7 +72,7 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
 
   fun onDescribe(block: (call: ApplicationCall) -> DescribeResponse) = let { describeActions += block }
 
-  fun onStart(block: (context: T, request: StartRequest) -> StartResponse) = let { startActions += block }
+  fun onStart(block: (context: T, request: StartRequest) -> Unit) = let { startActions += block }
 
   fun onMove(block: (context: T, request: MoveRequest) -> MoveResponse) = let { moveActions += block }
 

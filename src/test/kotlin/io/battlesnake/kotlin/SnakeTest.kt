@@ -82,9 +82,8 @@ class SnakeTest {
                 |"snakes":[{"id":"you","name":"you","shout":"","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
                 |"shout":"","health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = StartRequest.toObject(json)
-    val response =
-      TestSnake.strategy.startActions.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull()
-      ?: StartResponse
+    TestSnake.strategy.startActions.map { it.invoke(TestSnake.snakeContext(), request) }
+    val response = StartResponse
 
     /*
     response.apply {

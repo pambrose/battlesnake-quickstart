@@ -33,11 +33,12 @@ private val json = Json(JsonConfiguration.Stable.copy(ignoreUnknownKeys = true, 
 interface GameResponse
 
 @Serializable
-data class DescribeResponse(val apiversion: String = "1",
-                            val author: String = "",
+data class DescribeResponse(val author: String = "",
                             val color: String = "#888888",
                             val headType: String = "default",
                             val tailType: String = "default") : GameResponse {
+  val apiversion = "1"
+
   fun toJson() = Json.stringify(serializer(), this)
 
   companion object {

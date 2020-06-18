@@ -50,7 +50,9 @@ abstract class AbstractGameStrategy<T : SnakeContext>(private val verbose: Boole
 
   open fun onDescribe(call: ApplicationCall) = DescribeResponse()
 
-  open fun onStart(context: T, request: StartRequest) = StartResponse
+  open fun onStart(context: T, request: StartRequest) {
+    return
+  }
 
   abstract fun onMove(context: T, request: MoveRequest): MoveResponse
 

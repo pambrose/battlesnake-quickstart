@@ -50,10 +50,10 @@ public class ExampleSnake extends AbstractBattleSnake<MySnakeContext> {
       super(verbose);
     }
 
-    // StartResponse describes snake color and head/tail type
+    // DescribeResponse describes snake color and head/tail type
     @Override
     public DescribeResponse onDescribe(ApplicationCall call) {
-      return new DescribeResponse("1", "me", "#ff00ff", "beluga", "bolt");
+      return new DescribeResponse("me", "#ff00ff", "beluga", "bolt");
     }
 
     // MoveResponse can be LEFT, RIGHT, UP or DOWN
