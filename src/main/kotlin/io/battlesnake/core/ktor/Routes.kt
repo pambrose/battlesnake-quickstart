@@ -17,9 +17,9 @@
 package io.battlesnake.core.ktor
 
 import io.battlesnake.core.AbstractBattleSnake
+import io.battlesnake.core.DESCRIBE
 import io.battlesnake.core.END
 import io.battlesnake.core.MOVE
-import io.battlesnake.core.PING
 import io.battlesnake.core.START
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -45,7 +45,7 @@ fun Application.routes(snake: AbstractBattleSnake<*>) {
 
   routing {
 
-    get("/") {
+    get("/ping") {
       call.respondHtml {
         head {
         }
@@ -63,14 +63,14 @@ fun Application.routes(snake: AbstractBattleSnake<*>) {
       }
     }
 
-    get(PING) {
-      snake.process(call)
-      call.respond("pong")
+    get(DESCRIBE) {
+      val response = snake.process(call)
+      call.respond(response)
     }
 
-    post(PING) {
-      snake.process(call)
-      call.respond("{}")
+    post(DESCRIBE) {
+      val response = snake.process(call)
+      call.respond(response)
     }
 
     post(START) {

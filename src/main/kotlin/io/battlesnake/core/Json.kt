@@ -32,8 +32,17 @@ private val json = Json(JsonConfiguration.Stable.copy(ignoreUnknownKeys = true, 
 
 interface GameResponse
 
-object PingResponse : GameResponse {
-  override fun toString() = PingResponse::class.simpleName ?: "PingResponse"
+@Serializable
+data class DescribeResponse(val apiversion: String = "1",
+                            val author: String = "",
+                            val color: String = "#888888",
+                            val headType: String = "default",
+                            val tailType: String = "default") : GameResponse {
+  fun toJson() = Json.stringify(serializer(), this)
+
+  companion object {
+    fun toObject(s: String) = json.parse(serializer(), s)
+  }
 }
 
 @Serializable
@@ -46,12 +55,10 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
   companion object {
     fun primeClassLoader() {
       val start =
-        StartRequest(
-          Board(3, 4, emptyList(), emptyList()),
-          Game(""),
-          1,
-          You("", "", emptyList(), 3, "")
-                    )
+        StartRequest(Board(3, 4, emptyList(), emptyList()),
+                     Game(""),
+                     1,
+                     You("", "", emptyList(), 3, ""))
       val json = start.toJson()
       toObject(json)
     }
@@ -61,14 +68,8 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
 }
 
 @Serializable
-data class StartResponse(val color: String = "",
-                         val headType: String = "",
-                         val tailType: String = "") : GameResponse {
-  fun toJson() = Json.stringify(serializer(), this)
-
-  companion object {
-    fun toObject(s: String) = json.parse(serializer(), s)
-  }
+object StartResponse : GameResponse {
+  override fun toString() = StartResponse::class.simpleName ?: "StartResponse"
 }
 
 @Serializable

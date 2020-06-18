@@ -24,9 +24,9 @@ import kotlin.time.Duration
 abstract class AbstractGameStrategy<T : SnakeContext>(private val verbose: Boolean = false) : GameStrategy<T>() {
 
   init {
-    onPing { call: ApplicationCall ->
-      logger.info { pingMsg(call) }
-      onPing(call)
+    onDescribe { call: ApplicationCall ->
+      logger.info { describeMsg(call) }
+      onDescribe(call)
     }
 
     onStart { context: T, request: StartRequest ->
@@ -48,9 +48,9 @@ abstract class AbstractGameStrategy<T : SnakeContext>(private val verbose: Boole
     }
   }
 
-  open fun onPing(call: ApplicationCall) = PingResponse
+  open fun onDescribe(call: ApplicationCall) = DescribeResponse()
 
-  open fun onStart(context: T, request: StartRequest) = StartResponse()
+  open fun onStart(context: T, request: StartRequest) = StartResponse
 
   abstract fun onMove(context: T, request: MoveRequest): MoveResponse
 

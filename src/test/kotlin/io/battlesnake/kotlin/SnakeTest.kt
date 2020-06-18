@@ -20,6 +20,8 @@ package io.battlesnake.kotlin
 
 import io.battlesnake.core.AbstractBattleSnake
 import io.battlesnake.core.Board
+import io.battlesnake.core.DESCRIBE
+import io.battlesnake.core.DescribeResponse
 import io.battlesnake.core.END
 import io.battlesnake.core.EndRequest
 import io.battlesnake.core.EndResponse
@@ -28,8 +30,6 @@ import io.battlesnake.core.GameStrategy
 import io.battlesnake.core.MOVE
 import io.battlesnake.core.MoveRequest
 import io.battlesnake.core.MoveResponse
-import io.battlesnake.core.PING
-import io.battlesnake.core.PingResponse
 import io.battlesnake.core.RIGHT
 import io.battlesnake.core.START
 import io.battlesnake.core.SnakeContext
@@ -38,6 +38,7 @@ import io.battlesnake.core.StartResponse
 import io.battlesnake.core.You
 import io.battlesnake.core.module
 import io.battlesnake.core.strategy
+import io.ktor.application.ApplicationCall
 import io.ktor.http.HttpHeaders.ContentType
 import io.ktor.http.HttpMethod.Companion.Get
 import io.ktor.http.HttpMethod.Companion.Post
@@ -62,16 +63,16 @@ class SnakeTest {
 
     override fun gameStrategy(): GameStrategy<MySnakeContext> =
       strategy {
-        onStart { _: MySnakeContext, _: StartRequest -> StartResponse("#ff00ff") }
+        onDescribe { call: ApplicationCall -> DescribeResponse(color = "#ff00ff") }
         onMove { _: MySnakeContext, _: MoveRequest -> RIGHT }
       }
   }
 
   @Test
-  fun pingTest() {
-    // val response = TestSnake.strategy.ping.map { it.invoke() }.lastOrNull() ?: PingResponse
-    val response = PingResponse
-    response.toString() shouldBeEqualTo PingResponse.javaClass.simpleName
+  fun describeTest() {
+    //val response = TestSnake.strategy.describe.map { it.invoke() }.lastOrNull() ?: DescribeResponse
+    //val response = DescribeResponse
+    //response.toString() shouldBeEqualTo DescribeResponse.javaClass.simpleName
   }
 
   @Test
@@ -83,13 +84,15 @@ class SnakeTest {
     val request = StartRequest.toObject(json)
     val response =
       TestSnake.strategy.startActions.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull()
-      ?: StartResponse()
+      ?: StartResponse
 
+    /*
     response.apply {
       color shouldBeEqualTo "#ff00ff"
       headType shouldBeEqualTo ""
       tailType shouldBeEqualTo ""
     }
+     */
   }
 
   @Test
@@ -134,11 +137,11 @@ class SnakeTest {
         assertEquals(OK, response.status())
       }
 
-      handleRequest(Get, PING).apply {
+      handleRequest(Get, DESCRIBE).apply {
         assertEquals(OK, response.status())
       }
 
-      handleRequest(Post, PING).apply {
+      handleRequest(Post, DESCRIBE).apply {
         assertEquals(OK, response.status())
       }
 
@@ -151,15 +154,21 @@ class SnakeTest {
             val game = ObjProvider.game
             val you = ObjProvider.you
 
+            handleRequest(Post, DESCRIBE) {
+              addHeader(ContentType, "application/json")
+            }.apply {
+              assertEquals(OK, response.status())
+
+              val json = String(response.byteContent!!)
+              val obj = DescribeResponse.toObject(json)
+              assertEquals(DescribeResponse::class, obj::class)
+            }
+
             handleRequest(Post, START) {
               addHeader(ContentType, "application/json")
               setBody(StartRequest(board, game, 0, you).toJson())
             }.apply {
               assertEquals(OK, response.status())
-
-              val json = String(response.byteContent!!)
-              val obj = StartResponse.toObject(json)
-              assertEquals(StartResponse::class, obj::class)
             }
 
             repeat(100) {

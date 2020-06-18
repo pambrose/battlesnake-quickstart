@@ -19,23 +19,23 @@
 package io.battlesnake.kotlin
 
 import io.battlesnake.core.AbstractBattleSnake
+import io.battlesnake.core.DescribeResponse
 import io.battlesnake.core.GameStrategy
 import io.battlesnake.core.MoveRequest
 import io.battlesnake.core.RIGHT
 import io.battlesnake.core.SnakeContext
-import io.battlesnake.core.StartRequest
-import io.battlesnake.core.StartResponse
 import io.battlesnake.core.strategy
 import io.battlesnake.kotlin.ExampleSnake.MySnakeContext
+import io.ktor.application.ApplicationCall
 
 object ExampleSnake : AbstractBattleSnake<MySnakeContext>() {
 
   override fun gameStrategy(): GameStrategy<MySnakeContext> =
     strategy(true) {
 
-      // StartResponse describes snake color and head/tail type
-      onStart { context: MySnakeContext, request: StartRequest ->
-        StartResponse("#ff00ff", "beluga", "bolt")
+      // DescribeResponse describes snake color and head/tail type
+      onDescribe { call: ApplicationCall ->
+        DescribeResponse(color = "#ff00ff", headType = "beluga", tailType = "bolt")
       }
 
       // MoveResponse can be LEFT, RIGHT, UP or DOWN
