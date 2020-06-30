@@ -78,7 +78,7 @@ class SnakeTest {
   @Test
   fun startTest() {
     val json =
-      """{"game":{"id":"1551594939037768058"},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
+      """{"game":{"id":"1551594939037768058", "timeOutMillis":500},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
                 |"snakes":[{"id":"you","name":"you","shout":"","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
                 |"shout":"","health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = StartRequest.toObject(json)
@@ -97,7 +97,7 @@ class SnakeTest {
   @Test
   fun moveTest() {
     val json =
-      """{"game":{"id":"1551628170849008209"},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
+      """{"game":{"id":"1551628170849008209", "timeOutMillis":500},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
                 |"snakes":[{"id":"you","name":"you","shout":"","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
                 |"shout":"","health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = MoveRequest.toObject(json)
@@ -110,7 +110,7 @@ class SnakeTest {
   @Test
   fun endTest() {
     val json =
-      """{"game":{"id":"1551628170849008209"},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
+      """{"game":{"id":"1551628170849008209", "timeOutMillis":500},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
                 |"snakes":[{"id":"you","name":"you","shout":"","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
                 |"shout":"","health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = EndRequest.toObject(json)
