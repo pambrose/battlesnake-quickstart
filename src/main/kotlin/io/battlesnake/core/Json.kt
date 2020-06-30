@@ -57,7 +57,7 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
     fun primeClassLoader() {
       val start =
         StartRequest(Board(3, 4, emptyList(), emptyList()),
-                     Game(""),
+                     Game("", 500),
                      1,
                      You("", "", emptyList(), 3, ""))
       val json = start.toJson()
@@ -74,11 +74,10 @@ object StartResponse : GameResponse {
 }
 
 @Serializable
-data class MoveRequest(
-  val board: Board,
-  val game: Game,
-  val turn: Int,
-  val you: You) {
+data class MoveRequest(val board: Board,
+                       val game: Game,
+                       val turn: Int,
+                       val you: You) {
 
   val gameId
     get() = game.id
@@ -177,7 +176,7 @@ class EndResponse : GameResponse {
 }
 
 @Serializable
-data class Game(val id: String)
+data class Game(val id: String, val timeOutMillis: Int)
 
 @Serializable
 data class Board(val height: Int,
@@ -208,8 +207,8 @@ data class Board(val height: Int,
 @Serializable
 data class Snake(val name: String,
                  val id: String,
-                 val body: List<Body>,
                  val health: Int,
+                 val body: List<Body>,
                  val shout: String) {
   val headPosition
     get() = bodyPosition(0)

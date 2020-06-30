@@ -16,7 +16,9 @@
 
 package io.battlesnake.core
 
-const val DESCRIBE = "/"
-const val START = "/start"
-const val MOVE = "/move"
-const val END = "/end"
+enum class Direction(val moveResponse: MoveResponse) {
+  UP(MoveResponse("up")),
+  DOWN(MoveResponse("down")),
+  LEFT(MoveResponse("left")),
+  RIGHT(MoveResponse("right"));
+}

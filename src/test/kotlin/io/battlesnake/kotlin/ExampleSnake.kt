@@ -20,9 +20,9 @@ package io.battlesnake.kotlin
 
 import io.battlesnake.core.AbstractBattleSnake
 import io.battlesnake.core.DescribeResponse
+import io.battlesnake.core.Direction.RIGHT
 import io.battlesnake.core.GameStrategy
 import io.battlesnake.core.MoveRequest
-import io.battlesnake.core.RIGHT
 import io.battlesnake.core.SnakeContext
 import io.battlesnake.core.strategy
 import io.battlesnake.kotlin.ExampleSnake.MySnakeContext
@@ -40,7 +40,7 @@ object ExampleSnake : AbstractBattleSnake<MySnakeContext>() {
 
       // MoveResponse can be LEFT, RIGHT, UP or DOWN
       onMove { context: MySnakeContext, request: MoveRequest ->
-        RIGHT
+        RIGHT.moveResponse
       }
     }
 
