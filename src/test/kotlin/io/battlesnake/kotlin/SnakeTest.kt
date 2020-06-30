@@ -123,7 +123,7 @@ class SnakeTest {
     val counter = AtomicInteger(0)
     val newId get() = counter.incrementAndGet().toString()
     val board = Board(0, 0, emptyList(), emptyList())
-    val game get() = Game(newId, 500)
+    val game get() = Game(newId)
     val you get() = You("", newId, emptyList(), 0, "")
   }
 

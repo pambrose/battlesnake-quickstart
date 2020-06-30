@@ -57,7 +57,7 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
     fun primeClassLoader() {
       val start =
         StartRequest(Board(3, 4, emptyList(), emptyList()),
-                     Game("", 500),
+                     Game(""),
                      1,
                      You("", "", emptyList(), 3, ""))
       val json = start.toJson()
@@ -176,7 +176,7 @@ class EndResponse : GameResponse {
 }
 
 @Serializable
-data class Game(val id: String, val timeOutMillis: Int)
+data class Game(val id: String, val timeOutMillis: Int = 500)
 
 @Serializable
 data class Board(val height: Int,
