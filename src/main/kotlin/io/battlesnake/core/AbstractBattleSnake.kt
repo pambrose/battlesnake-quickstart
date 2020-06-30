@@ -18,7 +18,6 @@
 
 package io.battlesnake.core
 
-import io.battlesnake.core.Direction.RIGHT
 import io.battlesnake.core.ktor.installs
 import io.battlesnake.core.ktor.routes
 import io.ktor.application.Application
@@ -91,7 +90,7 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
 
     val (response, duration) =
       measureTimedValue {
-        strategy.moveActions.map { it.invoke(context, moveRequest) }.lastOrNull() ?: RIGHT.moveResponse
+        strategy.moveActions.map { it.invoke(context, moveRequest) }.lastOrNull() ?: RIGHT
       }
 
     context.apply {

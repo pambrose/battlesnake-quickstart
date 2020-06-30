@@ -22,7 +22,6 @@ import io.battlesnake.core.AbstractBattleSnake
 import io.battlesnake.core.Board
 import io.battlesnake.core.DESCRIBE
 import io.battlesnake.core.DescribeResponse
-import io.battlesnake.core.Direction.RIGHT
 import io.battlesnake.core.END
 import io.battlesnake.core.EndRequest
 import io.battlesnake.core.EndResponse
@@ -31,6 +30,7 @@ import io.battlesnake.core.GameStrategy
 import io.battlesnake.core.MOVE
 import io.battlesnake.core.MoveRequest
 import io.battlesnake.core.MoveResponse
+import io.battlesnake.core.RIGHT
 import io.battlesnake.core.START
 import io.battlesnake.core.SnakeContext
 import io.battlesnake.core.StartRequest
@@ -64,7 +64,7 @@ class SnakeTest {
     override fun gameStrategy(): GameStrategy<MySnakeContext> =
       strategy {
         onDescribe { call: ApplicationCall -> DescribeResponse(color = "#ff00ff") }
-        onMove { _: MySnakeContext, _: MoveRequest -> RIGHT.moveResponse }
+        onMove { _: MySnakeContext, _: MoveRequest -> RIGHT }
       }
   }
 
@@ -103,7 +103,7 @@ class SnakeTest {
     val request = MoveRequest.toObject(json)
     val response =
       TestSnake.strategy.moveActions.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull()
-      ?: RIGHT.moveResponse
+      ?: RIGHT
     response.move shouldBeEqualTo "right"
   }
 
