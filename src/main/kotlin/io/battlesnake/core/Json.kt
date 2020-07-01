@@ -135,7 +135,7 @@ data class MoveRequest(val board: Board,
   val headPosition
     get() = you.headPosition
 
-  fun toJson() = Json.stringify(MoveRequest.serializer(), this)
+  fun toJson() = Json.stringify(serializer(), this)
 
   companion object {
     fun toObject(s: String) = json.parse(serializer(), s)
@@ -159,7 +159,7 @@ data class EndRequest(val board: Board,
   val gameId
     get() = game.id
 
-  fun toJson() = Json.stringify(EndRequest.serializer(), this)
+  fun toJson() = Json.stringify(serializer(), this)
 
   companion object {
     fun toObject(s: String) = json.parse(serializer(), s)
