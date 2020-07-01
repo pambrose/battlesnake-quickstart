@@ -19,8 +19,8 @@
 package io.battlesnake.core
 
 import io.battlesnake.core.GameStrategy.Companion.afterTurnMsg
+import io.battlesnake.core.GameStrategy.Companion.describeMsg
 import io.battlesnake.core.GameStrategy.Companion.endMsg
-import io.battlesnake.core.GameStrategy.Companion.pingMsg
 import io.battlesnake.core.GameStrategy.Companion.startMsg
 import io.ktor.application.ApplicationCall
 import io.ktor.features.origin
@@ -32,14 +32,13 @@ import kotlin.time.milliseconds
 fun <T : SnakeContext> strategy(verbose: Boolean = false, init: GameStrategy<T>.() -> Unit) =
   GameStrategy<T>()
       .apply {
-        onPing { call ->
-          logger.info { pingMsg(call) }
-          PingResponse
+        onDescribe { call ->
+          logger.info { describeMsg(call) }
+          DescribeResponse()
         }
 
         onStart { context, request ->
           logger.info { startMsg(context, request) }
-          StartResponse()
         }
 
         onEnd { context, request ->
@@ -58,9 +57,9 @@ fun <T : SnakeContext> strategy(verbose: Boolean = false, init: GameStrategy<T>.
 
 open class GameStrategy<T : SnakeContext> : KLogging() {
 
-  internal val pingActions: MutableList<(call: ApplicationCall) -> PingResponse> = mutableListOf()
+  internal val describeActions: MutableList<(call: ApplicationCall) -> DescribeResponse> = mutableListOf()
 
-  internal val startActions: MutableList<(context: T, request: StartRequest) -> StartResponse> = mutableListOf()
+  internal val startActions: MutableList<(context: T, request: StartRequest) -> Unit> = mutableListOf()
 
   internal val moveActions: MutableList<(context: T, request: MoveRequest) -> MoveResponse> = mutableListOf()
 
@@ -71,9 +70,9 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
                                               gameResponse: GameResponse,
                                               duration: Duration) -> Unit> = mutableListOf()
 
-  fun onPing(block: (call: ApplicationCall) -> PingResponse) = let { pingActions += block }
+  fun onDescribe(block: (call: ApplicationCall) -> DescribeResponse) = let { describeActions += block }
 
-  fun onStart(block: (context: T, request: StartRequest) -> StartResponse) = let { startActions += block }
+  fun onStart(block: (context: T, request: StartRequest) -> Unit) = let { startActions += block }
 
   fun onMove(block: (context: T, request: MoveRequest) -> MoveResponse) = let { moveActions += block }
 
@@ -85,7 +84,7 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
                           duration: Duration) -> Unit) = let { afterTurnActions += block }
 
   companion object {
-    internal fun pingMsg(call: ApplicationCall) = "Ping from ${call.request.origin.host}"
+    internal fun describeMsg(call: ApplicationCall) = "Describe from ${call.request.origin.host}"
 
     internal fun <T : SnakeContext> startMsg(context: T, request: StartRequest) =
       "Starting Game/Snake '${request.gameId}/${context.snakeId}' [${context.call.request.origin.host}]"

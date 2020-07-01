@@ -18,11 +18,11 @@ package io.battlesnake.java;
 
 import io.battlesnake.core.AbstractBattleSnake;
 import io.battlesnake.core.AbstractGameStrategy;
+import io.battlesnake.core.DescribeResponse;
 import io.battlesnake.core.MoveRequest;
 import io.battlesnake.core.MoveResponse;
 import io.battlesnake.core.SnakeContext;
-import io.battlesnake.core.StartRequest;
-import io.battlesnake.core.StartResponse;
+import io.ktor.application.ApplicationCall;
 
 import static io.battlesnake.core.JavaConstants.RIGHT;
 import static io.battlesnake.java.ExampleSnake.MySnakeContext;
@@ -50,10 +50,10 @@ public class ExampleSnake extends AbstractBattleSnake<MySnakeContext> {
       super(verbose);
     }
 
-    // StartResponse describes snake color and head/tail type
+    // DescribeResponse describes snake color and head/tail type
     @Override
-    public StartResponse onStart(MySnakeContext context, StartRequest request) {
-      return new StartResponse("#ff00ff", "beluga", "bolt");
+    public DescribeResponse onDescribe(ApplicationCall call) {
+      return new DescribeResponse("me", "#ff00ff", "beluga", "bolt");
     }
 
     // MoveResponse can be LEFT, RIGHT, UP or DOWN

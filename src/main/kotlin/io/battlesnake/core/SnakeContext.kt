@@ -34,8 +34,10 @@ open class SnakeContext {
 
   lateinit var gameId: String
     internal set
+
   lateinit var snakeId: String
     internal set
+
   lateinit var call: ApplicationCall
     internal set
 

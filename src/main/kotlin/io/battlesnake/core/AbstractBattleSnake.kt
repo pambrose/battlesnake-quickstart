@@ -47,7 +47,7 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
       val (pair, duration) =
         measureTimedValue {
           when (uri) {
-            PING -> ping(call)
+            DESCRIBE -> describe(call)
             START -> start(call)
             MOVE -> move(call)
             END -> end(call)
@@ -65,8 +65,8 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
       throw e
     }
 
-  private fun ping(call: ApplicationCall): Pair<T?, GameResponse> =
-    null to (strategy.pingActions.map { it.invoke(call) }.lastOrNull() ?: PingResponse)
+  private fun describe(call: ApplicationCall): Pair<T?, GameResponse> =
+    null to (strategy.describeActions.map { it.invoke(call) }.lastOrNull() ?: DescribeResponse())
 
   private suspend fun start(call: ApplicationCall): Pair<T?, GameResponse> =
     snakeContext()
@@ -76,7 +76,8 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
           context.assignIds(startRequest.gameId, startRequest.you.id)
           context.assignRequestResponse(call)
           contextMap[context.snakeId] = context
-          context to (strategy.startActions.map { it.invoke(context, startRequest) }.lastOrNull() ?: StartResponse())
+          strategy.startActions.map { it.invoke(context, startRequest) }
+          context to StartResponse
         }
 
   private suspend fun move(call: ApplicationCall): Pair<T?, GameResponse> {

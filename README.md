@@ -26,7 +26,7 @@ state between game moves. The framework creates SnakeContext instances at the st
 (one for each snake your server is supporting).
                      
 4) Define a [GameStrategy](src/main/kotlin/io/battlesnake/core/GameStrategy.kt) object to produce responses 
-for the `Ping`, `Start`, `Move`, and `End` requests. The framework creates a single GameStrategy 
+for the `/`, `/start`, `/move`, and `/end` requests. The framework creates a single GameStrategy 
 instance when the server launches.
 
 ## Examples
@@ -42,9 +42,9 @@ object ExampleSnake : AbstractBattleSnake<MySnakeContext>(){
     override fun gameStrategy() : GameStrategy<MySnakeContext> =
         strategy(verbose = true) {
 
-            // StartResponse describes snake color and head/tail type
-            onStart { context: MySnakeContext, request: StartRequest ->
-                StartResponse("#ff00ff", "beluga", "bolt")
+            // DescribeResponse describes snake color and head/tail type
+            onDescribe { call: ApplicationCall ->
+                DescribeResponse("#ff00ff", "beluga", "bolt")
             }
 
             // MoveResponse can be LEFT, RIGHT, UP or DOWN
@@ -95,10 +95,10 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.MySnakeContex
             super(verbose);
         }
         
-        // StartResponse describes snake color and head/tail type
+        // DescibeResponse describes snake color and head/tail type
         @Override
-        public StartResponse onStart(MySnakeContext context, StartRequest request) {
-            return new StartResponse("#ff00ff", "beluga", "bolt");
+        public DescibeResponse onDescribe(MySnakeContext context, StartRequest request) {
+            return new DescribeResponse("me", "#ff00ff", "beluga", "bolt");
         }
         
         // MoveResponse can be LEFT, RIGHT, UP or DOWN
