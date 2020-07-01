@@ -26,7 +26,7 @@ state between game moves. The framework creates SnakeContext instances at the st
 (one for each snake your server is supporting).
                      
 4) Define a [GameStrategy](src/main/kotlin/io/battlesnake/core/GameStrategy.kt) object to produce responses 
-for the `/`, `Start`, `Move`, and `End` requests. The framework creates a single GameStrategy 
+for the `/`, `/start`, `/move`, and `/end` requests. The framework creates a single GameStrategy 
 instance when the server launches.
 
 ## Examples

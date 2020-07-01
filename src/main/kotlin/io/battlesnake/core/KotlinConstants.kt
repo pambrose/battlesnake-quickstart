@@ -17,6 +17,7 @@
 package io.battlesnake.core
 
 const val DESCRIBE = "/"
+const val INFO = "/info"
 const val START = "/start"
 const val MOVE = "/move"
 const val END = "/end"
