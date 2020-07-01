@@ -28,4 +28,3 @@ pluginManagement {
 }
 
 rootProject.name = 'battlesnake-quickstart'
-
