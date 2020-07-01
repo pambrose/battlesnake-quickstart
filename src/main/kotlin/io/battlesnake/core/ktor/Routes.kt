@@ -59,7 +59,7 @@ fun Application.routes(snake: AbstractBattleSnake<*>) {
             span { rawHtml(nbsp.text) }
             span { id = "url" }
           }
-          script { rawHtml("""document.getElementById("url").innerHTML = window.location.href;""") }
+          script { rawHtml("""document.getElementById("url").innerHTML = window.location.href.slice(0, -5);""") }
         }
       }
     }
