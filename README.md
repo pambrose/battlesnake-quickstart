@@ -33,6 +33,11 @@ instance when the server launches.
 
 Examples of simple Battlesnakes created with this framework are [here](https://github.com/pambrose/battlesnake-examples).
 
+## Clone your own snake
+
+Use the [Battlesnake_Template](https://github.com/pambrose/battlesnake-template) to clone 
+the code for your own snake.
+
 ### Minimal Kotlin Battlesnake
 
 ```kotlin
