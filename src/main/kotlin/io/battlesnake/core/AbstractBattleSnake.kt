@@ -122,11 +122,9 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
     logger.info { "Listening on port: $p" }
     embeddedServer(CIO, port = p) { module(this@AbstractBattleSnake) }.start(wait = true)
   }
-
 }
 
 internal fun Application.module(snake: AbstractBattleSnake<*>) {
   installs()
   routes(snake)
 }
-
