@@ -113,7 +113,3 @@ public class ExampleSnake extends AbstractBattleSnake<ExampleSnake.MySnakeContex
     }
 }
 ```
-
-## Helpful Tools
-
-* [JsonToKotlinClass](https://github.com/wuseal/JsonToKotlinClass)
