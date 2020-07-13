@@ -116,6 +116,8 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
     // Reference strategy to load it
     strategy
 
+    logger.info { "Running snake: ${this.javaClass.name}" }
+
     val p = Integer.parseInt(System.getProperty("PORT") ?: "$port")
     logger.info { "Listening on port: $p" }
     embeddedServer(CIO, port = p) { module(this@AbstractBattleSnake) }.start(wait = true)
