@@ -16,22 +16,12 @@
 
 package io.battlesnake.core.ktor
 
-import io.ktor.application.Application
-import io.ktor.application.call
-import io.ktor.application.install
-import io.ktor.features.CallLogging
-import io.ktor.features.Compression
-import io.ktor.features.ContentNegotiation
-import io.ktor.features.StatusPages
-import io.ktor.features.deflate
-import io.ktor.features.gzip
-import io.ktor.features.minimumSize
-import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
-import io.ktor.request.path
-import io.ktor.response.respond
-import io.ktor.serialization.DefaultJsonConfiguration
-import io.ktor.serialization.json
+import io.ktor.application.*
+import io.ktor.features.*
+import io.ktor.http.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.serialization.*
 import kotlinx.serialization.json.Json
 import org.slf4j.event.Level
 
@@ -53,7 +43,7 @@ fun Application.installs() {
 
   install(ContentNegotiation) {
     json(contentType = ContentType.Application.Json,
-         json = Json(DefaultJsonConfiguration.copy(ignoreUnknownKeys = true, prettyPrint = true)))
+         json = Json { ignoreUnknownKeys = true; prettyPrint = true })
   }
 
   install(StatusPages) {
