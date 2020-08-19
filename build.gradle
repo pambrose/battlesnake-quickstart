@@ -34,11 +34,10 @@ sourceCompatibility = 1.8
 
 description = 'battlesnake-quickstart'
 group = 'io.battlesnake'
-version = '0.5.3'
+version = '0.5.4'
 
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-  implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:${serialization_version}"
 
   implementation "io.ktor:ktor-server-cio:$ktor_version"
   implementation "io.ktor:ktor-server-core:$ktor_version"
