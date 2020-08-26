@@ -55,7 +55,7 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
   companion object {
     fun primeClassLoader() {
       val start =
-        StartRequest(Board(3, 4, emptyList(), emptyList()),
+        StartRequest(Board(3, 4, emptyList(), emptyList(), emptyList()),
                      Game(""),
                      1,
                      You("", "", emptyList(), 3, ""))
@@ -122,11 +122,17 @@ data class MoveRequest(val board: Board,
   val foodList
     get() = board.food
 
+  val hazardList
+    get() = board.hazards
+
   val snakeList
     get() = board.snakes
 
   val isFoodAvailable
     get() = foodList.isNotEmpty()
+
+  val doHazardsExist
+    get() = hazardList.isNotEmpty()
 
   val bodyLength
     get() = you.bodyLength
@@ -181,6 +187,7 @@ data class Game(val id: String, val timeOutMillis: Int = 500)
 data class Board(val height: Int,
                  val width: Int,
                  val food: List<Food>,
+                 val hazards: List<Hazard>,
                  val snakes: List<Snake>) {
   @Transient
   val origin = BOARD_ORIGIN
@@ -239,6 +246,11 @@ data class Body(val x: Int, val y: Int) {
 
 @Serializable
 data class Food(val x: Int, val y: Int) {
+  val position by lazy { Position(x, y) }
+}
+
+@Serializable
+data class Hazard(val x: Int, val y: Int) {
   val position by lazy { Position(x, y) }
 }
 

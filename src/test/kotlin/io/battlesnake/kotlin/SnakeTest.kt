@@ -38,14 +38,12 @@ import io.battlesnake.core.StartResponse
 import io.battlesnake.core.You
 import io.battlesnake.core.module
 import io.battlesnake.core.strategy
-import io.ktor.application.ApplicationCall
+import io.ktor.application.*
 import io.ktor.http.HttpHeaders.ContentType
 import io.ktor.http.HttpMethod.Companion.Get
 import io.ktor.http.HttpMethod.Companion.Post
 import io.ktor.http.HttpStatusCode.Companion.OK
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.setBody
-import io.ktor.server.testing.withTestApplication
+import io.ktor.server.testing.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.shouldBeEqualTo
@@ -122,7 +120,7 @@ class SnakeTest {
   object ObjProvider {
     val counter = AtomicInteger(0)
     val newId get() = counter.incrementAndGet().toString()
-    val board = Board(0, 0, emptyList(), emptyList())
+    val board = Board(0, 0, emptyList(), emptyList(), emptyList())
     val game get() = Game(newId)
     val you get() = You("", newId, emptyList(), 0, "")
   }
