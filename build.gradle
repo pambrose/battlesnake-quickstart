@@ -38,6 +38,7 @@ version = '0.8.0'
 
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+  implementation "org.jetbrains.kotlinx:kotlinx-serialization-core:$serialization_version"
 
   implementation "io.ktor:ktor-server-cio:$ktor_version"
   implementation "io.ktor:ktor-server-core:$ktor_version"
