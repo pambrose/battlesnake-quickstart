@@ -17,9 +17,9 @@
 plugins {
   id 'java'
   id 'maven'
-  id 'org.jetbrains.kotlin.jvm' version '1.4.10'
-  id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.10'
-  id "com.github.ben-manes.versions" version "0.33.0"
+  id 'org.jetbrains.kotlin.jvm' version '1.4.20-RC'
+  id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.20-RC'
+  id "com.github.ben-manes.versions" version "0.36.0"
 }
 
 repositories {
