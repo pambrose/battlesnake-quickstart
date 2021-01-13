@@ -33,11 +33,15 @@ private val json = Json { ignoreUnknownKeys = true; isLenient = true }
 sealed class GameResponse
 
 @Serializable
-data class DescribeResponse(val author: String = "",
-                            val color: String = "#888888",
-                            val headType: String = "default",
-                            val tailType: String = "default") : GameResponse() {
-  var apiversion = "1"
+data class DescribeResponse private constructor(val author: String,
+                                                val color: String,
+                                                val headType: String,
+                                                val tailType: String,
+                                                val apiversion: String) : GameResponse() {
+  constructor(author: String = "",
+              color: String = "#888888",
+              headType: String = "default",
+              tailType: String = "default") : this(author, color, headType, tailType, "1")
 
   fun toJson() = Json.encodeToString(serializer(), this)
 
