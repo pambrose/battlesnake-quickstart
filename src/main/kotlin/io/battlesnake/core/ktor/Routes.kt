@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 Paul Ambrose (pambrose@mac.com)
+ * Copyright © 2021 Paul Ambrose (pambrose@mac.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,10 @@ import io.battlesnake.core.END
 import io.battlesnake.core.INFO
 import io.battlesnake.core.MOVE
 import io.battlesnake.core.START
-import io.ktor.application.Application
-import io.ktor.application.call
-import io.ktor.html.respondHtml
-import io.ktor.response.respond
-import io.ktor.routing.get
-import io.ktor.routing.post
-import io.ktor.routing.routing
+import io.ktor.application.*
+import io.ktor.html.*
+import io.ktor.response.*
+import io.ktor.routing.*
 import kotlinx.html.Entities.nbsp
 import kotlinx.html.HTMLTag
 import kotlinx.html.a
