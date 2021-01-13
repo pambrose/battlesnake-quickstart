@@ -37,7 +37,7 @@ data class DescribeResponse(val author: String = "",
                             val color: String = "#888888",
                             val headType: String = "default",
                             val tailType: String = "default") : GameResponse() {
-  val apiversion = "1"
+  var apiversion = "1"
 
   fun toJson() = Json.encodeToString(serializer(), this)
 
