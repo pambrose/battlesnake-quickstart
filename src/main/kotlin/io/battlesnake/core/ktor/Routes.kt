@@ -22,6 +22,8 @@ import io.battlesnake.core.END
 import io.battlesnake.core.INFO
 import io.battlesnake.core.MOVE
 import io.battlesnake.core.START
+import io.battlesnake.core.right
+import io.battlesnake.core.up
 import io.ktor.application.*
 import io.ktor.html.*
 import io.ktor.response.*
@@ -45,8 +47,7 @@ fun Application.routes(snake: AbstractBattleSnake<*>) {
 
     get(INFO) {
       call.respondHtml {
-        head {
-        }
+        head {}
 
         body {
           br {}
@@ -83,6 +84,16 @@ fun Application.routes(snake: AbstractBattleSnake<*>) {
 
     post(END) {
       val response = snake.process(call)
+      call.respond(response)
+    }
+
+    get("/testright") {
+      val response = right("I am here")
+      call.respond(response)
+    }
+
+    get("/testup") {
+      val response = up("I am here")
       call.respond(response)
     }
   }

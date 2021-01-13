@@ -35,7 +35,7 @@ object ExampleSnake : AbstractBattleSnake<MySnakeContext>() {
 
       // DescribeResponse describes snake color and head/tail type
       onDescribe { call: ApplicationCall ->
-        DescribeResponse(color = "#ff00ff", headType = "beluga", tailType = "bolt")
+        DescribeResponse(color = "#ff00ff", head = "beluga", tail = "bolt")
       }
 
       // MoveResponse can be LEFT, RIGHT, UP or DOWN

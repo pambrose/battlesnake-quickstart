@@ -43,7 +43,7 @@ fun Application.installs() {
 
   install(ContentNegotiation) {
     json(contentType = ContentType.Application.Json,
-         json = Json { ignoreUnknownKeys = true; prettyPrint = true })
+         json = Json { ignoreUnknownKeys = true; prettyPrint = true; isLenient = true; })
   }
 
   install(StatusPages) {
@@ -54,7 +54,6 @@ fun Application.installs() {
       call.respond(HttpStatusCode.Forbidden)
     }
   }
-
 }
 
 class AuthenticationException : RuntimeException()

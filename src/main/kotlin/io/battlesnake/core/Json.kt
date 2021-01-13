@@ -153,13 +153,18 @@ data class MoveRequest(val board: Board,
 }
 
 @Serializable
-data class MoveResponse(val move: String) : GameResponse() {
+data class MoveResponse(val move: String, val shout: String = "") : GameResponse() {
   fun toJson() = Json.encodeToString(serializer(), this)
 
   companion object {
     fun toObject(s: String) = json.decodeFromString(serializer(), s)
   }
 }
+
+fun up(shout: String) = MoveResponse("up", shout)
+fun down(shout: String) = MoveResponse("down", shout)
+fun left(shout: String) = MoveResponse("left", shout)
+fun right(shout: String) = MoveResponse("right", shout)
 
 @Serializable
 data class EndRequest(val board: Board,
