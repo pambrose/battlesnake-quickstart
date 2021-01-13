@@ -159,6 +159,9 @@ data class MoveResponse(val move: String, val shout: String = "") : GameResponse
   companion object {
     fun toObject(s: String) = json.decodeFromString(serializer(), s)
   }
+
+  override fun toString() =
+    move.toUpperCase() + if (shout.isNotEmpty()) " ($shout)" else ""
 }
 
 fun up(shout: String) = MoveResponse("up", shout)

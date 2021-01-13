@@ -109,7 +109,7 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
                                                  gameResponse: GameResponse,
                                                  duration: Duration): String =
       "Responded to ${call.request.uri} in $duration with: " +
-      (if (gameResponse is MoveResponse) gameResponse.move.toUpperCase() else "$gameResponse") +
+      (if (gameResponse is MoveResponse) gameResponse.move else "$gameResponse") +
       (context?.let { " [${context.snakeId}]" } ?: "")
   }
 }
