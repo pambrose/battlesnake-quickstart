@@ -35,13 +35,13 @@ sealed class GameResponse
 @Serializable
 data class DescribeResponse private constructor(val author: String,
                                                 val color: String,
-                                                val headType: String,
-                                                val tailType: String,
+                                                val head: String,
+                                                val tail: String,
                                                 val apiversion: String) : GameResponse() {
   constructor(author: String = "",
               color: String = "#888888",
-              headType: String = "default",
-              tailType: String = "default") : this(author, color, headType, tailType, "1")
+              head: String = "default",
+              tail: String = "default") : this(author, color, head, tail, "1")
 
   fun toJson() = Json.encodeToString(serializer(), this)
 
