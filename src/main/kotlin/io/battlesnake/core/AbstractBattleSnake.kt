@@ -89,9 +89,6 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
     val (response, duration) =
       measureTimedValue {
         strategy.moveActions.map { it.invoke(context, moveRequest) }.lastOrNull() ?: RIGHT
-            .also {
-              logger.info { "Abstract returning: $it" }
-            }
       }
 
     context.apply {
