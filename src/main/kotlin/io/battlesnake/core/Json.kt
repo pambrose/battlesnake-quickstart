@@ -29,13 +29,14 @@ val Int.isOdd get() = this % 2 != 0
 
 private val json = Json { ignoreUnknownKeys = true; isLenient = true }
 
-interface GameResponse
+@Serializable
+sealed class GameResponse
 
 @Serializable
 data class DescribeResponse(val author: String = "",
                             val color: String = "#888888",
                             val headType: String = "default",
-                            val tailType: String = "default") : GameResponse {
+                            val tailType: String = "default") : GameResponse() {
   val apiversion = "1"
 
   fun toJson() = Json.encodeToString(serializer(), this)
@@ -68,7 +69,7 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
 }
 
 @Serializable
-object StartResponse : GameResponse {
+object StartResponse : GameResponse() {
   override fun toString() = StartResponse::class.simpleName ?: "StartResponse"
 }
 
@@ -148,7 +149,7 @@ data class MoveRequest(val board: Board,
 }
 
 @Serializable
-data class MoveResponse(val move: String) : GameResponse {
+data class MoveResponse(val move: String) : GameResponse() {
   fun toJson() = Json.encodeToString(serializer(), this)
 
   companion object {
@@ -172,7 +173,7 @@ data class EndRequest(val board: Board,
 }
 
 @Serializable
-class EndResponse : GameResponse {
+class EndResponse : GameResponse() {
   override fun toString() = EndResponse::class.simpleName ?: "EndResponse"
 
   companion object {
