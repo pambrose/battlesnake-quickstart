@@ -108,8 +108,7 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
                                                  call: ApplicationCall,
                                                  gameResponse: GameResponse,
                                                  duration: Duration): String =
-      "Responded to ${call.request.uri} in $duration with: " +
-      (if (gameResponse is MoveResponse) gameResponse.move else "$gameResponse") +
+      "Responded to ${call.request.uri} in $duration with: $gameResponse" +
       (context?.let { " [${context.snakeId}]" } ?: "")
   }
 }
