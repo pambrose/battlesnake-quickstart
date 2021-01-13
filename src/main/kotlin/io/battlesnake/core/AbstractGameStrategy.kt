@@ -22,7 +22,6 @@ import io.ktor.application.*
 import kotlin.time.Duration
 
 abstract class AbstractGameStrategy<T : SnakeContext>(private val verbose: Boolean = false) : GameStrategy<T>() {
-
   init {
     onDescribe { call: ApplicationCall ->
       logger.info { describeMsg(call) }
@@ -50,9 +49,7 @@ abstract class AbstractGameStrategy<T : SnakeContext>(private val verbose: Boole
 
   open fun onDescribe(call: ApplicationCall) = DescribeResponse()
 
-  open fun onStart(context: T, request: StartRequest) {
-    return
-  }
+  open fun onStart(context: T, request: StartRequest) {}
 
   abstract fun onMove(context: T, request: MoveRequest): MoveResponse
 
