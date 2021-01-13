@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 Paul Ambrose (pambrose@mac.com)
+ * Copyright © 2021 Paul Ambrose (pambrose@mac.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@ import io.battlesnake.core.GameStrategy.Companion.afterTurnMsg
 import io.battlesnake.core.GameStrategy.Companion.describeMsg
 import io.battlesnake.core.GameStrategy.Companion.endMsg
 import io.battlesnake.core.GameStrategy.Companion.startMsg
-import io.ktor.application.ApplicationCall
-import io.ktor.features.origin
-import io.ktor.request.uri
+import io.ktor.application.*
+import io.ktor.features.*
+import io.ktor.request.*
 import mu.KLogging
 import kotlin.time.Duration
 import kotlin.time.milliseconds
@@ -108,8 +108,7 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
                                                  call: ApplicationCall,
                                                  gameResponse: GameResponse,
                                                  duration: Duration): String =
-      "Responded to ${call.request.uri} in $duration with: " +
-      (if (gameResponse is MoveResponse) gameResponse.move.toUpperCase() else "$gameResponse") +
+      "Responded to ${call.request.uri} in $duration with: $gameResponse" +
       (context?.let { " [${context.snakeId}]" } ?: "")
   }
 }

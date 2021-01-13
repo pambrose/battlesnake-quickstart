@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 Paul Ambrose (pambrose@mac.com)
+ * Copyright © 2021 Paul Ambrose (pambrose@mac.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,11 @@ package io.battlesnake.core
 
 import io.battlesnake.core.ktor.installs
 import io.battlesnake.core.ktor.routes
-import io.ktor.application.Application
-import io.ktor.application.ApplicationCall
-import io.ktor.features.origin
-import io.ktor.request.receive
-import io.ktor.request.uri
-import io.ktor.server.cio.CIO
-import io.ktor.server.engine.embeddedServer
+import io.ktor.application.*
+import io.ktor.features.*
+import io.ktor.request.*
+import io.ktor.server.cio.*
+import io.ktor.server.engine.*
 import mu.KLogging
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.measureTimedValue

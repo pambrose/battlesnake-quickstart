@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 Paul Ambrose (pambrose@mac.com)
+ * Copyright © 2021 Paul Ambrose (pambrose@mac.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ fun Application.installs() {
 
   install(ContentNegotiation) {
     json(contentType = ContentType.Application.Json,
-         json = Json { ignoreUnknownKeys = true; prettyPrint = true })
+         json = Json { ignoreUnknownKeys = true; prettyPrint = true; isLenient = true; })
   }
 
   install(StatusPages) {
@@ -54,7 +54,6 @@ fun Application.installs() {
       call.respond(HttpStatusCode.Forbidden)
     }
   }
-
 }
 
 class AuthenticationException : RuntimeException()

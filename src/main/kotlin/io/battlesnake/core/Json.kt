@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 Paul Ambrose (pambrose@mac.com)
+ * Copyright © 2021 Paul Ambrose (pambrose@mac.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,14 +29,19 @@ val Int.isOdd get() = this % 2 != 0
 
 private val json = Json { ignoreUnknownKeys = true; isLenient = true }
 
-interface GameResponse
+@Serializable
+sealed class GameResponse
 
 @Serializable
-data class DescribeResponse(val author: String = "",
-                            val color: String = "#888888",
-                            val headType: String = "default",
-                            val tailType: String = "default") : GameResponse {
-  val apiversion = "1"
+data class DescribeResponse private constructor(val author: String,
+                                                val color: String,
+                                                val head: String,
+                                                val tail: String,
+                                                val apiversion: String) : GameResponse() {
+  constructor(author: String = "",
+              color: String = "#888888",
+              head: String = "default",
+              tail: String = "default") : this(author, color, head, tail, "1")
 
   fun toJson() = Json.encodeToString(serializer(), this)
 
@@ -68,7 +73,7 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
 }
 
 @Serializable
-object StartResponse : GameResponse {
+object StartResponse : GameResponse() {
   override fun toString() = StartResponse::class.simpleName ?: "StartResponse"
 }
 
@@ -148,13 +153,21 @@ data class MoveRequest(val board: Board,
 }
 
 @Serializable
-data class MoveResponse(val move: String) : GameResponse {
+data class MoveResponse(val move: String, val shout: String = "") : GameResponse() {
   fun toJson() = Json.encodeToString(serializer(), this)
 
   companion object {
     fun toObject(s: String) = json.decodeFromString(serializer(), s)
   }
+
+  override fun toString() =
+    move.toUpperCase() + if (shout.isNotEmpty()) " ($shout)" else ""
 }
+
+fun up(shout: String) = MoveResponse("up", shout)
+fun down(shout: String) = MoveResponse("down", shout)
+fun left(shout: String) = MoveResponse("left", shout)
+fun right(shout: String) = MoveResponse("right", shout)
 
 @Serializable
 data class EndRequest(val board: Board,
@@ -172,7 +185,7 @@ data class EndRequest(val board: Board,
 }
 
 @Serializable
-class EndResponse : GameResponse {
+class EndResponse : GameResponse() {
   override fun toString() = EndResponse::class.simpleName ?: "EndResponse"
 
   companion object {

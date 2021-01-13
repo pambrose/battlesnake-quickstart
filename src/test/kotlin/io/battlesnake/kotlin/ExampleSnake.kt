@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 Paul Ambrose (pambrose@mac.com)
+ * Copyright © 2021 Paul Ambrose (pambrose@mac.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import io.battlesnake.core.RIGHT
 import io.battlesnake.core.SnakeContext
 import io.battlesnake.core.strategy
 import io.battlesnake.kotlin.ExampleSnake.MySnakeContext
-import io.ktor.application.ApplicationCall
+import io.ktor.application.*
 
 object ExampleSnake : AbstractBattleSnake<MySnakeContext>() {
 
@@ -35,7 +35,7 @@ object ExampleSnake : AbstractBattleSnake<MySnakeContext>() {
 
       // DescribeResponse describes snake color and head/tail type
       onDescribe { call: ApplicationCall ->
-        DescribeResponse(color = "#ff00ff", headType = "beluga", tailType = "bolt")
+        DescribeResponse(color = "#ff00ff", head = "beluga", tail = "bolt")
       }
 
       // MoveResponse can be LEFT, RIGHT, UP or DOWN
