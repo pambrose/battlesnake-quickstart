@@ -1,0 +1,168 @@
+POST http://localhost:8080/start
+Content-Type: application/json
+
+{
+  "game": {
+    "id": "76f989bf-9db6-4e4b-af17-62ca02b26f7d",
+    "ruleset": {
+      "name": "solo",
+      "version": "v1.0.15"
+    },
+    "timeout": 500
+  },
+  "turn": 0,
+  "board": {
+    "height": 7,
+    "width": 7,
+    "snakes": [
+      {
+        "id": "gs_7jvbwFT93wgFQ4f3mVdR8GtK",
+        "name": "PaulTest",
+        "latency": "",
+        "health": 100,
+        "body": [
+          {
+            "x": 3,
+            "y": 1
+          },
+          {
+            "x": 3,
+            "y": 1
+          },
+          {
+            "x": 3,
+            "y": 1
+          }
+        ],
+        "head": {
+          "x": 3,
+          "y": 1
+        },
+        "length": 3,
+        "shout": ""
+      }
+    ],
+    "food": [
+      {
+        "x": 4,
+        "y": 0
+      },
+      {
+        "x": 3,
+        "y": 3
+      }
+    ],
+    "hazards": []
+  },
+  "you": {
+    "id": "gs_7jvbwFT93wgFQ4f3mVdR8GtK",
+    "name": "PaulTest",
+    "latency": "",
+    "health": 100,
+    "body": [
+      {
+        "x": 3,
+        "y": 1
+      },
+      {
+        "x": 3,
+        "y": 1
+      },
+      {
+        "x": 3,
+        "y": 1
+      }
+    ],
+    "head": {
+      "x": 3,
+      "y": 1
+    },
+    "length": 3,
+    "shout": ""
+  }
+}
+
+###
+POST http://localhost:8080/move
+Content-Type: application/json
+
+{
+  "game": {
+    "id": "76f989bf-9db6-4e4b-af17-62ca02b26f7d",
+    "ruleset": {
+      "name": "solo",
+      "version": "v1.0.15"
+    },
+    "timeout": 500
+  },
+  "turn": 0,
+  "board": {
+    "height": 7,
+    "width": 7,
+    "snakes": [
+      {
+        "id": "gs_7jvbwFT93wgFQ4f3mVdR8GtK",
+        "name": "PaulTest",
+        "latency": "",
+        "health": 100,
+        "body": [
+          {
+            "x": 3,
+            "y": 1
+          },
+          {
+            "x": 3,
+            "y": 1
+          },
+          {
+            "x": 3,
+            "y": 1
+          }
+        ],
+        "head": {
+          "x": 3,
+          "y": 1
+        },
+        "length": 3,
+        "shout": ""
+      }
+    ],
+    "food": [
+      {
+        "x": 4,
+        "y": 0
+      },
+      {
+        "x": 3,
+        "y": 3
+      }
+    ],
+    "hazards": []
+  },
+  "you": {
+    "id": "gs_7jvbwFT93wgFQ4f3mVdR8GtK",
+    "name": "PaulTest",
+    "latency": "",
+    "health": 100,
+    "body": [
+      {
+        "x": 3,
+        "y": 1
+      },
+      {
+        "x": 3,
+        "y": 1
+      },
+      {
+        "x": 3,
+        "y": 1
+      }
+    ],
+    "head": {
+      "x": 3,
+      "y": 1
+    },
+    "length": 3,
+    "shout": ""
+  }
+}

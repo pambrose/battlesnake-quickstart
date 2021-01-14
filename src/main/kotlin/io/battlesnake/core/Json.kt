@@ -27,7 +27,7 @@ import kotlin.math.abs
 val Int.isEven get() = this % 2 == 0
 val Int.isOdd get() = this % 2 != 0
 
-private val json = Json { ignoreUnknownKeys = true; isLenient = true }
+private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true; isLenient = true }
 
 @Serializable
 sealed class GameResponse
@@ -43,7 +43,7 @@ data class DescribeResponse private constructor(val author: String,
               head: String = "default",
               tail: String = "default") : this(author, color, head, tail, "1")
 
-  fun toJson() = Json.encodeToString(serializer(), this)
+  fun toJson() = json.encodeToString(serializer(), this)
 
   companion object {
     fun toObject(s: String) = json.decodeFromString(serializer(), s)
@@ -55,15 +55,15 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
   val gameId
     get() = game.id
 
-  fun toJson() = Json.encodeToString(serializer(), this)
+  fun toJson() = json.encodeToString(serializer(), this)
 
   companion object {
     fun primeClassLoader() {
       val start =
         StartRequest(Board(3, 4, emptyList(), emptyList(), emptyList()),
-                     Game(""),
+                     Game("", Ruleset("", ""), 500),
                      1,
-                     You("", "", emptyList(), 3, ""))
+                     You(name = "", id = "", health = 3, body = emptyList(), latency = "", shout = ""))
       val json = start.toJson()
       toObject(json)
     }
@@ -74,6 +74,8 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
 
 @Serializable
 object StartResponse : GameResponse() {
+  fun toJson() = json.encodeToString(StartResponse.serializer(), this)
+
   override fun toString() = StartResponse::class.simpleName ?: "StartResponse"
 }
 
@@ -82,7 +84,6 @@ data class MoveRequest(val board: Board,
                        val game: Game,
                        val turn: Int,
                        val you: You) {
-
   val gameId
     get() = game.id
 
@@ -145,7 +146,7 @@ data class MoveRequest(val board: Board,
   val headPosition
     get() = you.headPosition
 
-  fun toJson() = Json.encodeToString(serializer(), this)
+  fun toJson() = json.encodeToString(serializer(), this)
 
   companion object {
     fun toObject(s: String) = json.decodeFromString(serializer(), s)
@@ -154,7 +155,7 @@ data class MoveRequest(val board: Board,
 
 @Serializable
 data class MoveResponse(val move: String, val shout: String = "") : GameResponse() {
-  fun toJson() = Json.encodeToString(serializer(), this)
+  fun toJson() = json.encodeToString(serializer(), this)
 
   companion object {
     fun toObject(s: String) = json.decodeFromString(serializer(), s)
@@ -177,7 +178,7 @@ data class EndRequest(val board: Board,
   val gameId
     get() = game.id
 
-  fun toJson() = Json.encodeToString(serializer(), this)
+  fun toJson() = json.encodeToString(serializer(), this)
 
   companion object {
     fun toObject(s: String) = json.decodeFromString(serializer(), s)
@@ -186,6 +187,8 @@ data class EndRequest(val board: Board,
 
 @Serializable
 class EndResponse : GameResponse() {
+  fun toJson() = json.encodeToString(serializer(), this)
+
   override fun toString() = EndResponse::class.simpleName ?: "EndResponse"
 
   companion object {
@@ -194,7 +197,10 @@ class EndResponse : GameResponse() {
 }
 
 @Serializable
-data class Game(val id: String, val timeOutMillis: Int = 500)
+data class Ruleset(val name: String, val version: String)
+
+@Serializable
+data class Game(val id: String, val ruleset: Ruleset, val timeout: Int)
 
 @Serializable
 data class Board(val height: Int,
@@ -228,7 +234,9 @@ data class Snake(val name: String,
                  val id: String,
                  val health: Int,
                  val body: List<Body>,
-                 val shout: String) {
+                 val latency: String,
+                 val shout: String,
+                 val squad: String = "") {
   val headPosition
     get() = bodyPosition(0)
 
@@ -241,10 +249,13 @@ data class Snake(val name: String,
 @Serializable
 data class You(val name: String,
                val id: String,
-               val body: List<Body>,
                val health: Int,
-               val shout: String) {
-  val headPosition by lazy { bodyPosition(0) }
+               val body: List<Body>,
+               val latency: String,
+               val shout: String,
+               val squad: String = "") {
+  val headPosition
+    get() = bodyPosition(0)
 
   fun bodyPosition(pos: Int) = body[pos].position
 

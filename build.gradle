@@ -7,9 +7,9 @@ plugins {
 }
 
 repositories {
-  maven { url 'https://kotlin.bintray.com/ktor' }
-  maven { url "https://kotlin.bintray.com/kotlinx" }
-  maven { url 'https://kotlin.bintray.com/kotlin-js-wrappers' }
+  maven { url = 'https://kotlin.bintray.com/ktor' }
+  maven { url = "https://kotlin.bintray.com/kotlinx" }
+  maven { url = 'https://kotlin.bintray.com/kotlin-js-wrappers' }
   maven { url = 'https://maven-central.storage-download.googleapis.com/repos/central/data/' }
   jcenter()
 }
@@ -18,7 +18,7 @@ sourceCompatibility = 1.8
 
 description = 'battlesnake-quickstart'
 group = 'io.battlesnake'
-version = '0.8.0'
+version = '0.9.0'
 
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
@@ -52,12 +52,14 @@ artifacts {
 compileKotlin {
   kotlinOptions.jvmTarget = '1.8'
   kotlinOptions.freeCompilerArgs += ['-Xuse-experimental=kotlin.time.ExperimentalTime',
+                                     '-Xuse-experimental=kotlin.ExperimentalStdlibApi',
                                      '-Xuse-experimental=io.ktor.util.KtorExperimentalAPI']
 }
 
 compileTestKotlin {
   kotlinOptions.jvmTarget = '1.8'
   kotlinOptions.freeCompilerArgs += ['-Xuse-experimental=kotlin.time.ExperimentalTime',
+                                     '-Xuse-experimental=kotlin.ExperimentalStdlibApi',
                                      '-Xuse-experimental=io.ktor.util.KtorExperimentalAPI']
 }
 
