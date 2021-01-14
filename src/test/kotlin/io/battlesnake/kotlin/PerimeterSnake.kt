@@ -48,48 +48,33 @@ object PerimeterSnake : AbstractBattleSnake<PerimeterSnake.MySnakeContext>() {
             repeat(x) { yield(LEFT) }
           }
 
-        fun perimeterPath(width: Int, height: Int): Sequence<MoveResponse> =
-          sequence {
-            while (true) {
-              repeat(height - 1) { yield(UP) }
-              repeat(width - 1) { yield(RIGHT) }
-              repeat(height - 1) { yield(DOWN) }
-              repeat(width - 1) { yield(LEFT) }
-            }
-          }
-
         val you = request.you
         val board = request.board
 
-        context.gotoOriginMoves = originPath(you.headPosition.x, you.headPosition.y).iterator()
-        context.perimeterMoves = perimeterPath(board.width, board.height).iterator()
+        context.moves = originPath(you.headPosition.x, you.headPosition.y).iterator()
 
         logger.info { "Position: ${you.headPosition.x},${you.headPosition.y} game id: ${request.gameId}" }
         logger.info { "Board: ${board.width}x${board.height} game id: ${request.gameId}" }
       }
 
       onMove { context: MySnakeContext, request: MoveRequest ->
+        fun perimeterPath(width: Int, height: Int): Sequence<MoveResponse> =
+          sequence {
+            repeat(height - 1) { yield(UP) }
+            repeat(width - 1) { yield(RIGHT) }
+            repeat(height - 1) { yield(DOWN) }
+            repeat(width - 1) { yield(LEFT) }
+          }
+
         if (request.isAtOrigin)
-          context.visitedOrigin = true
+          context.moves = perimeterPath(request.board.width, request.board.height).iterator()
 
-        val moves =
-          if (context.visitedOrigin) {
-            logger.info { "Using perimeter moves" }
-            context.perimeterMoves
-          }
-          else {
-            logger.info { "Using goto moves" }
-            context.gotoOriginMoves
-          }
-
-        moves.next()
+        context.moves.next()
       }
     }
 
   class MySnakeContext : SnakeContext() {
-    lateinit var gotoOriginMoves: Iterator<MoveResponse>
-    lateinit var perimeterMoves: Iterator<MoveResponse>
-    var visitedOrigin = false
+    lateinit var moves: Iterator<MoveResponse>
   }
 
   override fun snakeContext(): MySnakeContext = MySnakeContext()

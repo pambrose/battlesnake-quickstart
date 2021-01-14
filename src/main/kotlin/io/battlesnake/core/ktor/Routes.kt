@@ -67,6 +67,9 @@ fun Application.routes(snake: AbstractBattleSnake<*>) {
             span { rawHtml(nbsp.text) }
             span { id = "url" }
           }
+          h3 {
+            +"Snake type: ${snake.javaClass.name}"
+          }
           script { rawHtml("""document.getElementById("url").innerHTML = window.location.href.slice(0, -5);""") }
         }
       }
