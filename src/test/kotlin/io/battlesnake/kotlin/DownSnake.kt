@@ -19,20 +19,17 @@
 package io.battlesnake.kotlin
 
 import io.battlesnake.core.AbstractBattleSnake
-import io.battlesnake.core.DOWN
 import io.battlesnake.core.DescribeResponse
 import io.battlesnake.core.GameStrategy
-import io.battlesnake.core.LEFT
 import io.battlesnake.core.MoveRequest
-import io.battlesnake.core.MoveResponse
-import io.battlesnake.core.RIGHT
 import io.battlesnake.core.SnakeContext
 import io.battlesnake.core.StartRequest
-import io.battlesnake.core.UP
+import io.battlesnake.core.down
+import io.battlesnake.core.left
 import io.battlesnake.core.strategy
 import io.ktor.application.*
 
-object PerimeterSnake : AbstractBattleSnake<PerimeterSnake.MySnakeContext>() {
+object DownSnake : AbstractBattleSnake<DownSnake.MySnakeContext>() {
 
   override fun gameStrategy(): GameStrategy<MySnakeContext> =
     strategy(verbose = true) {
@@ -42,54 +39,22 @@ object PerimeterSnake : AbstractBattleSnake<PerimeterSnake.MySnakeContext>() {
       }
 
       onStart { context: MySnakeContext, request: StartRequest ->
-        fun originPath(x: Int, y: Int): Sequence<MoveResponse> =
-          sequence {
-            repeat(y) { yield(DOWN) }
-            repeat(x) { yield(LEFT) }
-          }
-
-        fun perimeterPath(width: Int, height: Int): Sequence<MoveResponse> =
-          sequence {
-            while (true) {
-              repeat(height - 1) { yield(UP) }
-              repeat(width - 1) { yield(RIGHT) }
-              repeat(height - 1) { yield(DOWN) }
-              repeat(width - 1) { yield(LEFT) }
-            }
-          }
-
         val you = request.you
         val board = request.board
-
-        context.gotoOriginMoves = originPath(you.headPosition.x, you.headPosition.y).iterator()
-        context.perimeterMoves = perimeterPath(board.width, board.height).iterator()
 
         logger.info { "Position: ${you.headPosition.x},${you.headPosition.y} game id: ${request.gameId}" }
         logger.info { "Board: ${board.width}x${board.height} game id: ${request.gameId}" }
       }
 
       onMove { context: MySnakeContext, request: MoveRequest ->
-        if (request.isAtOrigin)
-          context.visitedOrigin = true
-
-        val moves =
-          if (context.visitedOrigin) {
-            logger.info { "Using perimeter moves" }
-            context.perimeterMoves
-          }
-          else {
-            logger.info { "Using goto moves" }
-            context.gotoOriginMoves
-          }
-
-        moves.next()
+        if (request.you.headPosition.y > 0)
+          down("Going down")
+        else
+          left("Going left")
       }
     }
 
   class MySnakeContext : SnakeContext() {
-    lateinit var gotoOriginMoves: Iterator<MoveResponse>
-    lateinit var perimeterMoves: Iterator<MoveResponse>
-    var visitedOrigin = false
   }
 
   override fun snakeContext(): MySnakeContext = MySnakeContext()

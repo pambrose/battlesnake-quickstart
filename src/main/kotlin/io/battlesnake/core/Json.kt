@@ -19,7 +19,6 @@
 package io.battlesnake.core
 
 import io.battlesnake.core.Board.Companion.BOARD_ORIGIN
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
@@ -28,13 +27,12 @@ import kotlin.math.abs
 val Int.isEven get() = this % 2 == 0
 val Int.isOdd get() = this % 2 != 0
 
-private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true; isLenient = true }
+private val json = Json { prettyPrint = true; ignoreUnknownKeys = true; encodeDefaults = true; isLenient = true }
 
 @Serializable
 sealed class GameResponse
 
 @Serializable
-@SerialName("describe")
 data class DescribeResponse private constructor(val author: String,
                                                 val color: String,
                                                 val head: String,
@@ -45,7 +43,7 @@ data class DescribeResponse private constructor(val author: String,
               head: String = "default",
               tail: String = "default") : this(author, color, head, tail, "1")
 
-  fun toJson() = Json.encodeToString(serializer(), this)
+  fun toJson() = json.encodeToString(serializer(), this)
 
   companion object {
     fun toObject(s: String) = json.decodeFromString(serializer(), s)
@@ -57,7 +55,7 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
   val gameId
     get() = game.id
 
-  fun toJson() = Json.encodeToString(serializer(), this)
+  fun toJson() = json.encodeToString(serializer(), this)
 
   companion object {
     fun primeClassLoader() {
@@ -75,8 +73,9 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
 }
 
 @Serializable
-@SerialName("start")
 object StartResponse : GameResponse() {
+  fun toJson() = json.encodeToString(StartResponse.serializer(), this)
+
   override fun toString() = StartResponse::class.simpleName ?: "StartResponse"
 }
 
@@ -85,7 +84,6 @@ data class MoveRequest(val board: Board,
                        val game: Game,
                        val turn: Int,
                        val you: You) {
-
   val gameId
     get() = game.id
 
@@ -148,7 +146,7 @@ data class MoveRequest(val board: Board,
   val headPosition
     get() = you.headPosition
 
-  fun toJson() = Json.encodeToString(serializer(), this)
+  fun toJson() = json.encodeToString(serializer(), this)
 
   companion object {
     fun toObject(s: String) = json.decodeFromString(serializer(), s)
@@ -156,9 +154,8 @@ data class MoveRequest(val board: Board,
 }
 
 @Serializable
-@SerialName("move")
 data class MoveResponse(val move: String, val shout: String = "") : GameResponse() {
-  fun toJson() = Json.encodeToString(serializer(), this)
+  fun toJson() = json.encodeToString(serializer(), this)
 
   companion object {
     fun toObject(s: String) = json.decodeFromString(serializer(), s)
@@ -181,7 +178,7 @@ data class EndRequest(val board: Board,
   val gameId
     get() = game.id
 
-  fun toJson() = Json.encodeToString(serializer(), this)
+  fun toJson() = json.encodeToString(serializer(), this)
 
   companion object {
     fun toObject(s: String) = json.decodeFromString(serializer(), s)
@@ -189,8 +186,9 @@ data class EndRequest(val board: Board,
 }
 
 @Serializable
-@SerialName("end")
 class EndResponse : GameResponse() {
+  fun toJson() = json.encodeToString(serializer(), this)
+
   override fun toString() = EndResponse::class.simpleName ?: "EndResponse"
 
   companion object {

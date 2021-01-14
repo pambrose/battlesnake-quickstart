@@ -43,7 +43,7 @@ fun Application.installs() {
 
   install(ContentNegotiation) {
     json(contentType = ContentType.Application.Json,
-         json = Json { ignoreUnknownKeys = true; encodeDefaults = true; isLenient = true; })
+         json = Json { prettyPrint = true; ignoreUnknownKeys = true; encodeDefaults = true; isLenient = true; })
   }
 
   install(StatusPages) {

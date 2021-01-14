@@ -126,10 +126,6 @@ class SnakeTest {
             }
         }
       """.trimIndent()
-//      """{"game":{"id":"1551594939037768058", "ruleset": {name:"", version:""}, "timeout":500},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
-//                |"hazards":[{"x":2,"y":2}],
-//                |"snakes":[{"id":"you","name":"you","shout":"","latency": "","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
-//                |"shout":"","latency": "","health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = StartRequest.toObject(json)
     TestSnake.strategy.startActions.map { it.invoke(TestSnake.snakeContext(), request) }
     val response = StartResponse
@@ -195,10 +191,6 @@ class SnakeTest {
             }
         }
       """.trimIndent()
-//      """{"game":{"id":"1551628170849008209", "ruleset": {name:"", version:""}, "timeout":500},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
-//                |"hazards":[{"x":2,"y":2}],
-//                |"snakes":[{"id":"you","name":"you","shout":"","latency": "","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
-//                |"shout":"","latency": "","health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = MoveRequest.toObject(json)
     val response =
       TestSnake.strategy.moveActions.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull()
@@ -258,10 +250,6 @@ class SnakeTest {
             }
         }
       """.trimIndent()
-//      """{"game":{"id":"1551628170849008209", "ruleset": {name:"", version:""}, "timeout":500},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
-//                |"hazards":[{"x":2,"y":2}],
-//                |"snakes":[{"id":"you","name":"you","shout":"","latency": "","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
-//                |"shout":"","latency": "","health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = EndRequest.toObject(json)
     val response =
       TestSnake.strategy.endActions.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull() ?: EndResponse()

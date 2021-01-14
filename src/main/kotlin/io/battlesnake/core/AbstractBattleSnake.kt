@@ -70,6 +70,7 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
     snakeContext()
         .let { context ->
           val startRequest = call.receive<StartRequest>()
+          logger.info { "Creating new snake context for ${startRequest.gameId}" }
           context.resetStartTime()
           context.assignIds(startRequest.gameId, startRequest.you.id)
           context.assignRequestResponse(call)
@@ -88,7 +89,9 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
 
     val (response, duration) =
       measureTimedValue {
-        strategy.moveActions.map { it.invoke(context, moveRequest) }.lastOrNull() ?: RIGHT
+        strategy.moveActions
+            .map { it.invoke(context, moveRequest) }
+            .lastOrNull() ?: throw IllegalStateException("Missing move action")
       }
 
     context.apply {
