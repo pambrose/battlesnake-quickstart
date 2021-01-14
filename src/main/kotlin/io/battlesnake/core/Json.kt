@@ -27,7 +27,7 @@ import kotlin.math.abs
 val Int.isEven get() = this % 2 == 0
 val Int.isOdd get() = this % 2 != 0
 
-private val json = Json { prettyPrint = true; ignoreUnknownKeys = true; encodeDefaults = true; isLenient = true }
+private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true; isLenient = true }
 
 @Serializable
 sealed class GameResponse
