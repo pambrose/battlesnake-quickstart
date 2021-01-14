@@ -19,6 +19,7 @@
 package io.battlesnake.core
 
 import io.battlesnake.core.Board.Companion.BOARD_ORIGIN
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
@@ -27,12 +28,13 @@ import kotlin.math.abs
 val Int.isEven get() = this % 2 == 0
 val Int.isOdd get() = this % 2 != 0
 
-private val json = Json { ignoreUnknownKeys = true; isLenient = true }
+private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true; isLenient = true }
 
 @Serializable
 sealed class GameResponse
 
 @Serializable
+@SerialName("describe")
 data class DescribeResponse private constructor(val author: String,
                                                 val color: String,
                                                 val head: String,
@@ -61,9 +63,9 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
     fun primeClassLoader() {
       val start =
         StartRequest(Board(3, 4, emptyList(), emptyList(), emptyList()),
-                     Game(""),
+                     Game("", Ruleset("", ""), 500),
                      1,
-                     You("", "", emptyList(), 3, ""))
+                     You(name = "", id = "", health = 3, body = emptyList(), latency = "", shout = ""))
       val json = start.toJson()
       toObject(json)
     }
@@ -73,6 +75,7 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
 }
 
 @Serializable
+@SerialName("start")
 object StartResponse : GameResponse() {
   override fun toString() = StartResponse::class.simpleName ?: "StartResponse"
 }
@@ -153,6 +156,7 @@ data class MoveRequest(val board: Board,
 }
 
 @Serializable
+@SerialName("move")
 data class MoveResponse(val move: String, val shout: String = "") : GameResponse() {
   fun toJson() = Json.encodeToString(serializer(), this)
 
@@ -185,6 +189,7 @@ data class EndRequest(val board: Board,
 }
 
 @Serializable
+@SerialName("end")
 class EndResponse : GameResponse() {
   override fun toString() = EndResponse::class.simpleName ?: "EndResponse"
 
@@ -194,7 +199,10 @@ class EndResponse : GameResponse() {
 }
 
 @Serializable
-data class Game(val id: String, val timeOutMillis: Int = 500)
+data class Ruleset(val name: String, val version: String)
+
+@Serializable
+data class Game(val id: String, val ruleset: Ruleset, val timeout: Int)
 
 @Serializable
 data class Board(val height: Int,
@@ -228,7 +236,9 @@ data class Snake(val name: String,
                  val id: String,
                  val health: Int,
                  val body: List<Body>,
-                 val shout: String) {
+                 val latency: String,
+                 val shout: String,
+                 val squad: String = "") {
   val headPosition
     get() = bodyPosition(0)
 
@@ -241,10 +251,13 @@ data class Snake(val name: String,
 @Serializable
 data class You(val name: String,
                val id: String,
-               val body: List<Body>,
                val health: Int,
-               val shout: String) {
-  val headPosition by lazy { bodyPosition(0) }
+               val body: List<Body>,
+               val latency: String,
+               val shout: String,
+               val squad: String = "") {
+  val headPosition
+    get() = bodyPosition(0)
 
   fun bodyPosition(pos: Int) = body[pos].position
 

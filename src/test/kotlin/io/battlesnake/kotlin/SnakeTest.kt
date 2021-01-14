@@ -31,6 +31,7 @@ import io.battlesnake.core.MOVE
 import io.battlesnake.core.MoveRequest
 import io.battlesnake.core.MoveResponse
 import io.battlesnake.core.RIGHT
+import io.battlesnake.core.Ruleset
 import io.battlesnake.core.START
 import io.battlesnake.core.SnakeContext
 import io.battlesnake.core.StartRequest
@@ -76,10 +77,59 @@ class SnakeTest {
   @Test
   fun startTest() {
     val json =
-      """{"game":{"id":"1551594939037768058", "timeOutMillis":500},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
-                |"hazards":[{"x":2,"y":2}],
-                |"snakes":[{"id":"you","name":"you","shout":"","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
-                |"shout":"","health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
+      """
+        {
+            "game": {
+                "id": "2da9736c-b7cc-4505-88a6-90c4afd5313a",
+                "ruleset": { "name": "solo", "version": "v1.0.15" },
+                "timeout": 500
+            },
+            "turn": 0,
+            "board": {
+                "height": 7,
+                "width": 7,
+                "snakes": [
+                    {
+                        "id": "gs_8PJvMSqK4MxGQ48C48hqBhgF",
+                        "name": "PaulTest",
+                        "latency": "",
+                        "health": 100,
+                        "body": [
+                            { "x": 1, "y": 1 },
+                            { "x": 1, "y": 1 },
+                            { "x": 1, "y": 1 }
+                        ],
+                        "head": { "x": 1, "y": 1 },
+                        "length": 3,
+                        "shout": ""
+                    }
+                ],
+                "food": [
+                    { "x": 0, "y": 2 },
+                    { "x": 3, "y": 3 }
+                ],
+                "hazards": []
+            },
+            "you": {
+                "id": "gs_8PJvMSqK4MxGQ48C48hqBhgF",
+                "name": "PaulTest",
+                "latency": "",
+                "health": 100,
+                "body": [
+                    { "x": 1, "y": 1 }, 
+                    { "x": 1, "y": 1 }, 
+                    { "x": 1, "y": 1 }
+                ],
+                "head": { "x": 1, "y": 1 },
+                "length": 3,
+                "shout": ""
+            }
+        }
+      """.trimIndent()
+//      """{"game":{"id":"1551594939037768058", "ruleset": {name:"", version:""}, "timeout":500},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
+//                |"hazards":[{"x":2,"y":2}],
+//                |"snakes":[{"id":"you","name":"you","shout":"","latency": "","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
+//                |"shout":"","latency": "","health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = StartRequest.toObject(json)
     TestSnake.strategy.startActions.map { it.invoke(TestSnake.snakeContext(), request) }
     val response = StartResponse
@@ -96,10 +146,59 @@ class SnakeTest {
   @Test
   fun moveTest() {
     val json =
-      """{"game":{"id":"1551628170849008209", "timeOutMillis":500},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
-                |"hazards":[{"x":2,"y":2}],
-                |"snakes":[{"id":"you","name":"you","shout":"","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
-                |"shout":"","health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
+      """
+        {
+            "game": {
+                "id": "2da9736c-b7cc-4505-88a6-90c4afd5313a",
+                "ruleset": { "name": "solo", "version": "v1.0.15" },
+                "timeout": 500
+            },
+            "turn": 0,
+            "board": {
+                "height": 7,
+                "width": 7,
+                "snakes": [
+                    {
+                        "id": "gs_8PJvMSqK4MxGQ48C48hqBhgF",
+                        "name": "PaulTest",
+                        "latency": "",
+                        "health": 100,
+                        "body": [
+                            { "x": 1, "y": 1 },
+                            { "x": 1, "y": 1 },
+                            { "x": 1, "y": 1 }
+                        ],
+                        "head": { "x": 1, "y": 1 },
+                        "length": 3,
+                        "shout": ""
+                    }
+                ],
+                "food": [
+                    { "x": 0, "y": 2 },
+                    { "x": 3, "y": 3 }
+                ],
+                "hazards": []
+            },
+            "you": {
+                "id": "gs_8PJvMSqK4MxGQ48C48hqBhgF",
+                "name": "PaulTest",
+                "latency": "",
+                "health": 100,
+                "body": [
+                    { "x": 1, "y": 1 }, 
+                    { "x": 1, "y": 1 }, 
+                    { "x": 1, "y": 1 }
+                ],
+                "head": { "x": 1, "y": 1 },
+                "length": 3,
+                "shout": ""
+            }
+        }
+      """.trimIndent()
+//      """{"game":{"id":"1551628170849008209", "ruleset": {name:"", version:""}, "timeout":500},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
+//                |"hazards":[{"x":2,"y":2}],
+//                |"snakes":[{"id":"you","name":"you","shout":"","latency": "","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
+//                |"shout":"","latency": "","health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = MoveRequest.toObject(json)
     val response =
       TestSnake.strategy.moveActions.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull()
@@ -110,10 +209,59 @@ class SnakeTest {
   @Test
   fun endTest() {
     val json =
-      """{"game":{"id":"1551628170849008209", "timeOutMillis":500},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
-                |"hazards":[{"x":2,"y":2}],
-                |"snakes":[{"id":"you","name":"you","shout":"","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
-                |"shout":"","health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
+      """
+        {
+            "game": {
+                "id": "2da9736c-b7cc-4505-88a6-90c4afd5313a",
+                "ruleset": { "name": "solo", "version": "v1.0.15" },
+                "timeout": 500
+            },
+            "turn": 0,
+            "board": {
+                "height": 7,
+                "width": 7,
+                "snakes": [
+                    {
+                        "id": "gs_8PJvMSqK4MxGQ48C48hqBhgF",
+                        "name": "PaulTest",
+                        "latency": "",
+                        "health": 100,
+                        "body": [
+                            { "x": 1, "y": 1 },
+                            { "x": 1, "y": 1 },
+                            { "x": 1, "y": 1 }
+                        ],
+                        "head": { "x": 1, "y": 1 },
+                        "length": 3,
+                        "shout": ""
+                    }
+                ],
+                "food": [
+                    { "x": 0, "y": 2 },
+                    { "x": 3, "y": 3 }
+                ],
+                "hazards": []
+            },
+            "you": {
+                "id": "gs_8PJvMSqK4MxGQ48C48hqBhgF",
+                "name": "PaulTest",
+                "latency": "",
+                "health": 100,
+                "body": [
+                    { "x": 1, "y": 1 }, 
+                    { "x": 1, "y": 1 }, 
+                    { "x": 1, "y": 1 }
+                ],
+                "head": { "x": 1, "y": 1 },
+                "length": 3,
+                "shout": ""
+            }
+        }
+      """.trimIndent()
+//      """{"game":{"id":"1551628170849008209", "ruleset": {name:"", version:""}, "timeout":500},"turn":1,"board":{"height":10,"width":10,"food":[{"x":1,"y":1}],
+//                |"hazards":[{"x":2,"y":2}],
+//                |"snakes":[{"id":"you","name":"you","shout":"","latency": "","health":0,"body":[{"x":2,"y":2}]}]},"you":{"id":"you","name":"you",
+//                |"shout":"","latency": "","health":0,"body":[{"x":2,"y":2}]}}""".trimMargin()
     val request = EndRequest.toObject(json)
     val response =
       TestSnake.strategy.endActions.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull() ?: EndResponse()
@@ -124,8 +272,8 @@ class SnakeTest {
     val counter = AtomicInteger(0)
     val newId get() = counter.incrementAndGet().toString()
     val board = Board(0, 0, emptyList(), emptyList(), emptyList())
-    val game get() = Game(newId)
-    val you get() = You("", newId, emptyList(), 0, "")
+    val game get() = Game(newId, Ruleset("", ""), 500)
+    val you get() = You(name = "", id = newId, health = 0, body = emptyList(), latency = "", shout = "")
   }
 
   @Test
