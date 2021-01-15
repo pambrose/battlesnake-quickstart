@@ -47,9 +47,6 @@ import kotlinx.html.id
 import kotlinx.html.script
 import kotlinx.html.span
 import kotlinx.html.unsafe
-import mu.KLogging
-
-object Routes : KLogging()
 
 fun Application.routes(snake: AbstractBattleSnake<*>) {
 
@@ -86,21 +83,16 @@ fun Application.routes(snake: AbstractBattleSnake<*>) {
     }
 
     post(START) {
-      call.response.headers.append(HttpHeaders.CacheControl, "no-cache, no-store")
       val response = snake.process(call) as StartResponse
       call.respondText(response.toJson(), ContentType.Application.Json)
     }
 
     post(MOVE) {
-      call.response.headers.append(HttpHeaders.CacheControl, "no-cache, no-store")
       val response = snake.process(call) as MoveResponse
-      val json = response.toJson()
-      Routes.logger.info { "Return value:\n$json" }
-      call.respondText(json, ContentType.Application.Json)
+      call.respondText(response.toJson(), ContentType.Application.Json)
     }
 
     post(END) {
-      call.response.headers.append(HttpHeaders.CacheControl, "no-cache, no-store")
       val response = snake.process(call) as EndResponse
       call.respondText(response.toJson(), ContentType.Application.Json)
     }
