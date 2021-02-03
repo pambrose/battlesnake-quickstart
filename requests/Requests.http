@@ -1,3 +1,9 @@
+GET http://localhost:8080/
+
+###
+GET http://localhost:8080/info
+
+###
 POST http://localhost:8080/start
 Content-Type: application/json
 
@@ -166,3 +172,15 @@ Content-Type: application/json
     "shout": ""
   }
 }
+
+###
+GET http://localhost:8080/left
+
+###
+GET http://localhost:8080/right
+
+###
+GET http://localhost:8080/up
+
+###
+GET http://localhost:8080/down

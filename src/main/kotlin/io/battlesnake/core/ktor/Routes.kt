@@ -32,7 +32,7 @@ import io.battlesnake.core.right
 import io.battlesnake.core.up
 import io.ktor.application.*
 import io.ktor.html.*
-import io.ktor.http.*
+import io.ktor.http.ContentType.Application.Json
 import io.ktor.response.*
 import io.ktor.routing.*
 import kotlinx.html.Entities.nbsp
@@ -47,14 +47,9 @@ import kotlinx.html.id
 import kotlinx.html.script
 import kotlinx.html.span
 import kotlinx.html.unsafe
-import mu.KLogging
-
-object Routes : KLogging()
 
 fun Application.routes(snake: AbstractBattleSnake<*>) {
-
   routing {
-
     get(INFO) {
       call.respondHtml {
         head {}
@@ -76,53 +71,49 @@ fun Application.routes(snake: AbstractBattleSnake<*>) {
     }
 
     get(DESCRIBE) {
+      // We call response.toJson() to avoid ktor adding the "type" property to the json
       val response = snake.process(call) as DescribeResponse
-      call.respondText(response.toJson(), ContentType.Application.Json)
+      call.respondText(response.toJson(), Json)
     }
 
     post(DESCRIBE) {
       val response = snake.process(call) as DescribeResponse
-      call.respondText(response.toJson(), ContentType.Application.Json)
+      call.respondText(response.toJson(), Json)
     }
 
     post(START) {
-      call.response.headers.append(HttpHeaders.CacheControl, "no-cache, no-store")
       val response = snake.process(call) as StartResponse
-      call.respondText(response.toJson(), ContentType.Application.Json)
+      call.respondText(response.toJson(), Json)
     }
 
     post(MOVE) {
-      call.response.headers.append(HttpHeaders.CacheControl, "no-cache, no-store")
       val response = snake.process(call) as MoveResponse
-      val json = response.toJson()
-      Routes.logger.info { "Return value:\n$json" }
-      call.respondText(json, ContentType.Application.Json)
+      call.respondText(response.toJson(), Json)
     }
 
     post(END) {
-      call.response.headers.append(HttpHeaders.CacheControl, "no-cache, no-store")
       val response = snake.process(call) as EndResponse
-      call.respondText(response.toJson(), ContentType.Application.Json)
+      call.respondText(response.toJson(), Json)
     }
 
     get("/left") {
       val response = left("Going left")
-      call.respond(response)
+      call.respondText(response.toJson(), Json)
     }
 
     get("/right") {
       val response = right("Going right")
-      call.respond(response)
+      call.respondText(response.toJson(), Json)
     }
 
     get("/up") {
       val response = up("Going up")
-      call.respond(response)
+      call.respondText(response.toJson(), Json)
     }
 
     get("/down") {
       val response = down("Going down")
-      call.respond(response)
+      call.respondText(response.toJson(), Json)
     }
   }
 }

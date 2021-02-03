@@ -70,7 +70,7 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
     snakeContext()
         .let { context ->
           val startRequest = call.receive<StartRequest>()
-          logger.info { "Creating new snake context for ${startRequest.gameId}" }
+          //logger.info { "Creating new snake context for ${startRequest.gameId}" }
           context.resetStartTime()
           context.assignIds(startRequest.gameId, startRequest.you.id)
           context.assignRequestResponse(call)
