@@ -33,11 +33,11 @@ private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true; isLen
 sealed class GameResponse
 
 @Serializable
-data class DescribeResponse private constructor(val author: String,
-                                                val color: String,
-                                                val head: String,
-                                                val tail: String,
-                                                val apiversion: String) : GameResponse() {
+data class DescribeResponse constructor(val author: String,
+                                        val color: String,
+                                        val head: String,
+                                        val tail: String,
+                                        val apiversion: String) : GameResponse() {
   constructor(author: String = "",
               color: String = "#888888",
               head: String = "default",
@@ -74,7 +74,7 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
 
 @Serializable
 object StartResponse : GameResponse() {
-  fun toJson() = json.encodeToString(StartResponse.serializer(), this)
+  fun toJson() = json.encodeToString(serializer(), this)
 
   override fun toString() = StartResponse::class.simpleName ?: "StartResponse"
 }
