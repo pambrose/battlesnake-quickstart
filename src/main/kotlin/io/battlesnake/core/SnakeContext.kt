@@ -19,14 +19,14 @@
 package io.battlesnake.core
 
 import io.ktor.application.*
+import kotlin.time.Duration
 import kotlin.time.TimeSource
-import kotlin.time.seconds
 
 open class SnakeContext {
   private val clock = TimeSource.Monotonic
   private var gameStartTime = clock.markNow()
 
-  var computeTime = 0.seconds
+  var computeTime = Duration.nanoseconds(0)
     internal set
 
   var moveCount = 0L

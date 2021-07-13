@@ -194,7 +194,7 @@ class SnakeTest {
     val request = MoveRequest.toObject(json)
     val response =
       TestSnake.strategy.moveActions.map { it.invoke(TestSnake.snakeContext(), request) }.lastOrNull()
-      ?: RIGHT
+        ?: RIGHT
     response.move shouldBeEqualTo "right"
   }
 

@@ -27,48 +27,46 @@ import io.ktor.features.*
 import io.ktor.request.*
 import mu.KLogging
 import kotlin.time.Duration
-import kotlin.time.milliseconds
+import kotlin.time.DurationUnit
 
 fun <T : SnakeContext> strategy(verbose: Boolean = false, init: GameStrategy<T>.() -> Unit) =
   GameStrategy<T>()
-      .apply {
-        onDescribe { call ->
-          logger.info { describeMsg(call) }
-          DescribeResponse()
-        }
-
-        onStart { context, request ->
-          logger.info { startMsg(context, request) }
-        }
-
-        onEnd { context, request ->
-          logger.info { endMsg(context, request) }
-          EndResponse()
-        }
-
-        if (verbose) {
-          onAfterTurn { context: T?, call, gameResponse, millis ->
-            logger.info { afterTurnMsg(context, call, gameResponse, millis) }
-          }
-        }
-
-        init.invoke(this)
+    .apply {
+      onDescribe { call ->
+        logger.info { describeMsg(call) }
+        DescribeResponse()
       }
+
+      onStart { context, request ->
+        logger.info { startMsg(context, request) }
+      }
+
+      onEnd { context, request ->
+        logger.info { endMsg(context, request) }
+        EndResponse()
+      }
+
+      if (verbose) {
+        onAfterTurn { context: T?, call, gameResponse, millis ->
+          logger.info { afterTurnMsg(context, call, gameResponse, millis) }
+        }
+      }
+
+      init.invoke(this)
+    }
 
 open class GameStrategy<T : SnakeContext> : KLogging() {
 
-  internal val describeActions: MutableList<(call: ApplicationCall) -> DescribeResponse> = mutableListOf()
-
-  internal val startActions: MutableList<(context: T, request: StartRequest) -> Unit> = mutableListOf()
-
-  internal val moveActions: MutableList<(context: T, request: MoveRequest) -> MoveResponse> = mutableListOf()
-
-  internal val endActions: MutableList<(context: T, request: EndRequest) -> EndResponse> = mutableListOf()
-
-  internal val afterTurnActions: MutableList<(context: T?,
-                                              call: ApplicationCall,
-                                              gameResponse: GameResponse,
-                                              duration: Duration) -> Unit> = mutableListOf()
+  internal val describeActions = mutableListOf<(call: ApplicationCall) -> DescribeResponse>()
+  internal val startActions = mutableListOf<(context: T, request: StartRequest) -> Unit>()
+  internal val moveActions = mutableListOf<(context: T, request: MoveRequest) -> MoveResponse>()
+  internal val endActions = mutableListOf<(context: T, request: EndRequest) -> EndResponse>()
+  internal val afterTurnActions = mutableListOf<(
+    context: T?,
+    call: ApplicationCall,
+    gameResponse: GameResponse,
+    duration: Duration
+  ) -> Unit>()
 
   fun onDescribe(block: (call: ApplicationCall) -> DescribeResponse) = let { describeActions += block }
 
@@ -78,10 +76,10 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
 
   fun onEnd(block: (context: T, request: EndRequest) -> EndResponse) = let { endActions += block }
 
-  fun onAfterTurn(block: (context: T?,
-                          call: ApplicationCall,
-                          gameResponse: GameResponse,
-                          duration: Duration) -> Unit) = let { afterTurnActions += block }
+  fun onAfterTurn(
+    block: (context: T?, call: ApplicationCall, gameResponse: GameResponse, duration: Duration) -> Unit
+  ) =
+    let { afterTurnActions += block }
 
   companion object {
     internal fun describeMsg(call: ApplicationCall) = "Describe from ${call.request.origin.host}"
@@ -93,22 +91,24 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
       context.let {
         val avg =
           if (it.moveCount > 0)
-            "\nAvg time/move: ${(it.computeTime.inMilliseconds / it.moveCount.toDouble()).milliseconds} "
+            "\nAvg time/move: ${Duration.milliseconds((it.computeTime.toDouble(DurationUnit.MILLISECONDS) / it.moveCount.toDouble()))} "
           else
             ""
 
         "\nEnding Game/Snake '${request.gameId}/${it.snakeId}'" +
-        "\nTotal moves: ${it.moveCount} " +
-        "\nTotal game time: ${it.elapsedGameTime} " +
-        "\nTotal compute time: ${it.computeTime}" +
-        "$avg[${it.call.request.origin.host}]"
+            "\nTotal moves: ${it.moveCount} " +
+            "\nTotal game time: ${it.elapsedGameTime} " +
+            "\nTotal compute time: ${it.computeTime}" +
+            "$avg[${it.call.request.origin.host}]"
       }
 
-    internal fun <T : SnakeContext> afterTurnMsg(context: T?,
-                                                 call: ApplicationCall,
-                                                 gameResponse: GameResponse,
-                                                 duration: Duration): String =
+    internal fun <T : SnakeContext> afterTurnMsg(
+      context: T?,
+      call: ApplicationCall,
+      gameResponse: GameResponse,
+      duration: Duration
+    ): String =
       "Responded to ${call.request.uri} in $duration with: $gameResponse" +
-      (context?.let { " [${context.snakeId}]" } ?: "")
+          (context?.let { " [${context.snakeId}]" } ?: "")
   }
 }

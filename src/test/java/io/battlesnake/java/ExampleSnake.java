@@ -29,6 +29,10 @@ import static io.battlesnake.java.ExampleSnake.MySnakeContext;
 
 public class ExampleSnake extends AbstractBattleSnake<MySnakeContext> {
 
+  public static void main(String[] args) {
+    new ExampleSnake().run(8080);
+  }
+
   // Called at the beginning of each game on Start
   @Override
   public MySnakeContext snakeContext() {
@@ -61,9 +65,5 @@ public class ExampleSnake extends AbstractBattleSnake<MySnakeContext> {
     public MoveResponse onMove(MySnakeContext context, MoveRequest request) {
       return RIGHT;
     }
-  }
-
-  public static void main(String[] args) {
-    new ExampleSnake().run(8080);
   }
 }

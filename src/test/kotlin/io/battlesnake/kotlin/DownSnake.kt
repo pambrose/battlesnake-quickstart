@@ -54,8 +54,7 @@ object DownSnake : AbstractBattleSnake<DownSnake.MySnakeContext>() {
       }
     }
 
-  class MySnakeContext : SnakeContext() {
-  }
+  class MySnakeContext : SnakeContext()
 
   override fun snakeContext(): MySnakeContext = MySnakeContext()
 

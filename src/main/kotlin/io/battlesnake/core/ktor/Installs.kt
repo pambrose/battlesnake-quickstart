@@ -47,10 +47,10 @@ fun Application.installs() {
   }
 
   install(StatusPages) {
-    exception<AuthenticationException> { cause ->
+    exception<AuthenticationException> {
       call.respond(HttpStatusCode.Unauthorized)
     }
-    exception<AuthorizationException> { cause ->
+    exception<AuthorizationException> {
       call.respond(HttpStatusCode.Forbidden)
     }
   }

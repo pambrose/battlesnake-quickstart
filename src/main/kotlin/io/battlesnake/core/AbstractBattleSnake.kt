@@ -68,21 +68,21 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
 
   private suspend fun start(call: ApplicationCall): Pair<T?, GameResponse> =
     snakeContext()
-        .let { context ->
-          val startRequest = call.receive<StartRequest>()
-          //logger.info { "Creating new snake context for ${startRequest.gameId}" }
-          context.resetStartTime()
-          context.assignIds(startRequest.gameId, startRequest.you.id)
-          context.assignRequestResponse(call)
-          contextMap[context.snakeId] = context
-          strategy.startActions.map { it.invoke(context, startRequest) }
-          context to StartResponse
-        }
+      .let { context ->
+        val startRequest = call.receive<StartRequest>()
+        //logger.info { "Creating new snake context for ${startRequest.gameId}" }
+        context.resetStartTime()
+        context.assignIds(startRequest.gameId, startRequest.you.id)
+        context.assignRequestResponse(call)
+        contextMap[context.snakeId] = context
+        strategy.startActions.map { it.invoke(context, startRequest) }
+        context to StartResponse
+      }
 
   private suspend fun move(call: ApplicationCall): Pair<T?, GameResponse> {
     val moveRequest = call.receive<MoveRequest>()
     val context = contextMap[moveRequest.you.id]
-                  ?: throw NoSuchElementException("Missing context for user id: ${moveRequest.you.id}")
+      ?: throw NoSuchElementException("Missing context for user id: ${moveRequest.you.id}")
     assert(context.snakeId == moveRequest.you.id)
 
     context.assignRequestResponse(call)
@@ -90,8 +90,8 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
     val (response, duration) =
       measureTimedValue {
         strategy.moveActions
-            .map { it.invoke(context, moveRequest) }
-            .lastOrNull() ?: throw IllegalStateException("Missing move action")
+          .map { it.invoke(context, moveRequest) }
+          .lastOrNull() ?: throw IllegalStateException("Missing move action")
       }
 
     context.apply {
@@ -105,7 +105,7 @@ abstract class AbstractBattleSnake<T : SnakeContext> : KLogging() {
   private suspend fun end(call: ApplicationCall): Pair<T?, GameResponse> {
     val endRequest = call.receive<EndRequest>()
     val context = contextMap.remove(endRequest.you.id)
-                  ?: throw NoSuchElementException("Missing context for user id: ${endRequest.you.id}")
+      ?: throw NoSuchElementException("Missing context for user id: ${endRequest.you.id}")
     assert(context.snakeId == endRequest.you.id)
     context.assignRequestResponse(call)
     return context to (strategy.endActions.map { it.invoke(context, endRequest) }.lastOrNull() ?: EndResponse())
