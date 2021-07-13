@@ -33,15 +33,19 @@ private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true; isLen
 sealed class GameResponse
 
 @Serializable
-data class DescribeResponse constructor(val author: String,
-                                        val color: String,
-                                        val head: String,
-                                        val tail: String,
-                                        val apiversion: String) : GameResponse() {
-  constructor(author: String = "",
-              color: String = "#888888",
-              head: String = "default",
-              tail: String = "default") : this(author, color, head, tail, "1")
+data class DescribeResponse constructor(
+  val author: String,
+  val color: String,
+  val head: String,
+  val tail: String,
+  val apiversion: String
+) : GameResponse() {
+  constructor(
+    author: String = "",
+    color: String = "#888888",
+    head: String = "default",
+    tail: String = "default"
+  ) : this(author, color, head, tail, "1")
 
   fun toJson() = json.encodeToString(serializer(), this)
 
@@ -60,10 +64,12 @@ data class StartRequest(val board: Board, val game: Game, val turn: Int, val you
   companion object {
     fun primeClassLoader() {
       val start =
-        StartRequest(Board(3, 4, emptyList(), emptyList(), emptyList()),
-                     Game("", Ruleset("", ""), 500),
-                     1,
-                     You(name = "", id = "", health = 3, body = emptyList(), latency = "", shout = ""))
+        StartRequest(
+          Board(3, 4, emptyList(), emptyList(), emptyList()),
+          Game("", Ruleset("", ""), 500),
+          1,
+          You(name = "", id = "", health = 3, body = emptyList(), latency = "", shout = "")
+        )
       val json = start.toJson()
       toObject(json)
     }
@@ -80,10 +86,12 @@ object StartResponse : GameResponse() {
 }
 
 @Serializable
-data class MoveRequest(val board: Board,
-                       val game: Game,
-                       val turn: Int,
-                       val you: You) {
+data class MoveRequest(
+  val board: Board,
+  val game: Game,
+  val turn: Int,
+  val you: You
+) {
   val gameId
     get() = game.id
 
@@ -162,7 +170,7 @@ data class MoveResponse(val move: String, val shout: String = "") : GameResponse
   }
 
   override fun toString() =
-    move.toUpperCase() + if (shout.isNotEmpty()) " ($shout)" else ""
+    move.uppercase() + if (shout.isNotEmpty()) " ($shout)" else ""
 }
 
 fun up(shout: String) = MoveResponse("up", shout)
@@ -171,10 +179,12 @@ fun left(shout: String) = MoveResponse("left", shout)
 fun right(shout: String) = MoveResponse("right", shout)
 
 @Serializable
-data class EndRequest(val board: Board,
-                      val game: Game,
-                      val turn: Int,
-                      val you: You) {
+data class EndRequest(
+  val board: Board,
+  val game: Game,
+  val turn: Int,
+  val you: You
+) {
   val gameId
     get() = game.id
 
@@ -203,11 +213,13 @@ data class Ruleset(val name: String, val version: String)
 data class Game(val id: String, val ruleset: Ruleset, val timeout: Int)
 
 @Serializable
-data class Board(val height: Int,
-                 val width: Int,
-                 val food: List<Food>,
-                 val hazards: List<Hazard>,
-                 val snakes: List<Snake>) {
+data class Board(
+  val height: Int,
+  val width: Int,
+  val food: List<Food>,
+  val hazards: List<Hazard>,
+  val snakes: List<Snake>
+) {
   @Transient
   val origin = BOARD_ORIGIN
 
@@ -230,13 +242,15 @@ data class Board(val height: Int,
 }
 
 @Serializable
-data class Snake(val name: String,
-                 val id: String,
-                 val health: Int,
-                 val body: List<Body>,
-                 val latency: String,
-                 val shout: String,
-                 val squad: String = "") {
+data class Snake(
+  val name: String,
+  val id: String,
+  val health: Int,
+  val body: List<Body>,
+  val latency: String,
+  val shout: String,
+  val squad: String = ""
+) {
   val headPosition
     get() = bodyPosition(0)
 
@@ -247,13 +261,15 @@ data class Snake(val name: String,
 }
 
 @Serializable
-data class You(val name: String,
-               val id: String,
-               val health: Int,
-               val body: List<Body>,
-               val latency: String,
-               val shout: String,
-               val squad: String = "") {
+data class You(
+  val name: String,
+  val id: String,
+  val health: Int,
+  val body: List<Body>,
+  val latency: String,
+  val shout: String,
+  val squad: String = ""
+) {
   val headPosition
     get() = bodyPosition(0)
 
