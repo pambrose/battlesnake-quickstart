@@ -18,7 +18,7 @@ sourceCompatibility = 1.8
 
 description = 'battlesnake-quickstart'
 group = 'io.battlesnake'
-version = '0.11.0'
+version = '0.11.1'
 
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -41,12 +41,21 @@ dependencies {
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-  archiveClassifier = 'sources'
+  classifier = 'sources'
   from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  classifier = 'javadoc'
+  from javadoc.destinationDir
 }
 
 artifacts {
   archives sourcesJar
+}
+
+java {
+  withSourcesJar()
 }
 
 compileKotlin {
