@@ -27,6 +27,7 @@ import io.ktor.features.*
 import io.ktor.request.*
 import mu.KLogging
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.DurationUnit
 
 fun <T : SnakeContext> strategy(verbose: Boolean = false, init: GameStrategy<T>.() -> Unit) =
@@ -91,7 +92,7 @@ open class GameStrategy<T : SnakeContext> : KLogging() {
       context.let {
         val avg =
           if (it.moveCount > 0)
-            "\nAvg time/move: ${Duration.milliseconds((it.computeTime.toDouble(DurationUnit.MILLISECONDS) / it.moveCount.toDouble()))} "
+            "\nAvg time/move: ${(it.computeTime.toDouble(DurationUnit.MILLISECONDS) / it.moveCount.toDouble()).milliseconds} "
           else
             ""
 
