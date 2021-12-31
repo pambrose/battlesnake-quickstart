@@ -30,7 +30,7 @@ import io.battlesnake.core.SnakeContext
 import io.battlesnake.core.StartRequest
 import io.battlesnake.core.UP
 import io.battlesnake.core.strategy
-import io.ktor.application.*
+import io.ktor.server.application.*
 
 object PerimeterSnake : AbstractBattleSnake<PerimeterSnake.MySnakeContext>() {
 

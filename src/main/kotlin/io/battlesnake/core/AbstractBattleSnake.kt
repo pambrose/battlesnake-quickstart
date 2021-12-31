@@ -20,11 +20,11 @@ package io.battlesnake.core
 
 import io.battlesnake.core.ktor.installs
 import io.battlesnake.core.ktor.routes
-import io.ktor.application.*
-import io.ktor.features.*
-import io.ktor.request.*
+import io.ktor.server.application.*
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*
+import io.ktor.server.plugins.*
+import io.ktor.server.request.*
 import mu.KLogging
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.measureTimedValue

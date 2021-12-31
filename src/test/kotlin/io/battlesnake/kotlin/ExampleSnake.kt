@@ -26,7 +26,7 @@ import io.battlesnake.core.RIGHT
 import io.battlesnake.core.SnakeContext
 import io.battlesnake.core.strategy
 import io.battlesnake.kotlin.ExampleSnake.MySnakeContext
-import io.ktor.application.*
+import io.ktor.server.application.*
 
 object ExampleSnake : AbstractBattleSnake<MySnakeContext>() {
 

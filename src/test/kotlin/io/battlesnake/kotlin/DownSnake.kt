@@ -27,7 +27,7 @@ import io.battlesnake.core.StartRequest
 import io.battlesnake.core.down
 import io.battlesnake.core.left
 import io.battlesnake.core.strategy
-import io.ktor.application.*
+import io.ktor.server.application.*
 
 object DownSnake : AbstractBattleSnake<DownSnake.MySnakeContext>() {
 

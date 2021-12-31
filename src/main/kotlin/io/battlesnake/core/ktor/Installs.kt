@@ -16,12 +16,12 @@
 
 package io.battlesnake.core.ktor
 
-import io.ktor.application.*
-import io.ktor.features.*
 import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.serialization.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.application.*
+import io.ktor.server.plugins.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
 import kotlinx.serialization.json.Json
 import org.slf4j.event.Level
 
@@ -47,10 +47,10 @@ fun Application.installs() {
   }
 
   install(StatusPages) {
-    exception<AuthenticationException> {
+    exception<AuthenticationException> { call, cause ->
       call.respond(HttpStatusCode.Unauthorized)
     }
-    exception<AuthorizationException> {
+    exception<AuthorizationException> { call, cause ->
       call.respond(HttpStatusCode.Forbidden)
     }
   }

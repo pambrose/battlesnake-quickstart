@@ -22,9 +22,9 @@ import io.battlesnake.core.GameStrategy.Companion.afterTurnMsg
 import io.battlesnake.core.GameStrategy.Companion.describeMsg
 import io.battlesnake.core.GameStrategy.Companion.endMsg
 import io.battlesnake.core.GameStrategy.Companion.startMsg
-import io.ktor.application.*
-import io.ktor.features.*
-import io.ktor.request.*
+import io.ktor.server.application.*
+import io.ktor.server.plugins.*
+import io.ktor.server.request.*
 import mu.KLogging
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds

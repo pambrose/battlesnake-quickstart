@@ -18,7 +18,7 @@
 
 package io.battlesnake.core
 
-import io.ktor.application.*
+import io.ktor.server.application.*
 import kotlin.time.Duration
 
 abstract class AbstractGameStrategy<T : SnakeContext>(private val verbose: Boolean = false) : GameStrategy<T>() {

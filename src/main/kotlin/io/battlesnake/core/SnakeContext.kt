@@ -18,7 +18,7 @@
 
 package io.battlesnake.core
 
-import io.ktor.application.*
+import io.ktor.server.application.*
 import kotlin.time.Duration.Companion.nanoseconds
 import kotlin.time.TimeSource
 

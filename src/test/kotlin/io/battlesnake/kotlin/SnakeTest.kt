@@ -39,11 +39,11 @@ import io.battlesnake.core.StartResponse
 import io.battlesnake.core.You
 import io.battlesnake.core.module
 import io.battlesnake.core.strategy
-import io.ktor.application.*
 import io.ktor.http.HttpHeaders.ContentType
 import io.ktor.http.HttpMethod.Companion.Get
 import io.ktor.http.HttpMethod.Companion.Post
 import io.ktor.http.HttpStatusCode.Companion.OK
+import io.ktor.server.application.*
 import io.ktor.server.testing.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking

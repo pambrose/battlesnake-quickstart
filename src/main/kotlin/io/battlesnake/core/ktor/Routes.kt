@@ -30,11 +30,11 @@ import io.battlesnake.core.down
 import io.battlesnake.core.left
 import io.battlesnake.core.right
 import io.battlesnake.core.up
-import io.ktor.application.*
-import io.ktor.html.*
 import io.ktor.http.ContentType.Application.Json
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.html.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import kotlinx.html.Entities.nbsp
 import kotlinx.html.HTMLTag
 import kotlinx.html.a
