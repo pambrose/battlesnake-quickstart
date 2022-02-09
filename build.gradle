@@ -1,9 +1,9 @@
 plugins {
   id 'java'
   id 'maven-publish'
-  id 'org.jetbrains.kotlin.jvm' version '1.6.10'
-  id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.10'
-  id "com.github.ben-manes.versions" version "0.40.0"
+  id 'org.jetbrains.kotlin.jvm' version '1.6.20-M1'
+  id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.20-M1'
+  id "com.github.ben-manes.versions" version "0.42.0"
 }
 
 repositories {
@@ -16,7 +16,7 @@ sourceCompatibility = 1.8
 
 description = 'battlesnake-quickstart'
 group = 'io.battlesnake'
-version = '0.13.0'
+version = '0.14.0'
 
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -75,15 +75,19 @@ java {
 }
 
 compileKotlin {
-  kotlinOptions.jvmTarget = '1.8'
-  kotlinOptions.freeCompilerArgs += ['-Xopt-in=kotlin.time.ExperimentalTime',
-                                     '-Xopt-in=kotlin.ExperimentalStdlibApi']
+  kotlinOptions {
+    jvmTarget = '1.8'
+    freeCompilerArgs += ['-opt-in=kotlin.time.ExperimentalTime',
+                         '-opt-in=kotlin.ExperimentalStdlibApi']
+  }
 }
 
 compileTestKotlin {
-  kotlinOptions.jvmTarget = '1.8'
-  kotlinOptions.freeCompilerArgs += ['-Xopt-in=kotlin.time.ExperimentalTime',
-                                     '-Xopt-in=kotlin.ExperimentalStdlibApi']
+  kotlinOptions {
+    jvmTarget = '1.8'
+    freeCompilerArgs += ['-opt-in=kotlin.time.ExperimentalTime',
+                         '-opt-in=kotlin.ExperimentalStdlibApi']
+  }
 }
 
 test {
